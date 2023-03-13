@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;700&display=swap");
+
+.containerSignup {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* cria duas colunas com a mesma largura */
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  background-color: #fff;
+}
+
+.fundoStiveJobs {
+  object-fit: cover;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 667px;
+  height: 812px;
+  background: url(../../assets/fundoStiveJobs.png) no-repeat;
+  background-size: cover; /* //529 */
+  border-top-right-radius: 30px;
+  background-position-x: -8.4em;
+}
+
+.imgStiveJobs {
+  position: absolute;
+  object-fit: cover;
+  width: 667px;
+  height: 676.67px;
+  left: 0px;
+  top: 135.33px;
+  background-size: cover;
+}
+
+.colunaCadastro {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding-right: 30px;
+  padding-left: 40px;
+}
+
+.form-cadastro {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1rem;
+  margin-bottom: 35.4px;
+}
+
+.titleTermosCompromisso{
+  margin-bottom: 21.3px;
+}
+
+.titleTermosCompromisso strong {
+  font-family: "Poppins";
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.confirmaTermosCompromisso{
+  margin-bottom: 6.1px;
+}
+
+.containerInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.containerInput input {
+  border-radius: 10px;
+  width: 290px;
+  height: 50.06px;
+  border: 1px solid #d7d7d7;
+  background-color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+}
+
+.containerInput label {
+  margin-bottom: 14.6px;
+  font-family: "Poppins";
+  color: #000000;
+  font-weight: 400;
+}
+
+.container-title-cadastro {
+  width: 100%;
+  margin-bottom: 27px;
+}
+
+.container-title-cadastro h1{
+  color: #476ee6;
+  font-size: 24px;
+  line-height: 36px;
+  font-family: "Poppins";
+  font-weight: 500;
+}
+
+.logoCadastro {
+  width: 100%;
+}
+
+.logoCadastro img {
+  width: 190px;
+  height: 47.74px;
+  margin-bottom: 48.6px;
+}
+
+.contentCadastro {
+  margin-top: 88px;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  /* Define o tamanho da caixa de seleção */
+  width: 26px;
+  height: 27px;
+  /* Define a cor do fundo da caixa de seleção */
+  background-color: #fff;
+  /* Remove a borda padrão da caixa de seleção */
+  border: none;
+  /* Adiciona um raio para arredondar as bordas da caixa de seleção */
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #476ee6;
+  /* Define a cor do check */
+}
+
+input[type="checkbox"]:checked::before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  content: "✔";
+  font-size: 20px;
+  color: #fff;
+}
+
+input[type="checkbox"]:checked {
+  /* Define a cor de fundo da caixa de seleção quando selecionada */
+  background-color: #476ee6;
+}
+
+.inputCheckbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 2em;
+  font-family: "Poppins";
+  font-size: 13px;
+  font-weight: 500;
+  /* Define o espaçamento entre o texto da label e a caixa de seleção */
+  margin-left: 10px;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.termosPrivacidade {
+  margin-bottom: 63.8px;
+}
+
+.termosPrivacidade a {
+  color: #476ee6;
+  cursor: pointer;
+  margin-left: 2em;
+  font-size: 14px;
+  font-family: "Poppins";
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.buttonCadastrar {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonCadastrar button {
+  background-color: #476ee6;
+  border: none;
+  width: 267px;
+  height: 45.37px;
+  border-radius: 60px;
+  color: #fff;
+  font-family: "Poppins";
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.jaTemConta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  gap: 15px;
+  align-items: center;
+  font-weight: 500;
+}
+
+.jaTemConta a {
+  color: #476ee6;
+  cursor: pointer;
+  font-family: "Poppins";
+  font-weight: 500;
+}
