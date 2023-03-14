@@ -1,6 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;700&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+input[type="checkbox"] {
+  cursor: pointer;
+  /* Define o tamanho da caixa de seleção */
+  width: 26px;
+  height: 27px;
+  /* Define a cor do fundo da caixa de seleção */
+  background-color: #fff;
+  /* Remove a borda padrão da caixa de seleção */
+  border: none;
+  /* Adiciona um raio para arredondar as bordas da caixa de seleção */
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #476ee6;
+  /* Define a cor do check */
+}
 
+input[type="checkbox"]:checked::before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  content: "✔";
+  font-size: 20px;
+  color: #fff;
+}
+
+input[type="checkbox"]:checked {
+  /* Define a cor de fundo da caixa de seleção quando selecionada */
+  background-color: #476ee6;
+}
 *{
   margin: 0;
   padding: 0;
@@ -16,8 +46,8 @@ html, body, #root{
 }
 
 body{
-  font: 14px 'Roboto', sans-serif;
-  background-color: #EFEFEF;
+font-family: "Poppins", sans-serif;
+background-color: #EFEFEF;
 }
 
 a{
@@ -30,4 +60,5 @@ ul{
 
 button{
  cursor: pointer; 
+ font-family: "Poppins", sans-serif;
 }
