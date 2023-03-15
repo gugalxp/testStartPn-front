@@ -1,13 +1,12 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth";
-import "./signup.css";
-
-import logoCadastroImg from "../../assets/logoPn.png";
-import stiveJobsImg from "../../assets/stiveJobs.png";
-import fundoStiveJobsImg from "../../assets/fundoStiveJobs.png";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import Button from "../../components/Button";
+import ArteVisual from "../../components/ArteVisual";
+import Logo from "../../components/Logo";
+import TitlePrimary from "../../components/TitlePrimary";
 
 function SignUp() {
   const [nome, setNome] = useState("");
@@ -15,6 +14,8 @@ function SignUp() {
   const [password, setPassword] = useState("");
 
   const { signUp, loadingAuth } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmaPassword, setShowConfirmaPassword] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -32,62 +33,17 @@ function SignUp() {
     background: "#fff",
   };
 
-  const columun1 = {
-    position: "relative",
-    top: "0",
-    left: "0",
-    objectFit: "cover",
-    backgroundSize: "cover",
-    backgroundImage: "url(" + fundoStiveJobsImg + ")",
-    borderTopRightRadius: "30px",
-    backgroundPositionX: "-8.4em",
-    width: "667px",
-    height: "812px",
-  };
-
-  const styleImgStiveJobs = {
-    position: "absolute",
-    objectFit: "cover",
-    width: "667px",
-    height: "676.67px",
-    left: "0px",
-    top: "135.33px",
-    backgroundSize: "cover",
-  };
-
   const column2 = {
+    width: "100%",
     display: "flex",
+    justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    width: "100%",
-    paddingRight: "30px",
-    paddingLeft: "40px",
+    height: "100%",
   };
 
   const containerColumn2 = {
-    marginTop: "88px",
-  };
-
-  const containerLogo = {
-    width: "100%",
-  };
-
-  const logo = {
-    width: "190px",
-    height: "47.74px",
-    marginBottom: "48.6px",
-  };
-
-  const containerTitle = {
-    width: "100%",
-    marginBottom: "27px",
-  };
-
-  const titlePrimary = {
-    color: "#476ee6",
-    fontSize: "24px",
-    lineHeight: "36px",
-    fontWeight: "500",
+    marginTop: "0",
   };
 
   const form = {
@@ -116,6 +72,7 @@ function SignUp() {
     marginBottom: "14.6px",
     color: "#000000",
     fontWeight: "400",
+    fontSize: "14px",
   };
 
   const containerTitleTermosPrivacidade = {
@@ -142,10 +99,11 @@ function SignUp() {
     marginLeft: "10px",
     cursor: "pointer",
     gap: "10px",
+    width: "561px",
   };
 
   const containerTermosPrivacidade = {
-    marginBottom: "63.8px",
+    marginBottom: "30px",
   };
 
   const lerTermosPrivacidade = {
@@ -178,7 +136,6 @@ function SignUp() {
   };
 
   const containerButton = {
-    marginTop: "1rem",
     width: "100%",
     display: "flex",
     justifyContent: "center",
@@ -187,34 +144,39 @@ function SignUp() {
   const button = {
     background: "#476ee6",
     border: "none",
-    width: "267px",
+    width: "180px",
     height: "45.37px",
     borderRadius: "60px",
     color: "#fff",
     lineHeight: "20px",
     fontWeight: "600",
+    fontSize: "15px",
+    fontStyle: "normal",
+  };
+
+  const containerInputIcon = {
+    position: 'relative',
+  };
+
+  const icon = {
+    position: "absolute",
+    right: "3%",
+    top: "25%",
+    cursor: "pointer",
   };
 
   return (
     <div>
       <div style={containerMain}>
-        <div style={columun1}>
-          <img
-            style={styleImgStiveJobs}
-            src={stiveJobsImg}
-            alt="Imagem de stivejobs"
-          />
-        </div>
+        <ArteVisual />
 
         <div style={column2}>
           <div style={containerColumn2}>
-            <div style={containerLogo}>
-              <img style={logo} src={logoCadastroImg} alt="logo cadastro" />
-            </div>
-
-            <div style={containerTitle}>
-              <h1 style={titlePrimary}>Cadastro</h1>
-            </div>
+            <Logo containerLogo={{ width: "100%", marginBottom: "25px" }} />
+            <TitlePrimary
+              containerTitle={{ fontStyle: "normal" }}
+              conteudo="Cadastrar"
+            />
 
             <form style={form}>
               <div style={containerInput}>
@@ -247,26 +209,56 @@ function SignUp() {
                 <label style={label} for="senha">
                   Senha
                 </label>
-                <input
-                  style={input}
-                  type="password"
-                  id="senha"
-                  name="senha"
-                  placeholder="Insira senha"
-                />
+                <div style={containerInputIcon}>
+                  <input
+                    style={input}
+                    type={showPassword ? "text" : "password"}
+                    id="senha"
+                    name="senha"
+                    placeholder="Insira senha"
+                  />
+                  {showPassword ? (
+                    <BsEyeSlash
+                      style={icon}
+                      size={24}
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  ) : (
+                    <BsEye
+                      style={icon}
+                      size={24}
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  )}
+                </div>
               </div>
 
               <div style={containerInput}>
                 <label style={label} for="confirmacao-senha">
                   Confirmação de Senha
                 </label>
-                <input
-                  style={input}
-                  type="password"
-                  id="confirmacao-senha"
-                  name="confirmacao-senha"
-                  placeholder="Confirma senha"
-                />
+                <div style={containerInputIcon}>
+                  <input
+                    style={input}
+                    type={showConfirmaPassword ? "text" : "password"}
+                    id="confirmacao-senha"
+                    name="confirmacao-senha"
+                    placeholder="Confirma senha"
+                  />
+                  {showPassword ? (
+                    <BsEyeSlash
+                      style={icon}
+                      size={24}
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  ) : (
+                    <BsEye
+                      style={icon}
+                      size={24}
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  )}
+                </div>
               </div>
             </form>
             <div style={containerTitleTermosPrivacidade}>
@@ -290,7 +282,7 @@ function SignUp() {
               conteudo="Cadastrar"
             ></Button>
             <div style={jaTemConta}>
-              Já tem uma conta?{" "}
+              Já tem uma conta?
               <Link style={jaTemConta_Logar} to="/">
                 Login
               </Link>

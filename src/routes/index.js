@@ -9,12 +9,19 @@ import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Customers from '../pages/Customers';
 import New from '../pages/New';
+import ForgotPassword from '../pages/ForgotPassword';
+import EmailSent from '../pages/EmailSent';
+import NewPassword from '../pages/NewPassword';
 
 export default function Routes(){
   return(
     <Switch>
       <Route exact path="/" component={SignIn} />
       <Route exact path="/register" component={SignUp} />
+      <Route exact path="/forgotPassword" component={ForgotPassword} />
+      <Route exact path="/emailSent" component={EmailSent} />
+      <Route exact path="/newPassword" component={NewPassword} />
+      
 
       <Route exact path="/dashboard" component={Dashboard} isPrivate />
       <Route exact path="/profile" component={Profile} isPrivate />
