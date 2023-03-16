@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import Header from "../../components/Header";
 import Title from "../../components/Title";
-import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from "react-icons/fi";
+import InputSearchProject from "../../components/InputSearchProject";
+import { FiMoreVertical, FiSettings } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import firebase from "../../services/firebaseConnection";
+
+import userImg from "../../assets/images/user.png";
 
 const listRef = firebase
   .firestore()
@@ -24,129 +27,251 @@ export default function Dashboard() {
 
   const [showModal, setShowModal] = useState(false);
   const [detail, setDetail] = useState(false);
+  const [pageAtual, setPageAtual] = useState("");
+  const [itemMenu, setItemMenu] = useState(1);
 
-  // useEffect(()=> {
+  // useEffect(() =>{
+  //   setItemMenu();
+  // }, [])
 
-  //   loadChamados();
+  const containerNav = {
+    display: "flex",
+    justifyContent: "space-between",
+  };
 
-  //   return () => {
+  const containerMenuNav = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "15px",
+  };
 
-  //   }
-  // }, []);
+  const menuNav = {
+    width: "233px",
+    height: "45px",
+    gap: "10px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#FFFFFF",
+    border: "1px solid #D7D7D7",
+    borderRadius: "100px",
+  };
 
-  // async function loadChamados(){
-  //   await listRef.limit(5)
-  //   .get()
-  //   .then((snapshot) => {
-  //     updateState(snapshot)
-  //   })
-  //   .catch((err)=>{
-  //     console.log('Deu algum erro: ', err);
-  //     setLoadingMore(false);
-  //   })
+  const newTerceiro = {
+    width: "160px",
+    height: "45px",
+    background: "#476EE6",
+    borderRadius: "60px",
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "500",
+    fontSize: "15px",
+    lineHeight: "24px",
+    letterSpacing: "0.3px",
+  };
 
-  //   setLoading(false);
+  const iconSettingsContainer = {
+    width: "45px",
+    height: "45px",
+    background: "#FFFFFF",
+    border: "1px solid #D7D7D7",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+  };
 
-  // }
+  const checkbox = {
+    borderRadius: 0,
+    border: "1px solid #989898",
+    width: "16px",
+    height: "16px",
+    cursor: "pointer",
+  };
 
-  // async function updateState(snapshot){
-  //   const isCollectionEmpty = snapshot.size === 0;
+  const imgUserStyle = {
+    width: "37px",
+    height: "37px",
+    borderRadius: "50%",
+    objectFit: "cover",
+  };
 
-  //   if(!isCollectionEmpty){
-  //     let lista = [];
-
-  //     snapshot.forEach((doc)=>{
-  //       lista.push({
-  //         id: doc.id,
-  //         assunto: doc.data().assunto,
-  //         cliente: doc.data().cliente,
-  //         clienteId: doc.data().clienteId,
-  //         created: doc.data().created,
-  //         createdFormated: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
-  //         status: doc.data().status,
-  //         complemento: doc.data().complemento
-  //       })
-  //     })
-
-  //     const lastDoc = snapshot.docs[snapshot.docs.length -1]; //Pegando o ultimo documento buscado
-
-  //     setChamados(chamados => [...chamados, ...lista]);
-  //     setLastDocs(lastDoc);
-
-  //   }else{
-  //     setIsEmpty(true);
-  //   }
-
-  //   setLoadingMore(false);
-
-  // }
-
-  // async function handleMore(){
-  //   setLoadingMore(true);
-  //   await listRef.startAfter(lastDocs).limit(5)
-  //   .get()
-  //   .then((snapshot)=>{
-  //     updateState(snapshot)
-  //   })
-  // }
-
-  // function togglePostModal (item){
-  //   setShowModal(!showModal) //troca de true para false
-  //   setDetail(item);
-  // }
-
-  // if(loading){
-  //   return(
-  //     <div>
-  //       <Header/>
-
-  //       <div className="content">
-  //         <Title name="Atendimentos">
-  //           <FiMessageSquare size={25} />
-  //         </Title>
-
-  //         <div className="container dashboard">
-  //           <span>Buscando chamados...</span>
-  //         </div>
-
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  const containerUsernamePhoto = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+  };
 
   return (
     <div>
       <Header />
 
       <div className="content">
-        <div>
-          <Link to="/new" className="new">
-            <FiPlus size={25} color="#FFF" />
-            Novo chamado
+        <Title nameUser="Gustavo Arruda" userImg={userImg} page="Terceiros">
+          <img src={userImg} alt="" />
+        </Title>
+        <div style={containerNav}>
+          <div style={containerMenuNav}>
+            <div style={menuNav}>
+              <Link
+                className={itemMenu === 1 ? "item active" : "item"}
+                onClick={() => setItemMenu(1)}
+              >
+                Clientes
+              </Link>
+              <Link
+                className={itemMenu === 2 ? "item active" : "item"}
+                onClick={() => setItemMenu(2)}
+              >
+                Fornecedores
+              </Link>
+            </div>
+            <InputSearchProject placeholder="Pesquisar" />
+            <div style={iconSettingsContainer}>
+              <FiSettings size={23} color="#476EE6" />
+            </div>
+          </div>
+          <Link to="/new" style={newTerceiro}>
+            Novo Terceiro
           </Link>
         </div>
+        <div className="titleListTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentTitleListTerceiros">
+            <span>Nome</span>
+            <span>E-mail</span>
+            <span>Telefone</span>
+            <span>Endereço</span>
+          </div>
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>E-mail</th>
-              <th>Telefone</th>
-              <th>Endereço</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <input type="checkbox" />
-              <td data-label="Nome">Gustavo Arruda</td>
-              <td data-label="E-mail">gustavoleone3456@hotmail.com</td>
-              <td data-label="Telefone">13 99636-9053</td>
-              <td data-label="Endereço">
-                Av. Brg. Faria Lima, 2355 - São Paulo - SP, 01452-922
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
+        <div className="listagemTerceiros">
+          <input type="checkbox" style={checkbox} />
+          <div className="contentListagemTerceiros">
+            <div style={containerUsernamePhoto}>
+              <img style={imgUserStyle} src={userImg} alt="" />
+              <span>Gustavo Arruda</span>
+            </div>
+            <span>gustavoleone3456@hotmail.com</span>
+            <span>13 99636-4053</span>
+            <span>Rua Treze, 140 - Guarujá SP</span>
+            <span>
+              <FiMoreVertical size={20} color="#000" />
+            </span>
+          </div>
+        </div>
       </div>
       {/* 
       {showModal && (

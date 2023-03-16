@@ -25,13 +25,20 @@ export default function Header() {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    color: '#787486',
   };
 
   const itemActive = {
     background: "#F7F9FB",
     color: "#476EE6",
     borderRadius: "8px",
-    ...items,
+    display: "block",
+    padding: "16px",
+    width: "205px",
+    textDecoration: "none",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   };
 
   const containerItens = {
@@ -42,7 +49,7 @@ export default function Header() {
 
   const containerLogOut = {
     ...items,
-    marginTop: "120px",
+    marginTop: "80px",
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
@@ -56,6 +63,10 @@ export default function Header() {
     position: "fixed",
     height: "100%",
     overflow: "auto",
+    borderTopRightRadius: '30px',
+    borderBottomRightRadius: '30px',
+    borderRight: '1px solid #D7D7D7',
+
   };
 
   const containerLogo = {
@@ -76,14 +87,14 @@ export default function Header() {
   }
 
   return (
-    <div style={sidebar} className="sidebar">
+    <div style={sidebar}>
       <div style={containerLogo}>
         <img style={styleLogo} src={logo} alt="Foto avatar" />
       </div>
 
       <div style={containerItens}>
         <Link to="/dashboard" style={itemActive}>
-          <FiUsers style={icon} color="#787486" size={24} />
+          <FiUsers style={icon} color="#476EE6" size={24} />
           Terceiros
         </Link>
         <Link to="/customers" style={items}>

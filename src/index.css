@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;700&display=swap");
 
-input[type="checkbox"] {
+.containerCadastro input[type="checkbox"] {
   cursor: pointer;
   /* Define o tamanho da caixa de seleção */
   width: 26px;
@@ -10,7 +10,7 @@ input[type="checkbox"] {
   /* Remove a borda padrão da caixa de seleção */
   border: none;
   /* Adiciona um raio para arredondar as bordas da caixa de seleção */
-  border-radius: 10px;
+  border-radius: 15px;
   -webkit-border-radius: 10px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -18,7 +18,7 @@ input[type="checkbox"] {
   /* Define a cor do check */
 }
 
-input[type="checkbox"]:checked::before {
+.containerCadastro input[type="checkbox"]:checked::before {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,38 +27,111 @@ input[type="checkbox"]:checked::before {
   color: #fff;
 }
 
-input[type="checkbox"]:checked {
+.containerCadastro input[type="checkbox"]:checked {
   /* Define a cor de fundo da caixa de seleção quando selecionada */
   background-color: #476ee6;
 }
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-*:focus{
+*:focus {
   outline: 0;
 }
 
-html, body, #root{
+html,
+body,
+#root {
   height: 100%;
 }
 
-body{
-font-family: "Poppins", sans-serif;
-background-color: #E5E5E5;
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #F7F9FB;
 }
 
-a{
+a {
   text-decoration: none;
+  color: #000;
 }
 
-ul{
+ul {
   list-style: none;
 }
 
-button{
- cursor: pointer; 
- font-family: "Poppins", sans-serif;
+button {
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+
+.item {
+  color: #476ee6;
+  font-size: 15px;
+  padding: 5px 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  border-radius: 100px;
+}
+
+.active {
+  background: #476ee6;
+  color: #fff;
+}
+
+.titleListTerceiros {
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  padding: 0.8em;
+  border: 1px solid #D7D7D7;
+  align-items: center;
+  margin-bottom: 1em;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #6a6a6a;
+}
+
+.contentTitleListTerceiros {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.contentListagemTerceiros  {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.listagemTerceiros {
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  padding: 0.8em;
+  align-items: center;
+  margin-bottom: 3px;
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #6a6a6a;
+  border: 1px solid #D7D7D7;
 }

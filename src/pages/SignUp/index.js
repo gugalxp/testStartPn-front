@@ -155,7 +155,7 @@ function SignUp() {
   };
 
   const containerInputIcon = {
-    position: 'relative',
+    position: "relative",
   };
 
   const icon = {
@@ -166,7 +166,7 @@ function SignUp() {
   };
 
   return (
-    <div>
+    <div className="containerCadastro">
       <div style={containerMain}>
         <ArteVisual />
 

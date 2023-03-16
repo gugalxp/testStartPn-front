@@ -23,7 +23,7 @@ export default function Routes(){
       <Route exact path="/newPassword" component={NewPassword} />
       
 
-      <Route exact path="/dashboard" component={Dashboard} isPrivate />
+      <Route exact path="/dashboard" component={Dashboard} />
       <Route exact path="/profile" component={Profile} isPrivate />
       <Route exact path="/customers" component={Customers} isPrivate />
       <Route exact path="/new" component={New} isPrivate />
