@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../../context/auth";
 
 
-export default function DeleteModal({ conteudo, close }) {
+export default function SubModal({ conteudo, close }) {
 
   const { modal, isOpenModal } = useContext(AuthContext);
 

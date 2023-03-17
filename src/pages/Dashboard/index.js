@@ -1,14 +1,17 @@
 import "./dashboard.css";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
-
-import EditOrDeleteModal from "../../components/Modals/Modal";
+import SubModal from "../../components/Modals/SubModal";
+import Button from "../../components/Button";
+import Modal from "../../components/Modals/Modal";
 import Header from "../../components/Header";
 import Title from "../../components/Title";
 import InputSearchProject from "../../components/InputSearchProject";
 import { FiMoreVertical, FiSettings } from "react-icons/fi";
+import { MdAddAPhoto } from "react-icons/md";
+
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { FiX } from "react-icons/fi";
 
 import firebase from "../../services/firebaseConnection";
 import userImg from "../../assets/images/user.png";
@@ -20,15 +23,25 @@ const listRef = firebase
 
 export default function Dashboard() {
   const [itemMenu, setItemMenu] = useState(1);
-  const [showModalEditOrDeleteModal, setShowModalEditOrDeleteModal] = useState(false);
+  const [showModalEditOrDelete, setShowModalEditOrDelete] = useState(false);
+  const [showSubModal, setShowSubModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
 
-  const [detail, setDetail] = useState(false);
+  function togglePostModalEditOrDelete() {
+    setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
+  }
 
-  const { user } = useContext(AuthContext);
+  function togglePostSubModal() {
+    setShowSubModal(!showSubModal);
+  }
 
-  function togglePostModal(item) {
-    setShowModalEditOrDeleteModal(!showModalEditOrDeleteModal); //troca de true para false
-    setDetail(item);
+  function closeModals() {
+    togglePostModalEditOrDelete();
+    togglePostSubModal();
+  }
+
+  function togglePostModalEdit() {
+    setShowModalEdit(!showModalEdit);
   }
 
   const containerNav = {
@@ -106,6 +119,141 @@ export default function Dashboard() {
     gap: "10px",
   };
 
+  const modal_header = {
+    padding: "15px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottom: "1px solid #D7D7D7",
+  };
+
+  const editar_terceiro = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "64px",
+    color: "#030303",
+    fontWeight: 500,
+    fontSize: "10px",
+    lineHeight: "27px",
+    borderBottom: "1px solid #D7D7D7",
+    cursor: "pointer",
+  };
+
+  const excluir_terceiro = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "64px",
+    color: "#EA0000",
+    fontWeight: 500,
+    fontSize: "10px",
+    lineHeight: "27px",
+    borderBottom: "1px solid #D7D7D7",
+    cursor: "pointer",
+  };
+
+  const title_header = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "10px",
+    fontWeight: 500,
+    fontSize: "18px",
+    lineHeight: "27px",
+  };
+
+  const button = {
+    background: "#476EE6",
+    borderRadius: "50px",
+    width: "110px",
+    height: "35px",
+    color: "#FFF",
+    border: "none",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "21px",
+  };
+
+  const fixEditarTerceiro = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    fontWeight: 500,
+    fontSize: "18px",
+    lineHeight: "27px",
+  };
+
+  const styleImgUserModal = {
+    width: "100px",
+    height: "100px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    position: "absolute",
+    marginTop: "50px"
+  };
+
+  const containerStyleImgUserModal = {
+    display: "flex",
+    justifyContent: "center",
+    position: 'relative',
+  };
+
+  const form = {
+    height: "310px",
+    width: "100%",
+    position: "absolute",
+    bottom: "0",
+    padding: "15px",
+    gap: "10px",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gridTemplateRows: "repeat(2, auto)",
+    alignItems: "center",
+    flexWrap: "wrap",
+  };
+
+  const label = {
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "18px",
+    marginBottom: "11px",
+    color: "#000000",
+    width: "100%",
+  };
+
+  const containerInput = {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "250px",
+    marginBottom: "2px",
+  };
+
+  const input = {
+    height: "45px",
+    width: "250px",
+    borderRadius: "10px",
+    height: "50.06px",
+    border: "1px solid #d7d7d7",
+    background: "#fff",
+    padding: "10px",
+  };
+
+  const select = {
+    ...input
+  }
+
+  const iconImgUserModal = {
+    position: 'absolute',
+    top: '118px',
+    right: '260',
+    background: '#476EE6',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    padding: '5px',
+  }
+  
   return (
     <div>
       <Header />
@@ -134,7 +282,7 @@ export default function Dashboard() {
               <FiSettings size={23} color="#476EE6" />
             </div>
           </div>
-          <Link to="/new" style={newTerceiro}>
+          <Link onClick={() => togglePostModalEdit()} style={newTerceiro}>
             Novo Terceiro
           </Link>
         </div>
@@ -163,7 +311,7 @@ export default function Dashboard() {
                 size={20}
                 style={{ cursor: "pointer" }}
                 color="#000"
-                onClick={() => togglePostModal("conteudo")}
+                onClick={() => togglePostModalEditOrDelete()}
               />
             </span>
           </div>
@@ -274,8 +422,117 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      {showModalEditOrDeleteModal && (
-        <EditOrDeleteModal conteudo={detail} close={togglePostModal} />
+      {showModalEditOrDelete && (
+        <Modal close={togglePostModalEditOrDelete} width="375px" height="275px">
+          <div style={modal_header}>
+            <h3>Ações</h3>
+            <FiX
+              size={22}
+              style={{ cursor: "pointer" }}
+              onClick={togglePostModalEditOrDelete}
+            />
+          </div>
+
+          <div className="modal-body">
+            <div style={editar_terceiro} className="editar-terceiro">
+              <h2>Editar terceiro</h2>
+            </div>
+
+            <div
+              style={excluir_terceiro}
+              className="excluir-terceiro"
+              onClick={togglePostSubModal}
+            >
+              <h2>Excluir terceiro</h2>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {showSubModal && (
+        <SubModal conteudo={"Gustavo Arruda"} close={closeModals} />
+      )}
+      {showModalEdit && (
+        <>
+          <Modal width="605px" height="566px" close={togglePostModalEdit}>
+            <div style={modal_header}>
+              <div style={fixEditarTerceiro}>
+                <FiX
+                  size={22}
+                  style={{ cursor: "pointer" }}
+                  onClick={togglePostModalEdit}
+                />
+                Editar Terceiro
+              </div>
+              <div style={title_header}>
+                <Button conteudo="Editar" buttonStyle={button} />
+              </div>
+            </div>
+            <div style={containerStyleImgUserModal}>
+              <img style={styleImgUserModal} src={userImg} alt="Foto usuário" />
+              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30}/>
+            </div>
+            <form style={form}>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Nome do terceiro
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Telefone
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Tipo
+                </label>
+                <select style={select}>
+                  <option value="Cliente">Cliente</option>
+                  <option value="Fornecedor">Fornecedor</option>
+                </select>
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  E-mail
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Endereço
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+            </form>
+          </Modal>
+        </>
       )}
     </div>
   );
