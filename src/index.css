@@ -65,6 +65,7 @@ ul {
 button {
   cursor: pointer;
   font-family: "Poppins", sans-serif;
+  font-style: 'normal',
 }
 
 .item {
@@ -134,4 +135,17 @@ button {
   line-height: 21px;
   color: #6a6a6a;
   border: 1px solid #D7D7D7;
+}
+
+.content {
+  margin-left: 280px;
+  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.excluir-terceiro
+.editar-terceiro:hover {
+  opacity: .5;
 }

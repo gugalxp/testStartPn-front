@@ -27,7 +27,6 @@ function AuthProvider({ children }){
 
   }, [])
 
-
   //Fazendo login do usuario
   async function signIn(email, password){
     setLoadingAuth(true);
@@ -127,7 +126,7 @@ function AuthProvider({ children }){
       signIn,
       loadingAuth,
       setUser,
-      storageUser
+      storageUser,
     }}
     >
       {children}

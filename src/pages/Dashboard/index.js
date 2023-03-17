@@ -1,7 +1,8 @@
 import "./dashboard.css";
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/auth";
 
-import Modal from "../../components/Modal";
+import EditOrDeleteModal from "../../components/Modals/Modal";
 import Header from "../../components/Header";
 import Title from "../../components/Title";
 import InputSearchProject from "../../components/InputSearchProject";
@@ -10,7 +11,6 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import firebase from "../../services/firebaseConnection";
-
 import userImg from "../../assets/images/user.png";
 
 const listRef = firebase
@@ -19,20 +19,17 @@ const listRef = firebase
   .orderBy("created", "desc");
 
 export default function Dashboard() {
-  const [chamados, setChamados] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [lastDocs, setLastDocs] = useState();
-
-  const [showModal, setShowModal] = useState(false);
-  const [detail, setDetail] = useState(false);
-  const [pageAtual, setPageAtual] = useState("");
   const [itemMenu, setItemMenu] = useState(1);
+  const [showModalEditOrDeleteModal, setShowModalEditOrDeleteModal] = useState(false);
 
-  // useEffect(() =>{
-  //   setItemMenu();
-  // }, [])
+  const [detail, setDetail] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
+  function togglePostModal(item) {
+    setShowModalEditOrDeleteModal(!showModalEditOrDeleteModal); //troca de true para false
+    setDetail(item);
+  }
 
   const containerNav = {
     display: "flex",
@@ -112,7 +109,6 @@ export default function Dashboard() {
   return (
     <div>
       <Header />
-
       <div className="content">
         <Title nameUser="Gustavo Arruda" userImg={userImg} page="Terceiros">
           <img src={userImg} alt="" />
@@ -163,7 +159,12 @@ export default function Dashboard() {
             <span>13 99636-4053</span>
             <span>Rua Treze, 140 - Guarujá SP</span>
             <span>
-              <FiMoreVertical size={20} color="#000" />
+              <FiMoreVertical
+                size={20}
+                style={{ cursor: "pointer" }}
+                color="#000"
+                onClick={() => togglePostModal("conteudo")}
+              />
             </span>
           </div>
         </div>
@@ -273,13 +274,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      {/* 
-      {showModal && (
-        <Modal
-        conteudo={detail}
-        close={togglePostModal}
-        />
-      )} */}
+      {showModalEditOrDeleteModal && (
+        <EditOrDeleteModal conteudo={detail} close={togglePostModal} />
+      )}
     </div>
   );
 }

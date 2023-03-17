@@ -33,7 +33,6 @@ export default function ForgotPassword() {
     width: "100%",
     marginBottom: "17px",
     display: "flex",
-    fontStyle: 'normal',
     fontSize: "24px",
     lineHeight: "36px",
     fontWeight: "500",

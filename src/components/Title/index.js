@@ -48,7 +48,6 @@ export default function Title({ page, nameUser, userImg }) {
     flexDirection: "row",
     alignItems: "center",
     fontFamily: 'Comfortaa',
-    fontStyle: 'normal',
     fontWeight: '400',
     fontSize: '17px',
     lineHeight: '16px',

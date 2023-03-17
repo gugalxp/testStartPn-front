@@ -13,6 +13,8 @@ import {
   FiAnchor,
   FiLogOut,
 } from "react-icons/fi";
+import Dashboard from "../../pages/Dashboard";
+
 
 export default function Header() {
   const { user } = useContext(AuthContext);
@@ -66,7 +68,6 @@ export default function Header() {
     borderTopRightRadius: '30px',
     borderBottomRightRadius: '30px',
     borderRight: '1px solid #D7D7D7',
-
   };
 
   const containerLogo = {
@@ -111,7 +112,7 @@ export default function Header() {
         </Link>
         <Link to="/profile" style={items}>
           <FiUser color="#787486" style={icon} size={24} />
-          Minha conta
+          Minha conta 
         </Link>
         <Link style={containerLogOut}>
           <FiLogOut color="#787486" style={icon} size={24} />
