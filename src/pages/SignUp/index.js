@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory} from "react-router-dom";
 import { AuthContext } from "../../context/auth";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
@@ -9,19 +9,24 @@ import Logo from "../../components/Logo";
 import TitlePrimary from "../../components/TitlePrimary";
 
 function SignUp() {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
 
-  const { signUp, loadingAuth } = useContext(AuthContext);
+  const { signUp, authRegisterUser } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmaPassword, setShowConfirmaPassword] = useState(false);
+  const history = useHistory();
 
-  function handleSubmit(e) {
+  function handleRegister(e) {
     e.preventDefault();
-
-    if (nome !== "" && email !== "" && password !== "") {
-      signUp(email, password, nome);
+    if (email && password && confirmedPassword && name) {
+      signUp(email, password, confirmedPassword, name);
+      console.log(authRegisterUser)
+      if (authRegisterUser) {
+        history.push("/")
+      }
     }
   }
 
@@ -177,17 +182,17 @@ function SignUp() {
               containerTitle={{ fontStyle: "normal" }}
               conteudo="Cadastrar"
             />
-
             <form style={form}>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} for="name">
                   Nome
                 </label>
                 <input
+                  onChange={(e) => setName(e.target.value)}
                   style={input}
                   type="text"
-                  id="nome"
-                  name="nome"
+                  id="name"
+                  name="name"
                   placeholder="Insira seu nome"
                 />
               </div>
@@ -197,6 +202,7 @@ function SignUp() {
                   E-mail
                 </label>
                 <input
+                  onChange={(e) => setEmail(e.target.value)}
                   style={input}
                   type="email"
                   id="email"
@@ -211,6 +217,7 @@ function SignUp() {
                 </label>
                 <div style={containerInputIcon}>
                   <input
+                    onChange={(e) => setPassword(e.target.value)}                  
                     style={input}
                     type={showPassword ? "text" : "password"}
                     id="senha"
@@ -239,23 +246,24 @@ function SignUp() {
                 </label>
                 <div style={containerInputIcon}>
                   <input
+                    onChange={(e) => setConfirmedPassword(e.target.value)}
                     style={input}
                     type={showConfirmaPassword ? "text" : "password"}
                     id="confirmacao-senha"
                     name="confirmacao-senha"
                     placeholder="Confirma senha"
                   />
-                  {showPassword ? (
+                  {showConfirmaPassword ? (
                     <BsEyeSlash
                       style={icon}
                       size={24}
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowConfirmaPassword(!showConfirmaPassword)}
                     />
                   ) : (
                     <BsEye
                       style={icon}
                       size={24}
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowConfirmaPassword(!showConfirmaPassword)}
                     />
                   )}
                 </div>
@@ -277,6 +285,7 @@ function SignUp() {
               <a style={lerTermosPrivacidade}>Termos de uso e privacidade</a>
             </div>
             <Button
+              handle={handleRegister}
               containerButton={containerButton}
               buttonStyle={button}
               conteudo="Cadastrar"
@@ -291,23 +300,7 @@ function SignUp() {
         </div>
       </div>
     </div>
-    // <div className="container-center">
-    //   <div className="login">
-    //     <div className="login-area">
-    //       <img src={logo} alt="Sistema Logo" />
-    //     </div>
 
-    //     <form onSubmit={handleSubmit}>
-    //       <h1>Cadastrar uma conta</h1>
-    //       <input type="text" placeholder="Seu nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-    //       <input type="text" placeholder="email@email.com" value={email} onChange={ (e) => setEmail(e.target.value) }/>
-    //       <input type="password" placeholder="*******" value={password} onChange={(e) => setPassword(e.target.value) } />
-    //       <button type="submit">{loadingAuth ? 'Carregando...' : 'Cadastrar'}</button>
-    //     </form>
-
-    //     <Link to="/">Já tem uma conta? Entre</Link>
-    //   </div>
-    // </div>
   );
 }
 

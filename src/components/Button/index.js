@@ -1,9 +1,9 @@
 
-export default function Button({containerButton, buttonStyle, conteudo}){
+export default function Button({containerButton, buttonStyle, conteudo, handle}){
 
   return(
     <div style={containerButton}>
-        <button style={buttonStyle}>{conteudo}</button>
+        <button onClick={handle} style={buttonStyle}>{conteudo}</button>
     </div>
   )
 }

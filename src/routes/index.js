@@ -20,7 +20,7 @@ export default function Routes(){
       <Route exact path="/register" component={SignUp} />
       <Route exact path="/forgotPassword" component={ForgotPassword} />
       <Route exact path="/emailSent" component={EmailSent} />
-      <Route exact path="/newPassword" component={NewPassword} />
+      <Route exact path="/newPassword/:token" component={NewPassword} />
       
 
       <Route exact path="/dashboard" component={Dashboard} />

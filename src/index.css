@@ -78,6 +78,16 @@ button {
   border-radius: 100px;
 }
 
+.itemModal {
+  color: #476ee6;
+  font-size: 15px;
+  padding: 5px 35px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  border-radius: 100px;
+}
+
 .active {
   background: #476ee6;
   color: #fff;
@@ -148,4 +158,10 @@ button {
 .excluir-terceiro
 .editar-terceiro:hover {
   opacity: .5;
+}
+
+form{
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
 }

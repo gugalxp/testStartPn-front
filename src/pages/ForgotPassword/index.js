@@ -2,10 +2,25 @@ import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/auth";
+import { useHistory } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const { sendMail, tokenURL } = useContext(AuthContext);
+  const history = useHistory();
+  
+  function handleSendMail(e) {
+    e.preventDefault();
+    if (email) {
+      sendMail(email)
+      history.push(`/emailSent`);
+    }
+  }
+
   const containerMain = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
@@ -121,7 +136,7 @@ export default function ForgotPassword() {
     <div style={containerMain}>
       <ArteVisual />
       <div style={column2}>
-        <form style={form}>
+        <form style={form} onSubmit={handleSendMail}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
             containerTitle={containerTitle}
@@ -136,6 +151,7 @@ export default function ForgotPassword() {
               E-mail
             </label>
             <input
+              onChange={ (e) => setEmail(e.target.value) }
               style={input}
               type="text"
               id="email"
@@ -144,14 +160,13 @@ export default function ForgotPassword() {
             />
           </div>
         <div style={containerForgotPassword}>
-            <Link to="/emailSent">
               <Button
+                handle={sendMail}
                 type="submit"
                 containerButton={containerButton}
                 buttonStyle={button}
                 conteudo="Recuperar senha"
               />
-            </Link>
             <Link style={lembrouSenha} to="/">Lembrou da senha?</Link>
           </div>
         </form>

@@ -1,8 +1,7 @@
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
-import "./signin.css";
 import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
@@ -14,14 +13,16 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn, loadingAuth } = useContext(AuthContext);
+  const { signIn, isAuthUser } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const history = useHistory(true);
 
-  function handleSubmit(e) {
+  function handleLogin(e) {
     e.preventDefault();
 
     if (email !== "" && password !== "") {
       signIn(email, password);
+      history.push("/dashboard")
     }
   }
 
@@ -151,10 +152,10 @@ function SignIn() {
   };
 
   return (
-    <div style={containerMain}>
+    <div style={containerMain} key={history.location.key}>
       <ArteVisual />
       <div style={column2}>
-        <form style={form} onSubmit={handleSubmit}>
+        <form style={form} onSubmit={handleLogin}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
             containerTitle={containerTitle}
@@ -171,7 +172,7 @@ function SignIn() {
               name="email"
               placeholder="Insira seu e-mail"
               value={email}
-              onChange={ (e) => setEmail(e.target.value) }
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div style={containerInputPassword}>
@@ -186,7 +187,7 @@ function SignIn() {
                 name="password"
                 placeholder="Insira sua senha"
                 value={password}
-                onChange={ (e) => setPassword(e.target.value) }
+                onChange={(e) => setPassword(e.target.value)}
               />
               {showPassword ? (
                 <BsEyeSlash
@@ -209,25 +210,12 @@ function SignIn() {
               containerButton={containerButton}
               buttonStyle={button}
               conteudo="Entrar"
-            />
+            ></Button>
             <Link style={esqueceuSenha} to="/forgotPassword">
               Esqueceu sua senha?
             </Link>
           </div>
         </form>
-
-        {/* <div className="login-area">
-          <img src={logo} alt="Sistema Logo" />
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <h1>Entrar</h1>
-          <input type="text" placeholder="email@email.com" value={email} onChange={ (e) => setEmail(e.target.value) }/>
-          <input type="password" placeholder="*******" value={password} onChange={(e) => setPassword(e.target.value) } />
-          <button type="submit">{loadingAuth ? 'Carregando...' : 'Acessar'}</button>
-        </form>  
-
-        <Link to="/register">Criar uma conta</Link> */}
       </div>
     </div>
   );

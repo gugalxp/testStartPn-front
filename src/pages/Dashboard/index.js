@@ -9,30 +9,37 @@ import Title from "../../components/Title";
 import InputSearchProject from "../../components/InputSearchProject";
 import { FiMoreVertical, FiSettings } from "react-icons/fi";
 import { MdAddAPhoto } from "react-icons/md";
-
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 
-import firebase from "../../services/firebaseConnection";
 import userImg from "../../assets/images/user.png";
-
-const listRef = firebase
-  .firestore()
-  .collection("chamados")
-  .orderBy("created", "desc");
+import AvatarImg from "../../assets/images/avatar.png";
 
 export default function Dashboard() {
   const [itemMenu, setItemMenu] = useState(1);
+  const [itemMenuModal, setItemMenuModal] = useState(1);
   const [showModalEditOrDelete, setShowModalEditOrDelete] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalNewTerceiro, setShowModalNewTerceiro] = useState(false);
+  const [showModalConfiguracao, setShowModalConfiguracao] = useState(false);
+
+  function togglePostModalConfiguracao() {
+    setShowModalConfiguracao(!showModalConfiguracao); //troca de true para false
+  }
+
+  function togglePostModalNewTerceiro() {
+    setShowModalNewTerceiro(!showModalNewTerceiro); //troca de true para false
+  }
 
   function togglePostModalEditOrDelete() {
     setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
+    setShowSubModal(false);
   }
 
   function togglePostSubModal() {
     setShowSubModal(!showSubModal);
+    setShowModalEditOrDelete(false);
   }
 
   function closeModals() {
@@ -42,6 +49,7 @@ export default function Dashboard() {
 
   function togglePostModalEdit() {
     setShowModalEdit(!showModalEdit);
+    setShowModalEditOrDelete(false);
   }
 
   const containerNav = {
@@ -68,6 +76,25 @@ export default function Dashboard() {
     background: "#FFFFFF",
     border: "1px solid #D7D7D7",
     borderRadius: "100px",
+  };
+
+  const menuNavModal = {
+    width: "280px",
+    height: "45px",
+    gap: "10px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#FFFFFF",
+    border: "1px solid #D7D7D7",
+    borderRadius: "100px",
+  };
+
+  const menuNavContainer = {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "1em",
   };
 
   const newTerceiro = {
@@ -102,6 +129,14 @@ export default function Dashboard() {
     border: "1px solid #989898",
     width: "16px",
     height: "16px",
+    cursor: "pointer",
+  };
+
+  const checkboxModal = {
+    borderRadius: 0,
+    border: "1px solid #989898",
+    width: "14px",
+    height: "14px",
     cursor: "pointer",
   };
 
@@ -191,13 +226,13 @@ export default function Dashboard() {
     borderRadius: "50%",
     objectFit: "cover",
     position: "absolute",
-    marginTop: "50px"
+    marginTop: "50px",
   };
 
   const containerStyleImgUserModal = {
     display: "flex",
     justifyContent: "center",
-    position: 'relative',
+    position: "relative",
   };
 
   const form = {
@@ -213,6 +248,13 @@ export default function Dashboard() {
     flexWrap: "wrap",
   };
 
+  const formSettings = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  };
+
   const label = {
     fontWeight: 400,
     fontSize: "14px",
@@ -226,34 +268,76 @@ export default function Dashboard() {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    width: "250px",
     marginBottom: "2px",
   };
 
   const input = {
-    height: "45px",
     width: "250px",
-    borderRadius: "10px",
+    borderRadius: "7px",
     height: "50.06px",
     border: "1px solid #d7d7d7",
     background: "#fff",
     padding: "10px",
   };
 
+  const inputModalSettings = {
+    height: "40px",
+    width: "240px",
+    borderRadius: "10px",
+    border: "1px solid #d7d7d7",
+    background: "#fff",
+    padding: "10px",
+  };
+
+  const containerCheckboxModal = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    gap: "10px",
+    marginTop: "1em",
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "18px",
+    letterSpacing: "0.202385px",
+  };
+
   const select = {
-    ...input
-  }
+    ...input,
+  };
 
   const iconImgUserModal = {
-    position: 'absolute',
-    top: '118px',
-    right: '260',
-    background: '#476EE6',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    padding: '5px',
-  }
-  
+    position: "absolute",
+    top: "118px",
+    right: "260",
+    background: "#476EE6",
+    borderRadius: "50%",
+    cursor: "pointer",
+    padding: "5px",
+  };
+
+  const qtdNumeroCampo = {
+    backgroundColor: "#476EE6",
+    width: "2em",
+    height: "2em",
+    borderRadius: "50%",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: ".6em",
+    fontWeight: 600,
+  };
+
+  const containerQtdNumeroCampo = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: "15px",
+    height: "100%",
+  };
+
   return (
     <div>
       <Header />
@@ -279,10 +363,14 @@ export default function Dashboard() {
             </div>
             <InputSearchProject placeholder="Pesquisar" />
             <div style={iconSettingsContainer}>
-              <FiSettings size={23} color="#476EE6" />
+              <FiSettings
+                size={23}
+                color="#476EE6"
+                onClick={togglePostModalConfiguracao}
+              />
             </div>
           </div>
-          <Link onClick={() => togglePostModalEdit()} style={newTerceiro}>
+          <Link onClick={togglePostModalNewTerceiro} style={newTerceiro}>
             Novo Terceiro
           </Link>
         </div>
@@ -434,7 +522,11 @@ export default function Dashboard() {
           </div>
 
           <div className="modal-body">
-            <div style={editar_terceiro} className="editar-terceiro">
+            <div
+              style={editar_terceiro}
+              className="editar-terceiro"
+              onClick={() => togglePostModalEdit()}
+            >
               <h2>Editar terceiro</h2>
             </div>
 
@@ -470,7 +562,7 @@ export default function Dashboard() {
             </div>
             <div style={containerStyleImgUserModal}>
               <img style={styleImgUserModal} src={userImg} alt="Foto usuário" />
-              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30}/>
+              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
             </div>
             <form style={form}>
               <div style={containerInput}>
@@ -529,6 +621,166 @@ export default function Dashboard() {
                   name="nome"
                   placeholder="Insira seu nome"
                 />
+              </div>
+            </form>
+          </Modal>
+        </>
+      )}
+      {showModalNewTerceiro && (
+        <>
+          <Modal
+            width="605px"
+            height="566px"
+            close={togglePostModalNewTerceiro}
+          >
+            <div style={modal_header}>
+              <div style={fixEditarTerceiro}>
+                <FiX
+                  size={22}
+                  style={{ cursor: "pointer" }}
+                  onClick={togglePostModalNewTerceiro}
+                />
+                Criar Terceiro
+              </div>
+              <div style={title_header}>
+                <Button conteudo="Criar" buttonStyle={button} />
+              </div>
+            </div>
+            <div style={containerStyleImgUserModal}>
+              <img
+                style={styleImgUserModal}
+                src={AvatarImg}
+                alt="Foto usuário"
+              />
+              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
+            </div>
+            <form style={form}>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Nome do terceiro
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Telefone
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Tipo
+                </label>
+                <select style={select}>
+                  <option value="Cliente">Cliente</option>
+                  <option value="Fornecedor">Fornecedor</option>
+                </select>
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  E-mail
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+              <div style={containerInput}>
+                <label style={label} for="nome">
+                  Endereço
+                </label>
+                <input
+                  style={input}
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Insira seu nome"
+                />
+              </div>
+            </form>
+          </Modal>
+        </>
+      )}
+      {showModalConfiguracao && (
+        <>
+          <Modal
+            width="340px"
+            height="600px"
+            close={togglePostModalConfiguracao}
+          >
+            <div style={modal_header}>
+              <div style={fixEditarTerceiro}>
+                <FiX
+                  size={22}
+                  style={{ cursor: "pointer" }}
+                  onClick={togglePostModalConfiguracao}
+                />
+                Configuração
+              </div>
+              <div style={title_header}>
+                <Button conteudo="Editar" buttonStyle={button} />
+              </div>
+            </div>
+
+            <div style={menuNavContainer}>
+              <div style={menuNavModal}>
+                <Link
+                  className={itemMenuModal === 1 ? "itemModal active" : "item"}
+                  onClick={() => setItemMenuModal(1)}
+                >
+                  Clientes
+                </Link>
+                <Link
+                  className={itemMenuModal === 2 ? "itemModal active" : "item"}
+                  onClick={() => setItemMenuModal(2)}
+                >
+                  Fornecedores
+                </Link>
+              </div>
+            </div>
+
+            <form style={formSettings}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <div style={containerQtdNumeroCampo}>
+                  <div style={qtdNumeroCampo}>1</div>
+                  <div style={containerInput}>
+                    <label style={label} for="nome">
+                      Nome do campo
+                    </label>
+                    <input
+                      style={inputModalSettings}
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                </div>
+                <div style={containerCheckboxModal}>
+                  <input style={checkboxModal} type="checkbox" />O campo é
+                  obrigatório?
+                </div>
               </div>
             </form>
           </Modal>

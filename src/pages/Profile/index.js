@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import './profile.css';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
-import avatar from '../../assets/avatar.png';
+import avatar from '../../assets/images/avatar.png';
 
 import firebase from '../../services/firebaseConnection';
 import { AuthContext } from '../../context/auth';

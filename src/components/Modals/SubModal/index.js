@@ -88,7 +88,7 @@ export default function SubModal({ conteudo, close }) {
             <FiX size={22} style={{ cursor: 'pointer' }}onClick={close}/>
             Excluir Terceiros
           </div>
-          <div style={excluir}>Excluir</div>
+          <div style={excluir} onClick={close}>Excluir</div>
         </div>
 
         <div style={modal_body}>
