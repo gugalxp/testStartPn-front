@@ -20,7 +20,6 @@ function AuthProvider({ children }) {
   const [isSupplier, setIsSupplier] = useState(false);
   const [isClients, setIsClients] = useState(true);
 
-
   //Listar clientes
   async function listClient() {
     try {
@@ -82,14 +81,40 @@ function AuthProvider({ children }) {
       const response = await api.post("/sendMail", {
         email,
       });
-      console.log(response.data.message)
+      // console.log(response.data.resonseEmailSent.id)
+
+      setCookie(undefined, "@idNewPassword", response.data.resonseEmailSent.id, {
+        maxAge: 3600, // expirar em 1h
+        path: "/",
+      });
+
       toast.success("E-mail enviado com sucesso!");
       return true;
     } catch (error) {
       console.log("O error é esse: ", error.message);
-      if (error != "") {
-        toast.error("Houve algum problema ao enviar e-mail!");
-      }
+      return false;
+    }
+  }
+
+  async function newPasswordCreate(newPassword) {
+    try {
+      const { "@idNewPassword": idNewPassword } = parseCookies();
+
+      let id = idNewPassword;
+      console.log("ID GERADO: " ,id)
+
+      const response = await api.put("/users/update", {
+        id,
+        newPassword
+      });
+
+      console.log("ID GERADO dps da REQ: " ,id)
+      console.log(response.data)
+      toast.success("Atualizado com sucesso");
+
+      return true;
+    } catch (error) {
+      console.log(error.message);
       return false;
     }
   }
@@ -186,7 +211,8 @@ function AuthProvider({ children }) {
         emailUserAuth,
         nameUserAuth,
         setEmailSentConfirmed,
-        emailSentConfirmed
+        emailSentConfirmed,
+        newPasswordCreate
       }}
     >
       {children}

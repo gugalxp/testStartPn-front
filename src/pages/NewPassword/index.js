@@ -2,10 +2,28 @@ import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/auth";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory} from "react-router-dom";
 
 export default function NewPassword() {
+
+  const [newPassword, setNewPassword] = useState();
+  const [newPasswordConfirmed, setNewPasswordConfirmed] = useState();
+  const { newPasswordCreate } = useContext(AuthContext);
+  const history = useHistory()
+
+  function handleNewPassword(e) {
+    e.preventDefault();
+    if (newPassword === newPasswordConfirmed && newPasswordConfirmed && newPassword) {
+       let response = newPasswordCreate(newPassword);
+       if (response) {
+        history.push("/")
+       }
+      } else {
+    }
+  }
   const containerMain = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
@@ -143,6 +161,7 @@ export default function NewPassword() {
               Nova senha
             </label>
             <input
+              onChange={ (e) => setNewPassword(e.target.value)}
               style={input}
               type="password"
               id="password"
@@ -155,6 +174,7 @@ export default function NewPassword() {
                 Confirmação de nova senha
             </label>
             <input
+              onChange={ (e) => setNewPasswordConfirmed(e.target.value)}
               style={input}
               type="password"
               id="password"
@@ -163,14 +183,13 @@ export default function NewPassword() {
             />
           </div>
           <div style={containerForgotPassword}>
-            <Link to="/emailSent">
               <Button
+                handle={(e) => handleNewPassword(e)}
                 type="submit"
                 containerButton={containerButton}
                 buttonStyle={button}
                 conteudo="Criar senha"
               />
-            </Link>
             <Link style={lembrouSenha} to="/">
               Lembrou da senha?
             </Link>
