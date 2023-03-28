@@ -4,22 +4,22 @@ import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const { sendMail, isSendMail } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { sendMail, setEmailSentConfirmed } = useContext(AuthContext);
+  const history = useHistory();
   
   async function handleSendMail(e) {
     e.preventDefault();
     if (email) {
+      setEmailSentConfirmed(email);
       let isEmail = await sendMail(email)
-      console.log("O EMAIL FOI VERIFICADO", isEmail)
       if (isEmail) {
-        navigate(`/emailSent`);
+        history.push(`/emailSent`);
       }
     }
   }

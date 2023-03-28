@@ -8,29 +8,24 @@ import { api } from "../../src/services/apiClient";
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [userAuth, setUserAuth] = useState(null);
+  const [emailUserAuth, setEmailUserAuth] = useState(null);
+  const [nameUserAuth, setNameUserAuth] = useState(null);
+  const [emailSentConfirmed, setEmailSentConfirmed] = useState(null);
+  
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState(false);
   const [supplier, setSupplier] = useState(false);
   const [isSupplier, setIsSupplier] = useState(false);
   const [isClients, setIsClients] = useState(true);
-  
-  function loadStorage() {
-    const storageUser = localStorage.getItem("SistemaUser");
 
-    if (storageUser) {
-      setUser(JSON.parse(storageUser));
-      setLoading(false);
-    }
 
-    setLoading(false);
-  }
   //Listar clientes
   async function listClient() {
     try {
       if (isSupplier) {
-        setIsSupplier(false)
+        setIsSupplier(false);
         setIsClients(true);
         const response = await api.get("/client");
         setClients(response.data);
@@ -47,10 +42,10 @@ function AuthProvider({ children }) {
   async function listSupplier() {
     try {
       if (isClients) {
-       setIsClients(false);
-       setIsSupplier(true);
-       const response = await api.get("/fornecedor");
-       setSupplier(response.data);
+        setIsClients(false);
+        setIsSupplier(true);
+        const response = await api.get("/fornecedor");
+        setSupplier(response.data);
       } else {
         const response = await api.get("/fornecedor");
         setSupplier(response.data);
@@ -59,28 +54,42 @@ function AuthProvider({ children }) {
       console.log(error);
     }
   }
-  
+
   useEffect(() => {
+    //detalhes usuario
     const { "@startpn": token } = parseCookies();
-    if (!token) {
+    if (token) {
+      api.get("/users/details").then((response) => {
+        const {id, name, email} = response.data;
+        setUserAuth(id, name, email);//enquanto houver o token no storage manterá o usuário logado
+        setNameUserAuth(name)
+        setEmailUserAuth(email)
+      }).catch(err => {
+        signOut();
+      })
+    } else {
       signOut();
     }
+
     if (isClients) {
       listClient();
     }
-    loadStorage();
   }, []);
 
-  //Esqueci senha
+  //Enviar Email
   async function sendMail(email) {
     try {
       const response = await api.post("/sendMail", {
         email,
       });
-      toast.success("E-mail enviado com sucesso!")
+      console.log(response.data.message)
+      toast.success("E-mail enviado com sucesso!");
       return true;
     } catch (error) {
-      toast.error("Houve algum problema ao enviar e-mail!")
+      console.log("O error é esse: ", error.message);
+      if (error != "") {
+        toast.error("Houve algum problema ao enviar e-mail!");
+      }
       return false;
     }
   }
@@ -97,24 +106,27 @@ function AuthProvider({ children }) {
 
       const { id, name, telefone, endereco, token } = response.data;
 
+      setNameUserAuth(name);
+      setEmailUserAuth(email);
+
       setCookie(undefined, "@startpn", token, {
         maxAge: 3600, // expirar em 1h
         path: "/",
       });
 
-      setUser({
+      setUserAuth(
         id,
         email,
         name,
         telefone,
         endereco,
-      });
+      );
 
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      toast.success("Logado com sucesso!")
+      toast.success("Logado com sucesso!");
       return true;
     } catch (error) {
-      toast.error(error)
+      toast.error(error);
       return false;
     }
   }
@@ -129,8 +141,10 @@ function AuthProvider({ children }) {
           name,
         });
 
+        setUserAuth(response.data);
+
         if (response.data.id) {
-          toast.success("Cadastrado efetuado com sucesso!")
+          toast.success("Cadastrado efetuado com sucesso!");
         }
       } else {
         toast.error("As senhas inseridas não coincidem!");
@@ -143,10 +157,6 @@ function AuthProvider({ children }) {
     }
   }
 
-  function storageUser(data) {
-    localStorage.setItem("SistemaUser", JSON.stringify(data));
-  }
-
   //Logout do usuario
   async function signOut() {
     try {
@@ -154,14 +164,14 @@ function AuthProvider({ children }) {
     } catch (error) {
       console.log("Erro ao tentar deslogar o usuario: ", error);
     }
-    setUser(null);
+    setUserAuth(null);
   }
 
   return (
     <AuthContext.Provider
       value={{
-        signed: !!user,
-        user,
+        signed: !!userAuth,
+        userAuth,
         signUp,
         clients,
         signOut,
@@ -172,9 +182,11 @@ function AuthProvider({ children }) {
         supplier,
         listSupplier,
         signIn,
-        loadingAuth,
-        setUser,
-        storageUser,
+        setUserAuth,
+        emailUserAuth,
+        nameUserAuth,
+        setEmailSentConfirmed,
+        emailSentConfirmed
       }}
     >
       {children}

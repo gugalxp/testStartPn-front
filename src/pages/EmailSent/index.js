@@ -3,10 +3,14 @@ import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import EmailEnviadoImg from "../../assets/images/emailEnviado.png";
+import { AuthContext } from "../../context/auth";
+import { useState, useContext } from "react";
 
 import { Link } from "react-router-dom";
 
 export default function EmailSent() {
+const { emailSentConfirmed } = useContext(AuthContext);
+
   const containerMain = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
@@ -121,7 +125,7 @@ export default function EmailSent() {
           />
           <p style={description}>
             Um link de recuperação de senha foi enviado para o e-mail
-            <strong>mateus@startpn.com</strong>
+            <strong> {emailSentConfirmed} </strong>
           </p>
 
           <div style={containeremailEnviado}>

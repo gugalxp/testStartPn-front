@@ -1,5 +1,5 @@
 
-import { Routes } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Route from './Route';
 
 import SignIn from '../pages/SignIn';
@@ -11,9 +11,9 @@ import ForgotPassword from '../pages/ForgotPassword';
 import EmailSent from '../pages/EmailSent';
 import NewPassword from '../pages/NewPassword';
 
-export default function Router(){
+export default function Routes(){
   return(
-    <Routes>
+    <Switch>
       <Route exact path="/" component={SignIn} />
       <Route exact path="/register" component={SignUp} />
       <Route exact path="/forgotPassword" component={ForgotPassword} />
@@ -25,6 +25,6 @@ export default function Router(){
       <Route exact path="/dashboard" component={Dashboard} isPrivate />
       <Route exact path="/profile" component={Profile} isPrivate/>
 
-    </Routes>
+    </Switch>
   )
 }

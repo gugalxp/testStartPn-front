@@ -30,6 +30,7 @@ export default function Dashboard() {
     isSupplier,
     isClients,
     listClient,
+    nameUserAuth
   } = useContext(AuthContext);
 
   function togglePostModalConfiguracao() {
@@ -382,7 +383,7 @@ export default function Dashboard() {
     <div>
       <Header />
       <div className="content">
-        <Title nameUser="Gustavo Arruda" userImg={userImg} page="Terceiros">
+        <Title nameUser={nameUserAuth} userImg={userImg} page="Terceiros">
           <img src={userImg} alt="" />
         </Title>
         <div style={containerNav}>

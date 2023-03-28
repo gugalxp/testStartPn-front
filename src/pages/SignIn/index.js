@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
 import ArteVisual from "../../components/ArteVisual";
@@ -15,7 +15,7 @@ function SignIn() {
 
   const { signIn } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const history = useHistory();
 
   function handleLogin(e) {
     e.preventDefault();
@@ -23,7 +23,7 @@ function SignIn() {
     if (email !== "" && password !== "") {
       let isSignIn = signIn(email, password);
       if (isSignIn) {
-        navigate("/dashboard")
+        history.push("/dashboard")
       }
     }
   }

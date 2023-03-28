@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useHistory} from "react-router-dom";
 import { AuthContext } from "../../context/auth";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
@@ -17,7 +17,7 @@ function SignUp() {
   const { signUp } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmaPassword, setShowConfirmaPassword] = useState(false);
-  const navigate = useNavigate();
+  const history = useHistory();
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -25,7 +25,7 @@ function SignUp() {
       const isRegister = await signUp(email, password, confirmedPassword, name);
       console.log( isRegister)
       if (isRegister) {
-        navigate("/");
+        history.push("/");
       } 
     }
   }
