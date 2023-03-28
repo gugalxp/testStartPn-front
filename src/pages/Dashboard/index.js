@@ -1,4 +1,3 @@
-import "./dashboard.css";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import SubModal from "../../components/Modals/SubModal";
@@ -23,6 +22,15 @@ export default function Dashboard() {
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalNewTerceiro, setShowModalNewTerceiro] = useState(false);
   const [showModalConfiguracao, setShowModalConfiguracao] = useState(false);
+
+  const {
+    clients,
+    supplier,
+    listSupplier,
+    isSupplier,
+    isClients,
+    listClient,
+  } = useContext(AuthContext);
 
   function togglePostModalConfiguracao() {
     setShowModalConfiguracao(!showModalConfiguracao); //troca de true para false
@@ -50,6 +58,24 @@ export default function Dashboard() {
   function togglePostModalEdit() {
     setShowModalEdit(!showModalEdit);
     setShowModalEditOrDelete(false);
+  }
+
+  async function handleListContentSupplier(list) {
+    if (list === "1") {
+      setItemMenu(1);
+    } else {
+      await listSupplier();
+      setItemMenu(2);
+    }
+  }
+
+  async function handleListContentClient(list) {
+    if (list === "1") {
+      await listClient();
+      setItemMenu(1);
+    } else {
+      setItemMenu(2);
+    }
   }
 
   const containerNav = {
@@ -145,13 +171,6 @@ export default function Dashboard() {
     height: "37px",
     borderRadius: "50%",
     objectFit: "cover",
-  };
-
-  const containerUsernamePhoto = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
   };
 
   const modal_header = {
@@ -338,6 +357,27 @@ export default function Dashboard() {
     height: "100%",
   };
 
+  const campoList = {
+    width: "33%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    wordBreak: "break-all",
+  };
+
+  const campoListEmail = {
+    ...campoList,
+    justifyContent: "flex-start !important",
+  };
+
+  const containerUsernamePhoto = {
+    width: "33%",
+    display: "flex",
+    alignItems: "center",
+    gap: "30px",
+    marginLeft: "4em",
+  };
+
   return (
     <div>
       <Header />
@@ -350,13 +390,13 @@ export default function Dashboard() {
             <div style={menuNav}>
               <Link
                 className={itemMenu === 1 ? "item active" : "item"}
-                onClick={() => setItemMenu(1)}
+                onClick={() => handleListContentClient("1")}
               >
                 Clientes
               </Link>
               <Link
                 className={itemMenu === 2 ? "item active" : "item"}
-                onClick={() => setItemMenu(2)}
+                onClick={() => handleListContentSupplier("2")}
               >
                 Fornecedores
               </Link>
@@ -383,132 +423,58 @@ export default function Dashboard() {
             <span>Endereço</span>
           </div>
         </div>
-
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical
-                size={20}
-                style={{ cursor: "pointer" }}
-                color="#000"
-                onClick={() => togglePostModalEditOrDelete()}
-              />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
-        <div className="listagemTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentListagemTerceiros">
-            <div style={containerUsernamePhoto}>
-              <img style={imgUserStyle} src={userImg} alt="" />
-              <span>Gustavo Arruda</span>
-            </div>
-            <span>gustavoleone3456@hotmail.com</span>
-            <span>13 99636-4053</span>
-            <span>Rua Treze, 140 - Guarujá SP</span>
-            <span>
-              <FiMoreVertical size={20} color="#000" />
-            </span>
-          </div>
-        </div>
+        {isClients && (
+          <>
+            {Object.values(clients).map((client) => (
+              <div className="listagemTerceiros">
+                <input type="checkbox" style={checkbox} />
+                <div style={containerUsernamePhoto}>
+                  <img style={imgUserStyle} src={userImg} alt="" />
+                  <span>{client.name}</span>
+                </div>
+                <div className="contentListagemTerceiros">
+                  <span style={campoListEmail}>{client.email}</span>
+                  <span style={campoList}>{client.telefone}</span>
+                  <span style={campoList}>{client.endereco}</span>
+                  <span style={campoList}>
+                    <FiMoreVertical
+                      size={20}
+                      style={{ cursor: "pointer" }}
+                      color="#000"
+                      onClick={() => togglePostModalEditOrDelete()}
+                    />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+        {isSupplier && (
+          <>
+            {Object.values(supplier).map((supp) => (
+              <div className="listagemTerceiros">
+                <input type="checkbox" style={checkbox} />
+                <div style={containerUsernamePhoto}>
+                  <img style={imgUserStyle} src={userImg} alt="" />
+                  <span>{supp.name}</span>
+                </div>
+                <div className="contentListagemTerceiros">
+                  <span style={campoListEmail}>{supp.email}</span>
+                  <span style={campoList}>{supp.telefone}</span>
+                  <span style={campoList}>{supp.endereco}</span>
+                  <span style={campoList}>
+                    <FiMoreVertical
+                      size={20}
+                      style={{ cursor: "pointer" }}
+                      color="#000"
+                      onClick={() => togglePostModalEditOrDelete()}
+                    />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
       {showModalEditOrDelete && (
         <Modal close={togglePostModalEditOrDelete} width="375px" height="275px">

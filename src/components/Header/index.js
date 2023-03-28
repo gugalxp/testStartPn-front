@@ -17,7 +17,7 @@ import Dashboard from "../../pages/Dashboard";
 
 
 export default function Header() {
-  const { user } = useContext(AuthContext);
+  const { user, signOut } = useContext(AuthContext);
 
   const items = {
     display: "block",
@@ -114,7 +114,7 @@ export default function Header() {
           <FiUser color="#787486" style={icon} size={24} />
           Minha conta 
         </Link>
-        <Link style={containerLogOut}>
+        <Link style={containerLogOut} onClick={signOut}>
           <FiLogOut color="#787486" style={icon} size={24} />
           Sair
         </Link>

@@ -120,7 +120,7 @@ export default function EmailSent() {
             conteudo="E-mail enviado!"
           />
           <p style={description}>
-            Um link de recuperação de senha foi enviado para o e-mail{" "}
+            Um link de recuperação de senha foi enviado para o e-mail
             <strong>mateus@startpn.com</strong>
           </p>
 

@@ -2,7 +2,7 @@ import { useState, createContext, useEffect } from "react";
 import firebase from "../services/firebaseConnection";
 import { toast } from "react-toastify";
 
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie, setCookie, parseCookies } from "nookies";
 import { api } from "../../src/services/apiClient";
 
 export const AuthContext = createContext({});
@@ -11,21 +11,63 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [authRegisterUser, setAuthRegisterUser] = useState(false);
-  const [tokenURL, setTokenURL] = useState(false)
+  const [clients, setClients] = useState(false);
+  const [supplier, setSupplier] = useState(false);
+  const [isSupplier, setIsSupplier] = useState(false);
+  const [isClients, setIsClients] = useState(true);
+  
+  function loadStorage() {
+    const storageUser = localStorage.getItem("SistemaUser");
 
-  useEffect(() => {
-    function loadStorage() {
-      const storageUser = localStorage.getItem("SistemaUser");
-
-      if (storageUser) {
-        setUser(JSON.parse(storageUser));
-        setLoading(false);
-      }
-
+    if (storageUser) {
+      setUser(JSON.parse(storageUser));
       setLoading(false);
     }
 
+    setLoading(false);
+  }
+  //Listar clientes
+  async function listClient() {
+    try {
+      if (isSupplier) {
+        setIsSupplier(false)
+        setIsClients(true);
+        const response = await api.get("/client");
+        setClients(response.data);
+      } else {
+        const response = await api.get("/client");
+        setClients(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //Listar fornecedor
+  async function listSupplier() {
+    try {
+      if (isClients) {
+       setIsClients(false);
+       setIsSupplier(true);
+       const response = await api.get("/fornecedor");
+       setSupplier(response.data);
+      } else {
+        const response = await api.get("/fornecedor");
+        setSupplier(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  useEffect(() => {
+    const { "@startpn": token } = parseCookies();
+    if (!token) {
+      signOut();
+    }
+    if (isClients) {
+      listClient();
+    }
     loadStorage();
   }, []);
 
@@ -35,14 +77,11 @@ function AuthProvider({ children }) {
       const response = await api.post("/sendMail", {
         email,
       });
-
-      setUser({
-        email
-      })
-      setTokenURL(response.data.token)
-      console.log(response.data.token)
+      toast.success("E-mail enviado com sucesso!")
+      return true;
     } catch (error) {
-      console.log(error)
+      toast.error("Houve algum problema ao enviar e-mail!")
+      return false;
     }
   }
 
@@ -56,7 +95,7 @@ function AuthProvider({ children }) {
         password,
       });
 
-      const { id, email, name, telefone, endereco, token } = response.data;
+      const { id, name, telefone, endereco, token } = response.data;
 
       setCookie(undefined, "@startpn", token, {
         maxAge: 3600, // expirar em 1h
@@ -72,8 +111,11 @@ function AuthProvider({ children }) {
       });
 
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      toast.success("Logado com sucesso!")
+      return true;
     } catch (error) {
-      console.log(error);
+      toast.error(error)
+      return false;
     }
   }
 
@@ -86,13 +128,18 @@ function AuthProvider({ children }) {
           password,
           name,
         });
-        
+
         if (response.data.id) {
-          setAuthRegisterUser(true)
+          toast.success("Cadastrado efetuado com sucesso!")
         }
+      } else {
+        toast.error("As senhas inseridas não coincidem!");
+        return false;
       }
+      return true;
     } catch (error) {
-      console.log(error);
+      toast.error(error);
+      return false;
     }
   }
 
@@ -115,12 +162,15 @@ function AuthProvider({ children }) {
       value={{
         signed: !!user,
         user,
-        loading,
         signUp,
+        clients,
         signOut,
-        authRegisterUser,
+        isSupplier,
+        isClients,
+        listClient,
         sendMail,
-        tokenURL,
+        supplier,
+        listSupplier,
         signIn,
         loadingAuth,
         setUser,
