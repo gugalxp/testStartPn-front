@@ -1,17 +1,29 @@
 import React from "react";
+import Header from "../../components/Header";
 
 const DashboardColumnLayout = ({ colum2Data }) => {
+  const contentMain = {
+    marginLeft: "50px",
+    marginRight: "50px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  };
+
   const containerMain = {
-    marginLeft: '280px',
-    marginRight: '50px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    display: "grid",
+    gridTemplateColumns:
+      "229px 1fr",
+    gridColumnGap: "0px",
+    gridRowGap: "0px",
   };
 
   return (
     <div style={containerMain}>
-        {colum2Data}
+      <div>
+        <Header />
+      </div>
+      <div style={contentMain}>{colum2Data}</div>
     </div>
   );
 };

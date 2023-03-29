@@ -158,7 +158,7 @@ function SignUp() {
     <div className="containerCadastro">
       <BeforeLoggerColumnLayout
         colum2Data={
-          <div style={containerColumn2}>
+          <div>
             <Logo containerLogo={{ width: "100%", marginBottom: "25px" }} />
             <TitlePrimary
               containerTitle={{ fontStyle: "normal" }}

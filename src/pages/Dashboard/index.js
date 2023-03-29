@@ -13,6 +13,7 @@ import { FiX } from "react-icons/fi";
 
 import userImg from "../../assets/images/user.png";
 import AvatarImg from "../../assets/images/avatar.png";
+import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 
 export default function Dashboard() {
   const [itemMenu, setItemMenu] = useState(1);
@@ -30,7 +31,7 @@ export default function Dashboard() {
     isSupplier,
     isClients,
     listClient,
-    nameUserAuth
+    nameUserAuth,
   } = useContext(AuthContext);
 
   function togglePostModalConfiguracao() {
@@ -381,102 +382,105 @@ export default function Dashboard() {
 
   return (
     <div>
-      <Header />
-      <div className="content">
-        <Title nameUser={nameUserAuth} userImg={userImg} page="Terceiros">
-          <img src={userImg} alt="" />
-        </Title>
-        <div style={containerNav}>
-          <div style={containerMenuNav}>
-            <div style={menuNav}>
-              <Link
-                className={itemMenu === 1 ? "item active" : "item"}
-                onClick={() => handleListContentClient("1")}
-              >
-                Clientes
-              </Link>
-              <Link
-                className={itemMenu === 2 ? "item active" : "item"}
-                onClick={() => handleListContentSupplier("2")}
-              >
-                Fornecedores
-              </Link>
-            </div>
-            <InputSearchProject placeholder="Pesquisar" />
-            <div style={iconSettingsContainer}>
-              <FiSettings
-                size={23}
-                color="#476EE6"
-                onClick={togglePostModalConfiguracao}
-              />
-            </div>
-          </div>
-          <Link onClick={togglePostModalNewTerceiro} style={newTerceiro}>
-            Novo Terceiro
-          </Link>
-        </div>
-        <div className="titleListTerceiros">
-          <input type="checkbox" style={checkbox} />
-          <div className="contentTitleListTerceiros">
-            <span>Nome</span>
-            <span>E-mail</span>
-            <span>Telefone</span>
-            <span>Endereço</span>
-          </div>
-        </div>
-        {isClients && (
-          <>
-            {Object.values(clients).map((client) => (
-              <div className="listagemTerceiros">
-                <input type="checkbox" style={checkbox} />
-                <div style={containerUsernamePhoto}>
-                  <img style={imgUserStyle} src={userImg} alt="" />
-                  <span>{client.name}</span>
+      <DashboardColumnLayout
+        colum2Data={
+          <div>
+            <Title nameUser={nameUserAuth} userImg={userImg} page="Terceiros">
+              <img src={userImg} alt="" />
+            </Title>
+            <div style={containerNav}>
+              <div style={containerMenuNav}>
+                <div style={menuNav}>
+                  <Link
+                    className={itemMenu === 1 ? "item active" : "item"}
+                    onClick={() => handleListContentClient("1")}
+                  >
+                    Clientes
+                  </Link>
+                  <Link
+                    className={itemMenu === 2 ? "item active" : "item"}
+                    onClick={() => handleListContentSupplier("2")}
+                  >
+                    Fornecedores
+                  </Link>
                 </div>
-                <div className="contentListagemTerceiros">
-                  <span style={campoListEmail}>{client.email}</span>
-                  <span style={campoList}>{client.telefone}</span>
-                  <span style={campoList}>{client.endereco}</span>
-                  <span style={campoList}>
-                    <FiMoreVertical
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      color="#000"
-                      onClick={() => togglePostModalEditOrDelete()}
-                    />
-                  </span>
+                <InputSearchProject placeholder="Pesquisar" />
+                <div style={iconSettingsContainer}>
+                  <FiSettings
+                    size={23}
+                    color="#476EE6"
+                    onClick={togglePostModalConfiguracao}
+                  />
                 </div>
               </div>
-            ))}
-          </>
-        )}
-        {isSupplier && (
-          <>
-            {Object.values(supplier).map((supp) => (
-              <div className="listagemTerceiros">
-                <input type="checkbox" style={checkbox} />
-                <div style={containerUsernamePhoto}>
-                  <img style={imgUserStyle} src={userImg} alt="" />
-                  <span>{supp.name}</span>
-                </div>
-                <div className="contentListagemTerceiros">
-                  <span style={campoListEmail}>{supp.email}</span>
-                  <span style={campoList}>{supp.telefone}</span>
-                  <span style={campoList}>{supp.endereco}</span>
-                  <span style={campoList}>
-                    <FiMoreVertical
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      color="#000"
-                      onClick={() => togglePostModalEditOrDelete()}
-                    />
-                  </span>
-                </div>
+              <Link onClick={togglePostModalNewTerceiro} style={newTerceiro}>
+                Novo Terceiro
+              </Link>
+            </div>
+            <div className="titleListTerceiros">
+              <input type="checkbox" style={checkbox} />
+              <div className="contentTitleListTerceiros">
+                <span>Nome</span>
+                <span>E-mail</span>
+                <span>Telefone</span>
+                <span>Endereço</span>
               </div>
-            ))}
-          </>
-        )}
-      </div>
+            </div>
+            {isClients && (
+              <>
+                {Object.values(clients).map((client) => (
+                  <div className="listagemTerceiros">
+                    <input type="checkbox" style={checkbox} />
+                    <div style={containerUsernamePhoto}>
+                      <img style={imgUserStyle} src={userImg} alt="" />
+                      <span>{client.name}</span>
+                    </div>
+                    <div className="contentListagemTerceiros">
+                      <span style={campoListEmail}>{client.email}</span>
+                      <span style={campoList}>{client.telefone}</span>
+                      <span style={campoList}>{client.endereco}</span>
+                      <span style={campoList}>
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() => togglePostModalEditOrDelete()}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {isSupplier && (
+              <>
+                {Object.values(supplier).map((supp) => (
+                  <div className="listagemTerceiros">
+                    <input type="checkbox" style={checkbox} />
+                    <div style={containerUsernamePhoto}>
+                      <img style={imgUserStyle} src={userImg} alt="" />
+                      <span>{supp.name}</span>
+                    </div>
+                    <div className="contentListagemTerceiros">
+                      <span style={campoListEmail}>{supp.email}</span>
+                      <span style={campoList}>{supp.telefone}</span>
+                      <span style={campoList}>{supp.endereco}</span>
+                      <span style={campoList}>
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() => togglePostModalEditOrDelete()}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        }
+      />
       {showModalEditOrDelete && (
         <Modal close={togglePostModalEditOrDelete} width="375px" height="275px">
           <div style={modal_header}>
