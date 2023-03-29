@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
@@ -7,6 +7,7 @@ import Button from "../../components/Button";
 import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import TitlePrimary from "../../components/TitlePrimary";
+import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -23,29 +24,12 @@ function SignUp() {
     e.preventDefault();
     if (email && password && confirmedPassword && name) {
       const isRegister = await signUp(email, password, confirmedPassword, name);
-      console.log( isRegister)
+      console.log(isRegister);
       if (isRegister) {
         history.push("/");
-      } 
+      }
     }
   }
-
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
-
-  const column2 = {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    height: "100%",
-  };
 
   const containerColumn2 = {
     marginTop: "0",
@@ -172,10 +156,8 @@ function SignUp() {
 
   return (
     <div className="containerCadastro">
-      <div style={containerMain}>
-        <ArteVisual />
-
-        <div style={column2}>
+      <BeforeLoggerColumnLayout
+        colum2Data={
           <div style={containerColumn2}>
             <Logo containerLogo={{ width: "100%", marginBottom: "25px" }} />
             <TitlePrimary
@@ -217,7 +199,7 @@ function SignUp() {
                 </label>
                 <div style={containerInputIcon}>
                   <input
-                    onChange={(e) => setPassword(e.target.value)}                  
+                    onChange={(e) => setPassword(e.target.value)}
                     style={input}
                     type={showPassword ? "text" : "password"}
                     id="senha"
@@ -257,13 +239,17 @@ function SignUp() {
                     <BsEyeSlash
                       style={icon}
                       size={24}
-                      onClick={() => setShowConfirmaPassword(!showConfirmaPassword)}
+                      onClick={() =>
+                        setShowConfirmaPassword(!showConfirmaPassword)
+                      }
                     />
                   ) : (
                     <BsEye
                       style={icon}
                       size={24}
-                      onClick={() => setShowConfirmaPassword(!showConfirmaPassword)}
+                      onClick={() =>
+                        setShowConfirmaPassword(!showConfirmaPassword)
+                      }
                     />
                   )}
                 </div>
@@ -297,10 +283,9 @@ function SignUp() {
               </Link>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
     </div>
-
   );
 }
 

@@ -4,42 +4,29 @@ import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
-
-import { Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 
 export default function NewPassword() {
-
   const [newPassword, setNewPassword] = useState();
   const [newPasswordConfirmed, setNewPasswordConfirmed] = useState();
   const { newPasswordCreate } = useContext(AuthContext);
-  const history = useHistory()
+  const history = useHistory();
 
   function handleNewPassword(e) {
     e.preventDefault();
-    if (newPassword === newPasswordConfirmed && newPasswordConfirmed && newPassword) {
-       let response = newPasswordCreate(newPassword);
-       if (response) {
-        history.push("/")
-       }
-      } else {
+    if (
+      newPassword === newPasswordConfirmed &&
+      newPasswordConfirmed &&
+      newPassword
+    ) {
+      let response = newPasswordCreate(newPassword);
+      if (response) {
+        history.push("/");
+      }
+    } else {
     }
   }
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
-
-  const column2 = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    height: "100%",
-  };
 
   const containerLogo = {
     width: "100%",
@@ -144,9 +131,8 @@ export default function NewPassword() {
   };
 
   return (
-    <div style={containerMain}>
-      <ArteVisual />
-      <div style={column2}>
+    <BeforeLoggerColumnLayout
+      colum2Data={
         <form style={form}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
@@ -161,7 +147,7 @@ export default function NewPassword() {
               Nova senha
             </label>
             <input
-              onChange={ (e) => setNewPassword(e.target.value)}
+              onChange={(e) => setNewPassword(e.target.value)}
               style={input}
               type="password"
               id="password"
@@ -171,10 +157,10 @@ export default function NewPassword() {
           </div>
           <div style={containerInputNewSenha}>
             <label style={label} for="password">
-                Confirmação de nova senha
+              Confirmação de nova senha
             </label>
             <input
-              onChange={ (e) => setNewPasswordConfirmed(e.target.value)}
+              onChange={(e) => setNewPasswordConfirmed(e.target.value)}
               style={input}
               type="password"
               id="password"
@@ -183,19 +169,19 @@ export default function NewPassword() {
             />
           </div>
           <div style={containerForgotPassword}>
-              <Button
-                handle={(e) => handleNewPassword(e)}
-                type="submit"
-                containerButton={containerButton}
-                buttonStyle={button}
-                conteudo="Criar senha"
-              />
+            <Button
+              handle={(e) => handleNewPassword(e)}
+              type="submit"
+              containerButton={containerButton}
+              buttonStyle={button}
+              conteudo="Criar senha"
+            />
             <Link style={lembrouSenha} to="/">
               Lembrou da senha?
             </Link>
           </div>
         </form>
-      </div>
-    </div>
+      }
+    />
   );
 }

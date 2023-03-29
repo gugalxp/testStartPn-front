@@ -5,41 +5,24 @@ import TitlePrimary from "../../components/TitlePrimary";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { useHistory } from "react-router-dom";
-
+import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const { sendMail, setEmailSentConfirmed } = useContext(AuthContext);
   const history = useHistory();
-  
+
   async function handleSendMail(e) {
     e.preventDefault();
     if (email) {
       setEmailSentConfirmed(email);
-      let isEmail = await sendMail(email)
+      let isEmail = await sendMail(email);
       if (isEmail) {
         history.push(`/emailSent`);
       }
     }
   }
-
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
-
-  const column2 = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: 'center',
-    flexDirection: "column",
-    height: '100%'
-  };
 
   const containerLogo = {
     width: "100%",
@@ -60,7 +43,6 @@ export default function ForgotPassword() {
 
   const form = {
     display: "flex",
-    maxWidth: "418px",
     justifyContent: "center",
     flexDirection: "column",
     margin: "0",
@@ -99,9 +81,9 @@ export default function ForgotPassword() {
   };
 
   const description = {
-    marginBottom: '34px',
-    width: '418px'
-  }
+    marginBottom: "34px",
+    width: "418px",
+  };
 
   const containerButton = {
     marginTop: "0",
@@ -134,11 +116,9 @@ export default function ForgotPassword() {
     lineHeight: "27px",
   };
 
-
   return (
-    <div style={containerMain}>
-      <ArteVisual />
-      <div style={column2}>
+    <BeforeLoggerColumnLayout
+      colum2Data={
         <form style={form} onSubmit={handleSendMail}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
@@ -154,7 +134,7 @@ export default function ForgotPassword() {
               E-mail
             </label>
             <input
-              onChange={ (e) => setEmail(e.target.value) }
+              onChange={(e) => setEmail(e.target.value)}
               style={input}
               type="text"
               id="email"
@@ -162,18 +142,20 @@ export default function ForgotPassword() {
               placeholder="Insira seu e-mail"
             />
           </div>
-        <div style={containerForgotPassword}>
-              <Button
-                handle={sendMail}
-                type="submit"
-                containerButton={containerButton}
-                buttonStyle={button}
-                conteudo="Recuperar senha"
-              />
-            <Link style={lembrouSenha} to="/">Lembrou da senha?</Link>
+          <div style={containerForgotPassword}>
+            <Button
+              handle={sendMail}
+              type="submit"
+              containerButton={containerButton}
+              buttonStyle={button}
+              conteudo="Recuperar senha"
+            />
+            <Link style={lembrouSenha} to="/">
+              Lembrou da senha?
+            </Link>
           </div>
         </form>
-      </div>
-    </div>
+      }
+    />
   );
 }

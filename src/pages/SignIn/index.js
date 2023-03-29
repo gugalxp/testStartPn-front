@@ -1,13 +1,11 @@
 import { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-
 import { AuthContext } from "../../context/auth";
-import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
-
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -23,27 +21,10 @@ function SignIn() {
     if (email !== "" && password !== "") {
       let isSignIn = signIn(email, password);
       if (isSignIn) {
-        history.push("/dashboard")
+        history.push("/dashboard");
       }
     }
   }
-
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
-
-  const column2 = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    height: "100%",
-  };
 
   const input = {
     width: "418px",
@@ -154,9 +135,8 @@ function SignIn() {
   };
 
   return (
-    <div style={containerMain}>
-      <ArteVisual />
-      <div style={column2}>
+    <BeforeLoggerColumnLayout
+      colum2Data={
         <form style={form} onSubmit={handleLogin}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
@@ -218,8 +198,8 @@ function SignIn() {
             </Link>
           </div>
         </form>
-      </div>
-    </div>
+      }
+    />
   );
 }
 
