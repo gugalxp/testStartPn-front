@@ -1,32 +1,16 @@
-import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import EmailEnviadoImg from "../../assets/images/emailEnviado.png";
 import { AuthContext } from "../../context/auth";
-import { useState, useContext } from "react";
+import { useContext } from "react";
+import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 
 import { Link } from "react-router-dom";
 
 export default function EmailSent() {
-const { emailSentConfirmed } = useContext(AuthContext);
+  const { emailSentConfirmed } = useContext(AuthContext);
 
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
-
-  const column2 = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    height: "100%",
-  };
 
   const containerLogo = {
     width: "100%",
@@ -44,7 +28,6 @@ const { emailSentConfirmed } = useContext(AuthContext);
     fontSize: "24px",
     lineHeight: "36px",
     fontWeight: "500",
-    lineHeight: "3%",
     padding: "0",
   };
 
@@ -114,9 +97,8 @@ const { emailSentConfirmed } = useContext(AuthContext);
   };
 
   return (
-    <div style={containerMain}>
-      <ArteVisual />
-      <div style={column2}>
+    <BeforeLoggerColumnLayout
+      colum2Data={
         <form style={form}>
           <Logo containerLogo={containerLogo} />
           <TitlePrimary
@@ -149,7 +131,7 @@ const { emailSentConfirmed } = useContext(AuthContext);
             {/* <Link style={lembrouSenha} to="/">Lembrou da senha?</Link> */}
           </div>
         </form>
-      </div>
-    </div>
+      }
+    />
   );
 }

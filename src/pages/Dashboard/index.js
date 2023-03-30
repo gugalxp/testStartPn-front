@@ -3,9 +3,7 @@ import { AuthContext } from "../../context/auth";
 import SubModal from "../../components/Modals/SubModal";
 import Button from "../../components/Button";
 import Modal from "../../components/Modals/Modal";
-import Header from "../../components/Header";
 import Title from "../../components/Title";
-import InputSearchProject from "../../components/InputSearchProject";
 import { FiMoreVertical, FiSettings } from "react-icons/fi";
 import { MdAddAPhoto } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -23,6 +21,21 @@ export default function Dashboard() {
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalNewTerceiro, setShowModalNewTerceiro] = useState(false);
   const [showModalConfiguracao, setShowModalConfiguracao] = useState(false);
+  const [search, setSearch] = useState();
+  const [novoTerceiroNome, setNovoTerceiroNome] = useState();
+  const [novoTerceiroEmail, setNovoTerceiroEmail] = useState();
+  const [novoTerceiroTelefone, setNovoTerceiroTelefone] = useState();
+  const [novoTerceiroEndereco, setNovoTerceiroEndereco] = useState();
+  const [novoTerceiroTipo, setNovoTerceiroTipo] = useState();
+
+  const [updateTerceiroNome, setUpdateTerceiroNome] = useState();
+  const [updateTerceiroEmail, setUpdateTerceiroEmail] = useState();
+  const [updateTerceiroTelefone, setUpdateTerceiroTelefone] = useState();
+  const [updateTerceiroEndereco, setUpdateTerceiroEndereco] = useState();
+  const [updateTerceiroTipo, setUpdateTerceiroTipo] = useState();
+  const [deleteTerceiroTipo, setDeleteTerceiroTipo] = useState("Cliente");
+
+  const [idItem, setIdItem] = useState();
 
   const {
     clients,
@@ -32,8 +45,61 @@ export default function Dashboard() {
     isClients,
     listClient,
     nameUserAuth,
+    searchSupplier,
+    searchClient,
+    searchItemsClient,
+    searchItemsSuplier,
+    setIsSupplier,
+    setIsClients,
+    createTerceiroData,
+    updateTerceiroData,
+    deleteTerceiroData,
   } = useContext(AuthContext);
 
+  function newTerceiroModalContent(e) {
+    e.preventDefault();
+    createTerceiroData(
+      novoTerceiroNome,
+      novoTerceiroEmail,
+      novoTerceiroTelefone,
+      novoTerceiroEndereco,
+      novoTerceiroTipo,
+      idItem
+    );
+
+    setNovoTerceiroNome("");
+    setNovoTerceiroEmail("");
+    setNovoTerceiroTelefone("");
+    setNovoTerceiroEndereco("");
+    setNovoTerceiroTipo("");
+  }
+
+  function updateTerceiroModalContent(e) {
+    e.preventDefault();
+    updateTerceiroData(
+      updateTerceiroNome,
+      updateTerceiroEmail,
+      updateTerceiroTelefone,
+      updateTerceiroEndereco,
+      updateTerceiroTipo,
+      idItem
+    );
+
+    setUpdateTerceiroNome("");
+    setUpdateTerceiroEmail("");
+    setUpdateTerceiroTelefone("");
+    setUpdateTerceiroEndereco("");
+    setUpdateTerceiroTipo("");
+  }
+
+  function deleteTerceiroModalContent() {
+    closeModals();
+    deleteTerceiroData(
+      idItem,
+      deleteTerceiroTipo
+    );
+  }
+  
   function togglePostModalConfiguracao() {
     setShowModalConfiguracao(!showModalConfiguracao); //troca de true para false
   }
@@ -42,7 +108,8 @@ export default function Dashboard() {
     setShowModalNewTerceiro(!showModalNewTerceiro); //troca de true para false
   }
 
-  function togglePostModalEditOrDelete() {
+  function togglePostModalEditOrDelete(id) {
+    setIdItem(id);
     setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
     setShowSubModal(false);
   }
@@ -65,18 +132,42 @@ export default function Dashboard() {
   async function handleListContentSupplier(list) {
     if (list === "1") {
       setItemMenu(1);
+      setDeleteTerceiroTipo("Cliente");
+      setIsClients(true);
     } else {
-      await listSupplier();
+      listSupplier();
       setItemMenu(2);
+      setDeleteTerceiroTipo("Fornecedor");
+      setIsSupplier(true);
     }
   }
 
   async function handleListContentClient(list) {
     if (list === "1") {
-      await listClient();
       setItemMenu(1);
+      setDeleteTerceiroTipo("Cliente");
+      setIsSupplier(false);
+      setIsClients(true);
+      listClient();
     } else {
       setItemMenu(2);
+      setDeleteTerceiroTipo("Fornecedor");
+      setIsClients(false);
+      setIsSupplier(true);
+    }
+  }
+
+  function handleSearch(event) {
+    if (itemMenu === 1) {
+      if (event.key === "Enter") {
+        searchClient(search);
+      }
+      searchClient(search);
+    } else {
+      if (event.key === "Enter") {
+        searchSupplier(search);
+      }
+      searchSupplier(search);
     }
   }
 
@@ -380,6 +471,21 @@ export default function Dashboard() {
     marginLeft: "4em",
   };
 
+  const inputSearch = {
+    background: "white",
+    height: "45px",
+    width: "290px",
+    borderRadius: "60px",
+    outline: "none",
+    paddingLeft: "50px",
+    border: "1.9px solid #d7d7d7",
+  };
+
+  const containerInputSearch = {
+    display: "flex",
+    position: "relative",
+  };
+
   return (
     <div>
       <DashboardColumnLayout
@@ -404,7 +510,45 @@ export default function Dashboard() {
                     Fornecedores
                   </Link>
                 </div>
-                <InputSearchProject placeholder="Pesquisar" />
+                <div style={containerInputSearch}>
+                  <div
+                    onClick={handleSearch}
+                    style={{ position: "absolute", left: "15px", top: "6px" }}
+                  >
+                    <svg
+                      style={{ cursor: "pointer" }}
+                      width="30"
+                      height="25"
+                      viewBox="2 -2 18 21"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
+                        stroke="#1172EB"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M17.5 18.1465L13.875 14.5215"
+                        stroke="#1172EB"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Pesquisar"
+                    className="inputLogin"
+                    maxLength={100}
+                    style={inputSearch}
+                    onKeyPress={handleSearch}
+                    onBlur={handleSearch}
+                  />
+                </div>
                 <div style={iconSettingsContainer}>
                   <FiSettings
                     size={23}
@@ -426,10 +570,10 @@ export default function Dashboard() {
                 <span>Endereço</span>
               </div>
             </div>
-            {isClients && (
+            {searchItemsClient && itemMenu === 1 && (
               <>
-                {Object.values(clients).map((client) => (
-                  <div className="listagemTerceiros">
+                {Object.values(searchItemsClient).map((client) => (
+                  <div className="listagemTerceiros" key={client.id}>
                     <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
                       <img style={imgUserStyle} src={userImg} alt="" />
@@ -444,7 +588,7 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete()}
+                          onClick={() => togglePostModalEditOrDelete(client.id)}
                         />
                       </span>
                     </div>
@@ -452,10 +596,10 @@ export default function Dashboard() {
                 ))}
               </>
             )}
-            {isSupplier && (
+            {searchItemsSuplier && itemMenu === 2 && (
               <>
-                {Object.values(supplier).map((supp) => (
-                  <div className="listagemTerceiros">
+                {Object.values(searchItemsSuplier).map((supp) => (
+                  <div className="listagemTerceiros" key={supp.id}>
                     <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
                       <img style={imgUserStyle} src={userImg} alt="" />
@@ -470,7 +614,59 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete()}
+                          onClick={() => togglePostModalEditOrDelete(supp.id)}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {isClients && !searchItemsClient && (
+              <>
+                {Object.values(clients).map((client) => (
+                  <div className="listagemTerceiros" key={client.id}>
+                    <input type="checkbox" style={checkbox} />
+                    <div style={containerUsernamePhoto}>
+                      <img style={imgUserStyle} src={userImg} alt="" />
+                      <span>{client.name}</span>
+                    </div>
+                    <div className="contentListagemTerceiros">
+                      <span style={campoListEmail}>{client.email}</span>
+                      <span style={campoList}>{client.telefone}</span>
+                      <span style={campoList}>{client.endereco}</span>
+                      <span style={campoList}>
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() => togglePostModalEditOrDelete(client.id)}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {isSupplier && !searchItemsSuplier && (
+              <>
+                {Object.values(supplier).map((supp) => (
+                  <div className="listagemTerceiros" key={supp.id}>
+                    <input type="checkbox" style={checkbox} />
+                    <div style={containerUsernamePhoto}>
+                      <img style={imgUserStyle} src={userImg} alt="" />
+                      <span>{supp.name}</span>
+                    </div>
+                    <div className="contentListagemTerceiros">
+                      <span style={campoListEmail}>{supp.email}</span>
+                      <span style={campoList}>{supp.telefone}</span>
+                      <span style={campoList}>{supp.endereco}</span>
+                      <span style={campoList}>
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() => togglePostModalEditOrDelete(supp.id)}
                         />
                       </span>
                     </div>
@@ -513,8 +709,9 @@ export default function Dashboard() {
       )}
 
       {showSubModal && (
-        <SubModal conteudo={"Gustavo Arruda"} close={closeModals} />
+        <SubModal conteudo={"Gustavo Arruda"} closeModal={closeModals} excluirItem={deleteTerceiroModalContent} />
       )}
+
       {showModalEdit && (
         <>
           <Modal width="605px" height="566px" close={togglePostModalEdit}>
@@ -528,7 +725,11 @@ export default function Dashboard() {
                 Editar Terceiro
               </div>
               <div style={title_header}>
-                <Button conteudo="Editar" buttonStyle={button} />
+                <Button
+                  conteudo="Editar"
+                  handle={(e) => updateTerceiroModalContent(e)}
+                  buttonStyle={button}
+                />
               </div>
             </div>
             <div style={containerStyleImgUserModal}>
@@ -537,10 +738,12 @@ export default function Dashboard() {
             </div>
             <form style={form}>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Nome do terceiro
                 </label>
                 <input
+                  onChange={(e) => setUpdateTerceiroNome(e.target.value)}
+                  value={updateTerceiroNome}
                   style={input}
                   type="text"
                   id="nome"
@@ -549,10 +752,12 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Telefone
                 </label>
                 <input
+                  onChange={(e) => setUpdateTerceiroTelefone(e.target.value)}
+                  value={updateTerceiroTelefone}
                   style={input}
                   type="text"
                   id="nome"
@@ -561,19 +766,26 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Tipo
                 </label>
-                <select style={select}>
+                <select
+                  value={updateTerceiroTipo}
+                  onChange={(e) => setUpdateTerceiroTipo(e.target.value)}
+                  style={select}
+                >
+                  <option value="">Selecione uma opção</option>
                   <option value="Cliente">Cliente</option>
                   <option value="Fornecedor">Fornecedor</option>
                 </select>
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   E-mail
                 </label>
                 <input
+                  onChange={(e) => setUpdateTerceiroEmail(e.target.value)}
+                  value={updateTerceiroEmail}
                   style={input}
                   type="text"
                   id="nome"
@@ -582,10 +794,12 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Endereço
                 </label>
                 <input
+                  onChange={(e) => setUpdateTerceiroEndereco(e.target.value)}
+                  value={updateTerceiroEndereco}
                   style={input}
                   type="text"
                   id="nome"
@@ -614,7 +828,11 @@ export default function Dashboard() {
                 Criar Terceiro
               </div>
               <div style={title_header}>
-                <Button conteudo="Criar" buttonStyle={button} />
+                <Button
+                  conteudo="Criar"
+                  handle={(e) => newTerceiroModalContent(e)}
+                  buttonStyle={button}
+                />
               </div>
             </div>
             <div style={containerStyleImgUserModal}>
@@ -627,10 +845,12 @@ export default function Dashboard() {
             </div>
             <form style={form}>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Nome do terceiro
                 </label>
                 <input
+                  onChange={(e) => setNovoTerceiroNome(e.target.value)}
+                  value={novoTerceiroNome}
                   style={input}
                   type="text"
                   id="nome"
@@ -639,10 +859,12 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Telefone
                 </label>
                 <input
+                  onChange={(e) => setNovoTerceiroTelefone(e.target.value)}
+                  value={novoTerceiroTelefone}
                   style={input}
                   type="text"
                   id="nome"
@@ -651,19 +873,26 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Tipo
                 </label>
-                <select style={select}>
+                <select
+                  onChange={(e) => setNovoTerceiroTipo(e.target.value)}
+                  value={novoTerceiroTipo}
+                  style={select}
+                >
+                  <option value="">Selecione uma opção</option>
                   <option value="Cliente">Cliente</option>
                   <option value="Fornecedor">Fornecedor</option>
                 </select>
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   E-mail
                 </label>
                 <input
+                  onChange={(e) => setNovoTerceiroEmail(e.target.value)}
+                  value={novoTerceiroEmail}
                   style={input}
                   type="text"
                   id="nome"
@@ -672,10 +901,12 @@ export default function Dashboard() {
                 />
               </div>
               <div style={containerInput}>
-                <label style={label} for="nome">
+                <label style={label} htmlFor="nome">
                   Endereço
                 </label>
                 <input
+                  onChange={(e) => setNovoTerceiroEndereco(e.target.value)}
+                  value={novoTerceiroEndereco}
                   style={input}
                   type="text"
                   id="nome"
@@ -736,7 +967,7 @@ export default function Dashboard() {
                 <div style={containerQtdNumeroCampo}>
                   <div style={qtdNumeroCampo}>1</div>
                   <div style={containerInput}>
-                    <label style={label} for="nome">
+                    <label style={label} htmlFor="nome">
                       Nome do campo
                     </label>
                     <input

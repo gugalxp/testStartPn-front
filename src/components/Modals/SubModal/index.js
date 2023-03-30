@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../../context/auth";
 
 
-export default function SubModal({ conteudo, close }) {
+export default function SubModal({ conteudo, closeModal, excluirItem }) {
 
   const { modal, isOpenModal } = useContext(AuthContext);
 
@@ -79,16 +79,21 @@ export default function SubModal({ conteudo, close }) {
     fontSize: '16px'
   }
 
+  function deleteItem() {
+    closeModal();
+    excluirItem()
+  }
+
   return (
     <>
-      <div style={fade} onClick={close}></div>
+      <div style={fade} onClick={closeModal}></div>
       <div style={modalStyle}>
         <div style={modal_header}>
           <div style={title_header}>
-            <FiX size={22} style={{ cursor: 'pointer' }}onClick={close}/>
+            <FiX size={22} style={{ cursor: 'pointer' }} onClick={closeModal}/>
             Excluir Terceiros
           </div>
-          <div style={excluir} onClick={close}>Excluir</div>
+          <div style={excluir} onClick={deleteItem}>Excluir</div>
         </div>
 
         <div style={modal_body}>

@@ -12,13 +12,13 @@ function AuthProvider({ children }) {
   const [emailUserAuth, setEmailUserAuth] = useState(null);
   const [nameUserAuth, setNameUserAuth] = useState(null);
   const [emailSentConfirmed, setEmailSentConfirmed] = useState(null);
-  
-  const [loadingAuth, setLoadingAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   const [clients, setClients] = useState(false);
   const [supplier, setSupplier] = useState(false);
   const [isSupplier, setIsSupplier] = useState(false);
   const [isClients, setIsClients] = useState(true);
+  const [searchItemsSuplier, setSearchItemsSuplier] = useState("");
+  const [searchItemsClient, setSearchItemsClient] = useState("");
 
   //Listar clientes
   async function listClient() {
@@ -58,14 +58,17 @@ function AuthProvider({ children }) {
     //detalhes usuario
     const { "@startpn": token } = parseCookies();
     if (token) {
-      api.get("/users/details").then((response) => {
-        const {id, name, email} = response.data;
-        setUserAuth(id, name, email);//enquanto houver o token no storage manterá o usuário logado
-        setNameUserAuth(name)
-        setEmailUserAuth(email)
-      }).catch(err => {
-        signOut();
-      })
+      api
+        .get("/users/details")
+        .then((response) => {
+          const { id, name, email } = response.data;
+          setUserAuth(id, name, email); //enquanto houver o token no storage manterá o usuário logado
+          setNameUserAuth(name);
+          setEmailUserAuth(email);
+        })
+        .catch((err) => {
+          signOut();
+        });
     } else {
       signOut();
     }
@@ -81,18 +84,143 @@ function AuthProvider({ children }) {
       const response = await api.post("/sendMail", {
         email,
       });
-      // console.log(response.data.resonseEmailSent.id)
 
-      setCookie(undefined, "@idNewPassword", response.data.resonseEmailSent.id, {
-        maxAge: 3600, // expirar em 1h
-        path: "/",
-      });
+      setCookie(
+        undefined,
+        "@idNewPassword",
+        response.data.resonseEmailSent.id,
+        {
+          maxAge: 3600, // expirar em 1h
+          path: "/",
+        }
+      );
 
       toast.success("E-mail enviado com sucesso!");
       return true;
     } catch (error) {
-      console.log("O error é esse: ", error.message);
+      console.log("O error é esse: ", error);
       return false;
+    }
+  }
+
+  //search Client
+  async function searchClient(search) {
+    try {
+      const response = await api.post("/client/search", {
+        search,
+      });
+
+      if (response.data.error !== undefined) {
+        toast.info(response.data.error);
+      } else {
+        setIsClients(false);
+        setSearchItemsClient(response.data);
+      }
+    } catch (error) {
+      console.log("ERROR Search Client", error);
+    }
+  }
+
+  //search Fornecedor
+  async function searchSupplier(search) {
+    try {
+      const response = await api.post("/fornecedor/search", {
+        search,
+      });
+      if (response.data.error !== undefined) {
+        toast.info(response.data.error);
+      } else {
+        setIsSupplier(false);
+        setSearchItemsSuplier(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function createTerceiroData(name, email, telefone, endereco, tipo) {
+    try {
+      if (tipo === "Cliente") {
+        const response = await api.post("/client", {
+          name,
+          email,
+          telefone,
+          endereco,
+        });
+        listClient();
+        toast.success("Novo Terceiro do tipo Cliente criado!");
+      }
+      if (tipo === "Fornecedor") {
+        const response = await api.post("/fornecedor", {
+          name,
+          email,
+          telefone,
+          endereco,
+        });
+        listSupplier();
+        toast.success("Novo Terceiro do tipo Fornecedor criado!");
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  async function updateTerceiroData(
+    name,
+    email,
+    telefone,
+    endereco,
+    tipo,
+    idItem
+  ) {
+    try {
+      if (tipo === "Cliente") {
+        const response = await api.put("/client", {
+          idItem,
+          name,
+          email,
+          telefone,
+          endereco,
+        });
+        toast.success("Cliente atualizado com sucesso!");
+        listClient();
+      }
+      if (tipo === "Fornecedor") {
+        const response = await api.put("/fornecedor", {
+          idItem,
+          name,
+          email,
+          telefone,
+          endereco,
+        });
+        toast.success("Fornecedor atualizado com sucesso!");
+        listSupplier();
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  async function deleteTerceiroData(idItem, tipo) {
+    try {
+      if (tipo === "Cliente") {
+        const response = await api.delete("/client", [
+          idItem
+        ]);
+        console.log(response.data);
+        toast.success("Cliente atualizado com sucesso!");
+        listClient();
+      }
+      if (tipo === "Fornecedor") {
+        const response = await api.delete("/fornecedor", {
+          idItem
+        });
+        console.log(response.data);
+        toast.success("Fornecedor atualizado com sucesso!");
+        listSupplier();
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -101,28 +229,22 @@ function AuthProvider({ children }) {
       const { "@idNewPassword": idNewPassword } = parseCookies();
 
       let id = idNewPassword;
-      console.log("ID GERADO: " ,id)
 
       const response = await api.put("/users/update", {
         id,
-        newPassword
+        newPassword,
       });
 
-      console.log("ID GERADO dps da REQ: " ,id)
-      console.log(response.data)
       toast.success("Atualizado com sucesso");
 
       return true;
     } catch (error) {
-      console.log(error.message);
       return false;
     }
   }
 
   //Fazendo login do usuario
   async function signIn(email, password) {
-    setLoadingAuth(true);
-
     try {
       const response = await api.post("/users/login", {
         email,
@@ -139,16 +261,11 @@ function AuthProvider({ children }) {
         path: "/",
       });
 
-      setUserAuth(
-        id,
-        email,
-        name,
-        telefone,
-        endereco,
-      );
+      setUserAuth(id, email, name, telefone, endereco);
 
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       toast.success("Logado com sucesso!");
+      listClient();
       return true;
     } catch (error) {
       toast.error(error);
@@ -187,7 +304,7 @@ function AuthProvider({ children }) {
     try {
       destroyCookie(null, "@startpn", { path: "/" });
     } catch (error) {
-      console.log("Erro ao tentar deslogar o usuario: ", error);
+      console.log(error);
     }
     setUserAuth(null);
   }
@@ -212,7 +329,16 @@ function AuthProvider({ children }) {
         nameUserAuth,
         setEmailSentConfirmed,
         emailSentConfirmed,
-        newPasswordCreate
+        newPasswordCreate,
+        searchSupplier,
+        searchClient,
+        searchItemsClient,
+        searchItemsSuplier,
+        setIsSupplier,
+        setIsClients,
+        createTerceiroData,
+        updateTerceiroData,
+        deleteTerceiroData,
       }}
     >
       {children}
