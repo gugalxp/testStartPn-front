@@ -1,11 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./header.css";
 import { AuthContext } from "../../context/auth";
 import logo from "../../assets/images/logoPn.png";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
-  FiHome,
   FiUser,
   FiSettings,
   FiAlertTriangle,
@@ -13,11 +12,11 @@ import {
   FiAnchor,
   FiLogOut,
 } from "react-icons/fi";
-import Dashboard from "../../pages/Dashboard";
-
 
 export default function Header() {
   const { user, signOut } = useContext(AuthContext);
+
+  const location = useLocation();
 
   const items = {
     display: "block",
@@ -27,7 +26,7 @@ export default function Header() {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    color: '#787486',
+    color: "#787486",
   };
 
   const itemActive = {
@@ -65,9 +64,9 @@ export default function Header() {
     position: "fixed",
     height: "100%",
     overflow: "auto",
-    borderTopRightRadius: '30px',
-    borderBottomRightRadius: '30px',
-    borderRight: '1px solid #D7D7D7',
+    borderTopRightRadius: "30px",
+    borderBottomRightRadius: "30px",
+    borderRight: "1px solid #D7D7D7",
   };
 
   const containerLogo = {
@@ -84,8 +83,8 @@ export default function Header() {
   };
 
   const icon = {
-    marginRight: '.8em'
-  }
+    marginRight: ".8em",
+  };
 
   return (
     <div style={sidebar}>
@@ -94,25 +93,59 @@ export default function Header() {
       </div>
 
       <div style={containerItens}>
-        <Link to="/dashboard" style={itemActive}>
-          <FiUsers style={icon} color="#476EE6" size={24} />
+        <Link
+          to="/dashboard"
+          style={location.pathname == "/dashboard" ? itemActive : items}
+        >
+          <FiUsers
+            style={icon}
+            color={location.pathname == "/dashboard" ? "#476EE6" : "#787486"}
+            size={24}
+          />
           Terceiros
         </Link>
-        <Link to="/customers" style={items}>
-          <FiAlertTriangle style={icon} color="#787486" size={24} />
+        <Link style={location.pathname == "/ancora" ? itemActive : items}>
+          <FiAnchor
+            style={icon}
+            color={location.pathname == "/ancora"  ? "#476EE6" : "#787486"}
+            size={24}
+          />
           Exemplo
         </Link>
-        <Link to="/profile" style={items}>
-          <FiAnchor style={icon} color="#787486" size={24} />
+
+        <Link
+          to=""
+          style={location.pathname == "/alert" ? itemActive : items}
+        >
+          <FiAlertTriangle
+            style={icon}
+            color={location.pathname == "/alert"  ? "#476EE6" : "#787486"}
+            size={24}
+          />
           Exemplo
         </Link>
-        <Link to="/profile" style={items}>
-          <FiSettings style={icon} color="#787486" size={24} />
+
+        <Link
+          to=""
+          style={location.pathname == "/setting" ? itemActive : items}
+        >
+          <FiSettings
+            style={icon}
+            color={location.pathname == "/setting" ? "#476EE6" : "#787486"}
+            size={24}
+          />
           Exemplo
         </Link>
-        <Link to="/profile" style={items}>
-          <FiUser color="#787486" style={icon} size={24} />
-          Minha conta 
+        <Link
+          to="/profile"
+          style={location.pathname == "/profile" ? itemActive : items}
+        >
+          <FiUser
+            color={location.pathname == "/profile" ? "#476EE6" : "#787486"}
+            style={icon}
+            size={24}
+          />
+          Minha conta
         </Link>
         <Link style={containerLogOut} onClick={signOut}>
           <FiLogOut color="#787486" style={icon} size={24} />

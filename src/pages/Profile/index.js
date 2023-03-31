@@ -1,152 +1,253 @@
+import { useState, useContext, useEffect } from "react";
+import Title from "../../components/Title";
+import avatar from "../../assets/images/avatar.png";
 
-import { useState, useContext } from 'react';
-import './profile.css';
-import Header from '../../components/Header';
-import Title from '../../components/Title';
-import avatar from '../../assets/images/avatar.png';
+import firebase, { storage } from "../../services/firebaseConnection";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { AuthContext } from "../../context/auth";
+import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
+import { MdAddAPhoto } from "react-icons/md";
 
-import firebase from '../../services/firebaseConnection';
-import { AuthContext } from '../../context/auth';
+import { FiSettings, FiUpload } from "react-icons/fi";
 
-import { FiSettings, FiUpload } from 'react-icons/fi';
+export default function Profile() {
+  const { nameUserAuth } = useContext(AuthContext);
+  const [imgUrl, setImgUrl] = useState();
+  const [progress, setProgress] = useState(0);
 
-export default function Profile(){
-  const { user, signOut, setUser, storageUser } = useContext(AuthContext);
+  useEffect(() => {
+    const storedUrl = localStorage.getItem("imgUrl");
+    if (storedUrl) {
+      setImgUrl(storedUrl);
+    }
+  });
 
-  const [nome, setNome] = useState(user && user.nome);
-  const [email, setEmail] = useState(user && user.email);
+  async function handleUpload(event) {
+    event.preventDefault();
 
-  const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
-  const [imageAvatar, setImageAvatar] = useState(null);
+    const file = event.target[0]?.files[0];
 
+    if (!file) return;
 
-  function handleFile(e){
+    const storageRef = ref(storage, `images/${file.name}`);
 
-    if(e.target.files[0]){
-      const image = e.target.files[0];
-      
-      if(image.type === 'image/jpeg' || image.type === 'image/png'){
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-        setImageAvatar(image);
-        setAvatarUrl(URL.createObjectURL(e.target.files[0]))
-
-      }else{
-        alert('Envie uma imagem do tipo PNG ou JPEG');
-        setImageAvatar(null);
-        return null;
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setImgUrl(url);
+          localStorage.setItem("imgUrl", url); // adiciona a URL ao localStorage
+        });
       }
-
-    }
-
+    );
   }
 
-  async function handleUpload(){
-    const currentUid = user.uid;
+  const form_profile = {
+    background: "#ffffff",
+    border: "1px solid #D7D7D7",
+    width: "713px",
+    maxWidth: "713px",
+    height: "558px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "15px",
+  };
 
-    const uploadTask = await firebase.storage()
-    .ref(`images/${currentUid}/${imageAvatar.name}`)
-    .put(imageAvatar)
-    .then( async () => {
-      console.log('FOTO ENVIADA COM SUCESSO!');
+  const container_perfil = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
-      await firebase.storage().ref(`images/${currentUid}`)
-      .child(imageAvatar.name).getDownloadURL()
-      .then( async (url)=>{
-        let urlFoto = url;
-        
-        await firebase.firestore().collection('users')
-        .doc(user.uid)
-        .update({
-          avatarUrl: urlFoto,
-          nome: nome
-        })
-        .then(()=>{
-          let data = {
-            ...user,
-            avatarUrl: urlFoto,
-            nome: nome
-          }; 
-          setUser(data);
-          storageUser(data);
+  const imgStyle = {
+    width: "115px",
+    height: "115px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginTop: "30px",
+  };
 
-        })
+  const iconImgUserModal = {
+    position: "absolute",
+    top: "265px",
+    right: "515px",
+    background: "#476EE6",
+    borderRadius: "50%",
+    cursor: "pointer",
+    padding: "5px",
+  };
 
-      })
+  const containerStyleImgUserModal = {
+    display: "flex",
+    justifyContent: "center",
+    height: "100%",
+    width: "100%",
+  };
 
-    })
+  const file_input = {
+    opacity: 0,
+    position: "absolute",
+    zIndex: -1,
+    display: "none",
+  };
 
-  }
+  const button = {
+    background: "#476ee6",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "24px",
+    color: "#fff",
+    width: "190px",
+    height: "43px",
+    border: "1px solid #D7D7D7",
+    borderRadius: "60px",
+    marginBottom: "20px",
+  };
 
+  const container_Buttun = {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
 
-  async function handleSave(e){
-    e.preventDefault();
+  const label = {
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "18px",
+    marginBottom: "11px",
+    color: "#000000",
+    width: "100%",
+  };
 
-    if(imageAvatar === null && nome !== ''){
-      await firebase.firestore().collection('users')
-      .doc(user.uid)
-      .update({
-        nome: nome
-      })
-      .then(()=>{
-        let data = {
-          ...user,
-          nome: nome
-        };
-        setUser(data);
-        storageUser(data);
+  const containerInput = {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    marginBottom: "2px",
+  };
 
-      })
+  const input = {
+    width: "250px",
+    borderRadius: "7px",
+    height: "50.06px",
+    border: "1px solid #d7d7d7",
+    background: "#fff",
+    padding: "10px",
+  };
 
-    }
-    else if(nome !== '' && imageAvatar !== null){
-      handleUpload();
-    }
+  const content_Input = {
+    height: "310px",
+    width: "100%",
+    padding: "15px",
+    gap: "10px",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gridTemplateRows: "repeat(2, auto)",
+    flexWrap: "wrap",
+  };
 
-  }
-
-  return(
+  return (
     <div>
-      <Header/>
+      <DashboardColumnLayout
+        colum2Data={
+          <div>
+            <Title nameUser={nameUserAuth} page="Minha conta"></Title>
+            <div style={container_perfil}>
+              <form style={form_profile} onSubmit={handleUpload}>
+                <label
+                  style={containerStyleImgUserModal}
+                  className="label-avatar"
+                  for="avatar"
+                >
+                  {typeof imgUrl === "undefined" ? (
+                    <img style={imgStyle} src={avatar} alt="" />
+                  ) : (
+                    <img style={imgStyle} src={imgUrl} alt="" />
+                  )}
+                  <MdAddAPhoto
+                    style={iconImgUserModal}
+                    color="#fff"
+                    size={30}
+                  />
+                  <input
+                    style={file_input}
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                  />
+                </label>
+                <div style={content_Input}>
+                  <div style={containerInput}>
+                    <label style={label} htmlFor="nome">
+                      Nome do terceiro
+                    </label>
+                    <input
+                      style={input}
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                  <div style={containerInput}>
+                    <label style={label} htmlFor="nome">
+                      Nome do terceiro
+                    </label>
+                    <input
+                      style={input}
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                  <div style={containerInput}>
+                    <label style={label} htmlFor="nome">
+                      Nome do terceiro
+                    </label>
+                    <input
+                      style={input}
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                  <div style={containerInput}>
+                    <label style={label} htmlFor="nome">
+                      Nome do terceiro
+                    </label>
+                    <input
+                      style={input}
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                </div>
 
-      <div className="content">
-        <Title name="Meu perfil">
-          <FiSettings size={25} />
-        </Title>
-
-
-        <div className="container">
-          <form className="form-profile" onSubmit={handleSave}>
-            <label className="label-avatar">
-              <span>
-                <FiUpload color="#FFF" size={25} />
-              </span>
-
-              <input type="file" accept="image/*" onChange={handleFile}  /><br/>
-              { avatarUrl === null ? 
-                <img src={avatar} width="250" height="250" alt="Foto de perfil do usuario" />
-                :
-                <img src={avatarUrl} width="250" height="250" alt="Foto de perfil do usuario" />
-              }
-            </label>
-
-            <label>Nome</label>
-            <input type="text" value={nome} onChange={ (e) => setNome(e.target.value) } />
-
-            <label>Email</label>
-            <input type="text" value={email} disabled={true} />     
-
-            <button type="submit">Salvar</button>       
-
-          </form>
-        </div>
-
-        <div className="container">
-            <button className="logout-btn" onClick={ () => signOut() } >
-               Sair
-            </button>
-        </div>
-
-      </div>
+                <button style={button} type="submit">
+                  Enviar
+                </button>
+              </form>
+            </div>
+            <br />
+            {!imgUrl && <progress value={progress}></progress>}
+          </div>
+        }
+      />
     </div>
-  )
+  );
 }

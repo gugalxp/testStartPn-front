@@ -50,7 +50,7 @@ body,
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #F7F9FB;
+  background-color: #f7f9fb;
 }
 
 a {
@@ -65,7 +65,8 @@ ul {
 button {
   cursor: pointer;
   font-family: "Poppins", sans-serif;
-  font-style: 'normal',
+  font-style: "normal";
+  border: none;
 }
 
 .item {
@@ -95,10 +96,10 @@ button {
 
 .titleListTerceiros {
   display: flex;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 0.8em;
-  border: 1px solid #D7D7D7;
+  border: 1px solid #d7d7d7;
   align-items: center;
   margin-bottom: 1em;
   margin-top: 40px;
@@ -120,7 +121,7 @@ button {
   margin-left: 9em;
 }
 
-.contentListagemTerceiros  {
+.contentListagemTerceiros {
   width: 100%;
   display: flex;
   align-items: center;
@@ -131,7 +132,7 @@ button {
 
 .listagemTerceiros {
   display: flex;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 0.8em;
   align-items: center;
@@ -142,7 +143,7 @@ button {
   font-size: 14px;
   line-height: 21px;
   color: #6a6a6a;
-  border: 1px solid #D7D7D7;
+  border: 1px solid #d7d7d7;
 }
 
 .content {
@@ -153,12 +154,11 @@ button {
   justify-content: center;
 }
 
-.excluir-terceiro
-.editar-terceiro:hover {
-  opacity: .5;
+.excluir-terceiro .editar-terceiro:hover {
+  opacity: 0.5;
 }
 
-form{
+form {
   margin-top: 2em;
   display: flex;
   flex-direction: column;

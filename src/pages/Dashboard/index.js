@@ -491,9 +491,7 @@ export default function Dashboard() {
       <DashboardColumnLayout
         colum2Data={
           <div>
-            <Title nameUser={nameUserAuth} userImg={userImg} page="Terceiros">
-              <img src={userImg} alt="" />
-            </Title>
+            <Title nameUser={nameUserAuth} page="Terceiros"/>
             <div style={containerNav}>
               <div style={containerMenuNav}>
                 <div style={menuNav}>

@@ -175,8 +175,8 @@ function AuthProvider({ children }) {
   ) {
     try {
       if (tipo === "Cliente") {
-        const response = await api.put("/client", {
-          idItem,
+        console.log(idItem)
+        const response = await api.put(`/client/${idItem}`, {
           name,
           email,
           telefone,
@@ -186,7 +186,7 @@ function AuthProvider({ children }) {
         listClient();
       }
       if (tipo === "Fornecedor") {
-        const response = await api.put("/fornecedor", {
+        const response = await api.put(`/fornecedor/${idItem}`, {
           idItem,
           name,
           email,
@@ -201,22 +201,18 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function deleteTerceiroData(idItem, tipo) {
+  async function deleteTerceiroData(id, tipo) {
     try {
       if (tipo === "Cliente") {
-        const response = await api.delete("/client", [
-          idItem
-        ]);
+        const response = await api.delete(`/client/${id}`);
         console.log(response.data);
-        toast.success("Cliente atualizado com sucesso!");
+        toast.success("Cliente excluido com sucesso!");
         listClient();
       }
       if (tipo === "Fornecedor") {
-        const response = await api.delete("/fornecedor", {
-          idItem
-        });
+        const response = await api.delete(`/fornecedor/${id}`);
         console.log(response.data);
-        toast.success("Fornecedor atualizado com sucesso!");
+        toast.success("Fornecedor excluido com sucesso!");
         listSupplier();
       }
     } catch (error) {

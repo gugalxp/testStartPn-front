@@ -1,7 +1,18 @@
 import "./title.css";
 import { FaChevronDown } from "react-icons/fa";
+import avatar from "../../assets/images/avatar.png";
+import { useState, useContext, useEffect } from "react";
 
 export default function Title({ page, nameUser, userImg }) {
+  const [imgUrl, setImgUrl] = useState();
+
+  useEffect(() => {
+    const storedUrl = localStorage.getItem("imgUrl");
+    if (storedUrl) {
+      setImgUrl(storedUrl);
+    }
+  })
+
   const user = {
     width: "225px",
     background: "#FFFFFF",
@@ -59,7 +70,7 @@ export default function Title({ page, nameUser, userImg }) {
       <span style={title}>{page}</span>
       <div style={user}>
         <div style={menuUser}>
-          <img style={imgUserStyle} src={userImg} alt="" />
+          <img style={imgUserStyle} src={typeof imgUrl === "undefined" ? avatar : imgUrl} alt="" />
           {nameUser}
           <FaChevronDown size={11} />
         </div>
