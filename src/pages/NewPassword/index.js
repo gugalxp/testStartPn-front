@@ -10,7 +10,7 @@ import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 export default function NewPassword() {
   const [newPassword, setNewPassword] = useState();
   const [newPasswordConfirmed, setNewPasswordConfirmed] = useState();
-  const { newPasswordCreate } = useContext(AuthContext);
+  const { newPasswordCreateForgotPassword } = useContext(AuthContext);
   const history = useHistory();
 
   function handleNewPassword(e) {
@@ -20,7 +20,7 @@ export default function NewPassword() {
       newPasswordConfirmed &&
       newPassword
     ) {
-      let response = newPasswordCreate(newPassword);
+      let response = newPasswordCreateForgotPassword(newPassword);
       if (response) {
         history.push("/");
       }

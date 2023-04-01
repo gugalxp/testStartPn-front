@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth";
 import SubModal from "../../components/Modals/SubModal";
 import Button from "../../components/Button";
@@ -8,10 +8,12 @@ import { FiMoreVertical, FiSettings } from "react-icons/fi";
 import { MdAddAPhoto } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
-
+import avatar from "../../assets/images/avatar.png";
 import userImg from "../../assets/images/user.png";
 import AvatarImg from "../../assets/images/avatar.png";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
+import firebase, { storage } from "../../services/firebaseConnection";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export default function Dashboard() {
   const [itemMenu, setItemMenu] = useState(1);
@@ -36,6 +38,11 @@ export default function Dashboard() {
   const [deleteTerceiroTipo, setDeleteTerceiroTipo] = useState("Cliente");
 
   const [idItem, setIdItem] = useState();
+  const [nameItem, setNameItem] = useState();
+  const [checkboxSelected, setCheckboxSelected] = useState(false);
+  const [imgUrl, setImgUrl] = useState();
+  const [progress, setProgress] = useState(0);
+  const [accessInfoClient, setAccessInfoClient] = useState("");
 
   const {
     clients,
@@ -56,9 +63,80 @@ export default function Dashboard() {
     deleteTerceiroData,
   } = useContext(AuthContext);
 
-  function newTerceiroModalContent(e) {
+  ///////////////// SALVA IMAGEM NO FIREBASE
+
+  useEffect(() => {
+    const storedUrl = localStorage.getItem(`imgUrl_${accessInfoClient}`);
+    if (storedUrl) {
+      setImgUrl(storedUrl);
+    }
+    if (clients) {
+      console.log(clients)
+    }
+      const fetchImgUrls = async () => {
+        const imgUrlsObj = {};
+        for (const client of clients) {
+          const storageRef = ref(storage, `images/clients/${client.id}/`);
+          const url = await getDownloadURL(storageRef);
+          imgUrlsObj[listClient] = url;
+        }
+        setImgUrl(imgUrlsObj);
+      };
+      fetchImgUrls();
+  });
+
+  async function handleUpload(event) {
+    event.preventDefault();
+
+    const input = document.getElementById("avatar");
+    let file;
+    if (input.files && input.files[0]) {
+      file = input.files[0];
+      console.log(`Nome do arquivo: ${file.name}`);
+      console.log(`Tipo do arquivo: ${file.type}`);
+      console.log(`Tamanho do arquivo: ${file.size} bytes`);
+      console.log(`Última modificação: ${file.lastModifiedDate}`);
+
+      // Fazer alguma coisa com o arquivo, por exemplo, enviar para o servidor via AJAX
+      // ...
+    }
+    if (!file) return alert("tá vazio");
+    console.log("ARQUIVO: ", file);
+    const storageRef = ref(
+      storage,
+      `images/clients/${accessInfoClient}/${file.name}`
+    );
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setImgUrl(url);
+          localStorage.setItem(`imgUrl_${accessInfoClient}`, url); // adiciona a URL ao localStorage
+        });
+      }
+    );
+  }
+  /////////////////////////////////////////////
+
+  async function newTerceiroModalContent(e) {
+    const storedUrl = localStorage.getItem(`imgUrl_${accessInfoClient}`);
+    if (storedUrl) {
+      setImgUrl(storedUrl);
+    }
     e.preventDefault();
-    createTerceiroData(
+
+    let response = await createTerceiroData(
       novoTerceiroNome,
       novoTerceiroEmail,
       novoTerceiroTelefone,
@@ -67,11 +145,18 @@ export default function Dashboard() {
       idItem
     );
 
-    setNovoTerceiroNome("");
-    setNovoTerceiroEmail("");
-    setNovoTerceiroTelefone("");
-    setNovoTerceiroEndereco("");
-    setNovoTerceiroTipo("");
+    if (response) {
+      console.log("O ID criado é: ", response.id);
+      setAccessInfoClient(response.id);
+    }
+
+    await handleUpload(e);
+
+    // setNovoTerceiroNome("");
+    // setNovoTerceiroEmail("");
+    // setNovoTerceiroTelefone("");
+    // setNovoTerceiroEndereco("");
+    // setNovoTerceiroTipo("");
   }
 
   function updateTerceiroModalContent(e) {
@@ -94,12 +179,9 @@ export default function Dashboard() {
 
   function deleteTerceiroModalContent() {
     closeModals();
-    deleteTerceiroData(
-      idItem,
-      deleteTerceiroTipo
-    );
+    deleteTerceiroData(idItem, deleteTerceiroTipo);
   }
-  
+
   function togglePostModalConfiguracao() {
     setShowModalConfiguracao(!showModalConfiguracao); //troca de true para false
   }
@@ -108,8 +190,9 @@ export default function Dashboard() {
     setShowModalNewTerceiro(!showModalNewTerceiro); //troca de true para false
   }
 
-  function togglePostModalEditOrDelete(id) {
+  function togglePostModalEditOrDelete(id, name) {
     setIdItem(id);
+    setNameItem(name);
     setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
     setShowSubModal(false);
   }
@@ -169,6 +252,17 @@ export default function Dashboard() {
       }
       searchSupplier(search);
     }
+  }
+
+  function handleCheckbox() {
+    setCheckboxSelected(!checkboxSelected);
+
+    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      if (checkbox.id !== "current-checkbox") {
+        checkbox.checked = !checkboxSelected;
+        console.log(checkbox.checked);
+      }
+    });
   }
 
   const containerNav = {
@@ -347,6 +441,13 @@ export default function Dashboard() {
     position: "relative",
   };
 
+  const file_input = {
+    opacity: 0,
+    position: "absolute",
+    zIndex: -1,
+    display: "none",
+  };
+
   const form = {
     height: "310px",
     width: "100%",
@@ -450,6 +551,15 @@ export default function Dashboard() {
     height: "100%",
   };
 
+  const imgStyle = {
+    width: "115px",
+    height: "115px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginTop: "30px",
+    cursor: "pointer",
+  };
+
   const campoList = {
     width: "33%",
     display: "flex",
@@ -461,6 +571,7 @@ export default function Dashboard() {
   const campoListEmail = {
     ...campoList,
     justifyContent: "flex-start !important",
+    marginLeft: "12px",
   };
 
   const containerUsernamePhoto = {
@@ -468,7 +579,7 @@ export default function Dashboard() {
     display: "flex",
     alignItems: "center",
     gap: "30px",
-    marginLeft: "4em",
+    marginLeft: "2.5em",
   };
 
   const inputSearch = {
@@ -491,7 +602,7 @@ export default function Dashboard() {
       <DashboardColumnLayout
         colum2Data={
           <div>
-            <Title nameUser={nameUserAuth} page="Terceiros"/>
+            <Title nameUser={nameUserAuth} page="Terceiros" />
             <div style={containerNav}>
               <div style={containerMenuNav}>
                 <div style={menuNav}>
@@ -560,7 +671,13 @@ export default function Dashboard() {
               </Link>
             </div>
             <div className="titleListTerceiros">
-              <input type="checkbox" style={checkbox} />
+              <input
+                type="checkbox"
+                checked={checkboxSelected}
+                id="current-checkbox"
+                style={checkbox}
+                onChange={handleCheckbox}
+              />
               <div className="contentTitleListTerceiros">
                 <span>Nome</span>
                 <span>E-mail</span>
@@ -574,7 +691,11 @@ export default function Dashboard() {
                   <div className="listagemTerceiros" key={client.id}>
                     <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
-                      <img style={imgUserStyle} src={userImg} alt="" />
+                      {typeof imgUrl === "undefined" ? (
+                        <img style={imgUserStyle} src={avatar} alt="" />
+                      ) : (
+                        <img style={imgUserStyle} src={imgUrl} alt="" />
+                      )}{" "}
                       <span>{client.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -586,7 +707,9 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete(client.id)}
+                          onClick={() =>
+                            togglePostModalEditOrDelete(client.id, client.name)
+                          }
                         />
                       </span>
                     </div>
@@ -600,7 +723,11 @@ export default function Dashboard() {
                   <div className="listagemTerceiros" key={supp.id}>
                     <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
-                      <img style={imgUserStyle} src={userImg} alt="" />
+                      {typeof imgUrl === "undefined" ? (
+                        <img style={imgUserStyle} src={avatar} alt="" />
+                      ) : (
+                        <img style={imgUserStyle} src={imgUrl} alt="" />
+                      )}{" "}
                       <span>{supp.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -612,7 +739,9 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete(supp.id)}
+                          onClick={() =>
+                            togglePostModalEditOrDelete(supp.id, supp.name)
+                          }
                         />
                       </span>
                     </div>
@@ -624,9 +753,17 @@ export default function Dashboard() {
               <>
                 {Object.values(clients).map((client) => (
                   <div className="listagemTerceiros" key={client.id}>
-                    <input type="checkbox" style={checkbox} />
+                    <input
+                      type="checkbox"
+                      style={checkbox}
+                      checked={checkboxSelected}
+                    />
                     <div style={containerUsernamePhoto}>
-                      <img style={imgUserStyle} src={userImg} alt="" />
+                      {typeof imgUrl === "undefined" ? (
+                        <img style={imgUserStyle} src={avatar} alt="" />
+                      ) : (
+                        <img style={imgUserStyle} src={imgUrl} alt="" />
+                      )}{" "}
                       <span>{client.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -638,7 +775,9 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete(client.id)}
+                          onClick={() =>
+                            togglePostModalEditOrDelete(client.id, client.name)
+                          }
                         />
                       </span>
                     </div>
@@ -652,7 +791,11 @@ export default function Dashboard() {
                   <div className="listagemTerceiros" key={supp.id}>
                     <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
-                      <img style={imgUserStyle} src={userImg} alt="" />
+                      {typeof imgUrl === "undefined" ? (
+                        <img style={imgUserStyle} src={avatar} alt="" />
+                      ) : (
+                        <img style={imgUserStyle} src={imgUrl} alt="" />
+                      )}
                       <span>{supp.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -664,7 +807,9 @@ export default function Dashboard() {
                           size={20}
                           style={{ cursor: "pointer" }}
                           color="#000"
-                          onClick={() => togglePostModalEditOrDelete(supp.id)}
+                          onClick={() =>
+                            togglePostModalEditOrDelete(supp.id, supp.name)
+                          }
                         />
                       </span>
                     </div>
@@ -707,7 +852,11 @@ export default function Dashboard() {
       )}
 
       {showSubModal && (
-        <SubModal conteudo={"Gustavo Arruda"} closeModal={closeModals} excluirItem={deleteTerceiroModalContent} />
+        <SubModal
+          conteudo={nameItem}
+          closeModal={closeModals}
+          excluirItem={deleteTerceiroModalContent}
+        />
       )}
 
       {showModalEdit && (
@@ -834,12 +983,21 @@ export default function Dashboard() {
               </div>
             </div>
             <div style={containerStyleImgUserModal}>
-              <img
-                style={styleImgUserModal}
-                src={AvatarImg}
-                alt="Foto usuário"
-              />
-              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
+              <label for="avatar">
+                {typeof imgUrl === "undefined" ? (
+                  <img style={imgStyle} src={avatar} alt="" />
+                ) : (
+                  <img style={imgStyle} src={imgUrl} alt="" />
+                )}
+                <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
+                <input
+                  style={file_input}
+                  id="avatar"
+                  type="file"
+                  accept="image/*"
+                />
+              </label>
+              <br />
             </div>
             <form style={form}>
               <div style={containerInput}>

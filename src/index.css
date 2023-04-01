@@ -118,7 +118,15 @@ button {
   align-items: center;
   justify-content: flex-start;
   gap: 10em;
-  margin-left: 9em;
+  margin-left: 7.5em;
+}
+
+.contentTitleListTerceiros span:nth-child(3) {
+  margin-left: 20px;
+}
+
+.contentTitleListTerceiros span:nth-child(4){
+  margin-left: -30px;
 }
 
 .contentListagemTerceiros {
@@ -128,6 +136,12 @@ button {
   justify-content: space-around;
   display: flex;
   gap: 10px;
+}
+
+.contentListagemTerceiros span:nth-child(3) {
+  display: flex;
+  justify-content: flex-start !important;
+  margin-left: 35px;
 }
 
 .listagemTerceiros {

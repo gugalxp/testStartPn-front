@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import "./header.css";
 import { AuthContext } from "../../context/auth";
 import logo from "../../assets/images/logoPn.png";
 
@@ -64,8 +63,8 @@ export default function Header() {
     position: "fixed",
     height: "100%",
     overflow: "auto",
-    borderTopRightRadius: "30px",
-    borderBottomRightRadius: "30px",
+    borderTopRightRadius: "20px",
+    borderBottomRightRadius: "20px",
     borderRight: "1px solid #D7D7D7",
   };
 
@@ -114,7 +113,6 @@ export default function Header() {
         </Link>
 
         <Link
-          to=""
           style={location.pathname == "/alert" ? itemActive : items}
         >
           <FiAlertTriangle
@@ -126,7 +124,6 @@ export default function Header() {
         </Link>
 
         <Link
-          to=""
           style={location.pathname == "/setting" ? itemActive : items}
         >
           <FiSettings

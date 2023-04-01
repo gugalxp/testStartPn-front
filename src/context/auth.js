@@ -147,8 +147,10 @@ function AuthProvider({ children }) {
           telefone,
           endereco,
         });
+
         listClient();
         toast.success("Novo Terceiro do tipo Cliente criado!");
+        return response.data;
       }
       if (tipo === "Fornecedor") {
         const response = await api.post("/fornecedor", {
@@ -161,7 +163,7 @@ function AuthProvider({ children }) {
         toast.success("Novo Terceiro do tipo Fornecedor criado!");
       }
     } catch (error) {
-      toast.error(error);
+      console.log("ERROR: ", error.message)
     }
   }
 
@@ -175,7 +177,7 @@ function AuthProvider({ children }) {
   ) {
     try {
       if (tipo === "Cliente") {
-        console.log(idItem)
+        console.log(idItem);
         const response = await api.put(`/client/${idItem}`, {
           name,
           email,
@@ -201,6 +203,40 @@ function AuthProvider({ children }) {
     }
   }
 
+  async function updateUserData(name, email, telefone, password) {
+    try {
+      if (password) {
+        newPasswordUpdateUser(password);
+      }
+      const response = await api.put(`/users/updateUser/${userAuth}`, {
+        name,
+        email,
+        telefone,
+      });
+      console.log(response.data);
+      toast.success("Seus dados foram atualizados com sucesso!");
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  async function newPasswordUpdateUser(newPassword) {
+    try {
+      const response = await api.put(`/users/updatePassword/`, {
+        id: userAuth,
+        newPassword,
+      });
+
+      console.log("SENHA: ", response.data);
+
+      toast.success("Senha atualizada com sucesso!");
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async function deleteTerceiroData(id, tipo) {
     try {
       if (tipo === "Cliente") {
@@ -220,14 +256,13 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function newPasswordCreate(newPassword) {
+  async function newPasswordCreateForgotPassword(newPassword) {
     try {
       const { "@idNewPassword": idNewPassword } = parseCookies();
 
       let id = idNewPassword;
 
-      const response = await api.put("/users/update", {
-        id,
+      const response = await api.put(`/users/update/${id}`, {
         newPassword,
       });
 
@@ -235,6 +270,7 @@ function AuthProvider({ children }) {
 
       return true;
     } catch (error) {
+      toast.error(error.message);
       return false;
     }
   }
@@ -325,7 +361,7 @@ function AuthProvider({ children }) {
         nameUserAuth,
         setEmailSentConfirmed,
         emailSentConfirmed,
-        newPasswordCreate,
+        newPasswordCreateForgotPassword,
         searchSupplier,
         searchClient,
         searchItemsClient,
@@ -335,6 +371,7 @@ function AuthProvider({ children }) {
         createTerceiroData,
         updateTerceiroData,
         deleteTerceiroData,
+        updateUserData,
       }}
     >
       {children}

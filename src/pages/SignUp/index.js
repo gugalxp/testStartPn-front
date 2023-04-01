@@ -31,10 +31,6 @@ function SignUp() {
     }
   }
 
-  const containerColumn2 = {
-    marginTop: "0",
-  };
-
   const form = {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",

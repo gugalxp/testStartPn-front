@@ -1,13 +1,15 @@
-import "./title.css";
 import { FaChevronDown } from "react-icons/fa";
 import avatar from "../../assets/images/avatar.png";
 import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../context/auth";
 
-export default function Title({ page, nameUser, userImg }) {
+export default function Title({ page, nameUser }) {
   const [imgUrl, setImgUrl] = useState();
+  const {  userAuth } = useContext(AuthContext);
 
   useEffect(() => {
-    const storedUrl = localStorage.getItem("imgUrl");
+    const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
+    
     if (storedUrl) {
       setImgUrl(storedUrl);
     }

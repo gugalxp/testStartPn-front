@@ -7,20 +7,30 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { AuthContext } from "../../context/auth";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { MdAddAPhoto } from "react-icons/md";
+import Button from "../../components/Button";
 
 import { FiSettings, FiUpload } from "react-icons/fi";
 
 export default function Profile() {
-  const { nameUserAuth } = useContext(AuthContext);
+  const { nameUserAuth, updateUserData, userAuth } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
 
+  const [nome, setNome] = useState();
+  const [email, setEmail] = useState();
+  const [telefone, setTelefone] = useState();
+  const [password, setPassword] = useState();
+
   useEffect(() => {
-    const storedUrl = localStorage.getItem("imgUrl");
+    const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
     if (storedUrl) {
       setImgUrl(storedUrl);
     }
   });
+
+  function handleUpdateDataUser() {
+    updateUserData(nome, email, telefone, password);
+  }
 
   async function handleUpload(event) {
     event.preventDefault();
@@ -29,7 +39,7 @@ export default function Profile() {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `images/${file.name}`);
+    const storageRef = ref(storage, `images/users/${userAuth}/${file.name}`);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -46,7 +56,7 @@ export default function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImgUrl(url);
-          localStorage.setItem("imgUrl", url); // adiciona a URL ao localStorage
+          localStorage.setItem(`imgUrl_${userAuth}`, url); // adiciona a URL ao localStorage
         });
       }
     );
@@ -57,11 +67,12 @@ export default function Profile() {
     border: "1px solid #D7D7D7",
     width: "713px",
     maxWidth: "713px",
-    height: "558px",
+    height: "500px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "15px",
+    marginTop: "-5px",
   };
 
   const container_perfil = {
@@ -76,11 +87,12 @@ export default function Profile() {
     borderRadius: "50%",
     objectFit: "cover",
     marginTop: "30px",
+    cursor: "pointer",
   };
 
   const iconImgUserModal = {
     position: "absolute",
-    top: "265px",
+    top: "230px",
     right: "515px",
     background: "#476EE6",
     borderRadius: "50%",
@@ -106,20 +118,14 @@ export default function Profile() {
     background: "#476ee6",
     fontWeight: "600",
     fontSize: "14px",
-    lineHeight: "24px",
+    lineHeight: "30px",
     color: "#fff",
-    width: "190px",
-    height: "43px",
+    width: "180px",
+    height: "47px",
     border: "1px solid #D7D7D7",
     borderRadius: "60px",
     marginBottom: "20px",
-  };
-
-  const container_Buttun = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: "20px",
   };
 
   const label = {
@@ -131,6 +137,16 @@ export default function Profile() {
     width: "100%",
   };
 
+  const input = {
+    width: "315px",
+    borderRadius: "7px",
+    height: "50px",
+    border: "1px solid #d7d7d7",
+    background: "#fff",
+    padding: "10px",
+    color: "#060606",
+  };
+
   const containerInput = {
     display: "flex",
     alignItems: "center",
@@ -138,20 +154,11 @@ export default function Profile() {
     marginBottom: "2px",
   };
 
-  const input = {
-    width: "250px",
-    borderRadius: "7px",
-    height: "50.06px",
-    border: "1px solid #d7d7d7",
-    background: "#fff",
-    padding: "10px",
-  };
-
   const content_Input = {
-    height: "310px",
-    width: "100%",
+    height: "600px",
     padding: "15px",
-    gap: "10px",
+    gap: "15px",
+    display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
     gridTemplateRows: "repeat(2, auto)",
     flexWrap: "wrap",
@@ -165,34 +172,34 @@ export default function Profile() {
             <Title nameUser={nameUserAuth} page="Minha conta"></Title>
             <div style={container_perfil}>
               <form style={form_profile} onSubmit={handleUpload}>
-                <label
-                  style={containerStyleImgUserModal}
-                  className="label-avatar"
-                  for="avatar"
-                >
-                  {typeof imgUrl === "undefined" ? (
-                    <img style={imgStyle} src={avatar} alt="" />
-                  ) : (
-                    <img style={imgStyle} src={imgUrl} alt="" />
-                  )}
-                  <MdAddAPhoto
-                    style={iconImgUserModal}
-                    color="#fff"
-                    size={30}
-                  />
-                  <input
-                    style={file_input}
-                    id="avatar"
-                    type="file"
-                    accept="image/*"
-                  />
-                </label>
+                <div style={containerStyleImgUserModal}>
+                  <label className="label-avatar" for="avatar">
+                    {typeof imgUrl === "undefined" ? (
+                      <img style={imgStyle} src={avatar} alt="" />
+                    ) : (
+                      <img style={imgStyle} src={imgUrl} alt="" />
+                    )}
+                    <MdAddAPhoto
+                      style={iconImgUserModal}
+                      color="#fff"
+                      size={30}
+                    />
+                    <input
+                      style={file_input}
+                      id="avatar"
+                      type="file"
+                      accept="image/*"
+                    />
+                  </label>
+                </div>
                 <div style={content_Input}>
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
-                      Nome do terceiro
+                      Nome
                     </label>
                     <input
+                      onChange={(e) => setNome(e.target.value)}
+                      value={nome}
                       style={input}
                       type="text"
                       id="nome"
@@ -202,9 +209,25 @@ export default function Profile() {
                   </div>
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
-                      Nome do terceiro
+                      E-mail
                     </label>
                     <input
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
+                      style={input}
+                      type="email"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira seu nome"
+                    />
+                  </div>
+                  <div style={containerInput}>
+                    <label style={label} htmlFor="nome">
+                      Número
+                    </label>
+                    <input
+                      onChange={(e) => setTelefone(e.target.value)}
+                      value={telefone}
                       style={input}
                       type="text"
                       id="nome"
@@ -214,23 +237,13 @@ export default function Profile() {
                   </div>
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
-                      Nome do terceiro
+                      Senha
                     </label>
                     <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      value={password}
                       style={input}
-                      type="text"
-                      id="nome"
-                      name="nome"
-                      placeholder="Insira seu nome"
-                    />
-                  </div>
-                  <div style={containerInput}>
-                    <label style={label} htmlFor="nome">
-                      Nome do terceiro
-                    </label>
-                    <input
-                      style={input}
-                      type="text"
+                      type="password"
                       id="nome"
                       name="nome"
                       placeholder="Insira seu nome"
@@ -238,9 +251,14 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <button style={button} type="submit">
-                  Enviar
-                </button>
+                <Button
+                  handle={handleUpdateDataUser}
+                  buttonStyle={button}
+                  conteudo="Salvar"
+                  type="submit"
+                >
+                  Salvar
+                </Button>
               </form>
             </div>
             <br />
