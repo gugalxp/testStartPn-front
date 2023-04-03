@@ -12,6 +12,7 @@ import avatar from "../../assets/images/avatar.png";
 import userImg from "../../assets/images/user.png";
 import AvatarImg from "../../assets/images/avatar.png";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
+import { toast } from "react-toastify";
 import firebase, { storage } from "../../services/firebaseConnection";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -43,6 +44,7 @@ export default function Dashboard() {
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
   const [accessInfoClient, setAccessInfoClient] = useState("");
+  const [selectedAllCheckbox, setSelectedAllCheckbox] = useState(false);
 
   const {
     clients,
@@ -61,28 +63,16 @@ export default function Dashboard() {
     createTerceiroData,
     updateTerceiroData,
     deleteTerceiroData,
+    deleteAll,
   } = useContext(AuthContext);
 
   ///////////////// SALVA IMAGEM NO FIREBASE
 
   useEffect(() => {
-    const storedUrl = localStorage.getItem(`imgUrl_${accessInfoClient}`);
-    if (storedUrl) {
-      setImgUrl(storedUrl);
-    }
-    if (clients) {
-      console.log(clients)
-    }
-      const fetchImgUrls = async () => {
-        const imgUrlsObj = {};
-        for (const client of clients) {
-          const storageRef = ref(storage, `images/clients/${client.id}/`);
-          const url = await getDownloadURL(storageRef);
-          imgUrlsObj[listClient] = url;
-        }
-        setImgUrl(imgUrlsObj);
-      };
-      fetchImgUrls();
+    const imgUrlFromLocalStorage = localStorage.getItem(
+      `imgUrl_${accessInfoClient}`
+    ); // adiciona a URL ao localStorage
+    setImgUrl(imgUrlFromLocalStorage);
   });
 
   async function handleUpload(event) {
@@ -92,16 +82,12 @@ export default function Dashboard() {
     let file;
     if (input.files && input.files[0]) {
       file = input.files[0];
-      console.log(`Nome do arquivo: ${file.name}`);
-      console.log(`Tipo do arquivo: ${file.type}`);
-      console.log(`Tamanho do arquivo: ${file.size} bytes`);
-      console.log(`Última modificação: ${file.lastModifiedDate}`);
 
       // Fazer alguma coisa com o arquivo, por exemplo, enviar para o servidor via AJAX
       // ...
     }
-    if (!file) return alert("tá vazio");
-    console.log("ARQUIVO: ", file);
+    if (!file) return toast.info("Escolha uma foto de perfil!");
+
     const storageRef = ref(
       storage,
       `images/clients/${accessInfoClient}/${file.name}`
@@ -119,44 +105,45 @@ export default function Dashboard() {
       (error) => {
         alert(error);
       },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setImgUrl(url);
-          localStorage.setItem(`imgUrl_${accessInfoClient}`, url); // adiciona a URL ao localStorage
-        });
+      async () => {
+        try {
+          getDownloadURL(uploadTask.snapshot.ref).then((urlImg) => {
+            setImgUrl(urlImg);
+
+            localStorage.setItem(`imgUrl_${accessInfoClient}`, urlImg);
+
+            const response = createTerceiroData(
+              novoTerceiroNome,
+              novoTerceiroEmail,
+              novoTerceiroTelefone,
+              novoTerceiroEndereco,
+              novoTerceiroTipo,
+              urlImg
+            );
+
+            if (response) {
+              setAccessInfoClient(response.id);
+            } else {
+              return;
+            }
+
+            setNovoTerceiroNome("");
+            setNovoTerceiroEmail("");
+            setNovoTerceiroTelefone("");
+            setNovoTerceiroEndereco("");
+            setNovoTerceiroTipo("");
+          });
+        } catch (error) {}
       }
     );
   }
+
   /////////////////////////////////////////////
 
   async function newTerceiroModalContent(e) {
-    const storedUrl = localStorage.getItem(`imgUrl_${accessInfoClient}`);
-    if (storedUrl) {
-      setImgUrl(storedUrl);
-    }
     e.preventDefault();
 
-    let response = await createTerceiroData(
-      novoTerceiroNome,
-      novoTerceiroEmail,
-      novoTerceiroTelefone,
-      novoTerceiroEndereco,
-      novoTerceiroTipo,
-      idItem
-    );
-
-    if (response) {
-      console.log("O ID criado é: ", response.id);
-      setAccessInfoClient(response.id);
-    }
-
     await handleUpload(e);
-
-    // setNovoTerceiroNome("");
-    // setNovoTerceiroEmail("");
-    // setNovoTerceiroTelefone("");
-    // setNovoTerceiroEndereco("");
-    // setNovoTerceiroTipo("");
   }
 
   function updateTerceiroModalContent(e) {
@@ -188,6 +175,16 @@ export default function Dashboard() {
 
   function togglePostModalNewTerceiro() {
     setShowModalNewTerceiro(!showModalNewTerceiro); //troca de true para false
+  }
+
+  function handleDeleteAll() {
+    if (itemMenu === 1) {
+      deleteAll("Cliente");
+      setSelectedAllCheckbox(false);
+    } else {
+      deleteAll("Fornecedor");
+      setSelectedAllCheckbox(false);
+    }
   }
 
   function togglePostModalEditOrDelete(id, name) {
@@ -260,7 +257,7 @@ export default function Dashboard() {
     document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
       if (checkbox.id !== "current-checkbox") {
         checkbox.checked = !checkboxSelected;
-        console.log(checkbox.checked);
+        setSelectedAllCheckbox(checkbox.checked);
       }
     });
   }
@@ -314,6 +311,21 @@ export default function Dashboard() {
     width: "160px",
     height: "45px",
     background: "#476EE6",
+    borderRadius: "60px",
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "500",
+    fontSize: "15px",
+    lineHeight: "24px",
+    letterSpacing: "0.3px",
+  };
+
+  const deleteAllItems = {
+    width: "160px",
+    height: "45px",
+    background: "red",
     borderRadius: "60px",
     color: "#fff",
     display: "flex",
@@ -666,14 +678,20 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
-              <Link onClick={togglePostModalNewTerceiro} style={newTerceiro}>
-                Novo Terceiro
+              <Link
+                onClick={
+                  !selectedAllCheckbox
+                    ? togglePostModalNewTerceiro
+                    : handleDeleteAll
+                }
+                style={!selectedAllCheckbox ? newTerceiro : deleteAllItems}
+              >
+                {!selectedAllCheckbox ? "Novo terceiro" : "Excluir"}
               </Link>
             </div>
             <div className="titleListTerceiros">
               <input
                 type="checkbox"
-                checked={checkboxSelected}
                 id="current-checkbox"
                 style={checkbox}
                 onChange={handleCheckbox}
@@ -685,6 +703,21 @@ export default function Dashboard() {
                 <span>Endereço</span>
               </div>
             </div>
+            {!clients.length && itemMenu === 1 && (
+              <>
+                <strong className="noInfo">
+                  Nenhum Cliente adicionado a lista
+                </strong>
+              </>
+            )}
+            {!supplier.length && itemMenu === 2 && (
+              <>
+                <strong className="noInfo">
+                  Nenhum Fornecedor adicionado a lista
+                </strong>
+              </>
+            )}
+
             {searchItemsClient && itemMenu === 1 && (
               <>
                 {Object.values(searchItemsClient).map((client) => (
@@ -694,8 +727,8 @@ export default function Dashboard() {
                       {typeof imgUrl === "undefined" ? (
                         <img style={imgUserStyle} src={avatar} alt="" />
                       ) : (
-                        <img style={imgUserStyle} src={imgUrl} alt="" />
-                      )}{" "}
+                        <img style={imgUserStyle} src={client.urlImg} alt="" />
+                      )}
                       <span>{client.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -726,8 +759,8 @@ export default function Dashboard() {
                       {typeof imgUrl === "undefined" ? (
                         <img style={imgUserStyle} src={avatar} alt="" />
                       ) : (
-                        <img style={imgUserStyle} src={imgUrl} alt="" />
-                      )}{" "}
+                        <img style={imgUserStyle} src={supp.urlImg} alt="" />
+                      )}
                       <span>{supp.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -753,17 +786,13 @@ export default function Dashboard() {
               <>
                 {Object.values(clients).map((client) => (
                   <div className="listagemTerceiros" key={client.id}>
-                    <input
-                      type="checkbox"
-                      style={checkbox}
-                      checked={checkboxSelected}
-                    />
+                    <input type="checkbox" style={checkbox} />
                     <div style={containerUsernamePhoto}>
                       {typeof imgUrl === "undefined" ? (
                         <img style={imgUserStyle} src={avatar} alt="" />
                       ) : (
-                        <img style={imgUserStyle} src={imgUrl} alt="" />
-                      )}{" "}
+                        <img style={imgUserStyle} src={client.urlImg} alt="" />
+                      )}
                       <span>{client.name}</span>
                     </div>
                     <div className="contentListagemTerceiros">
@@ -794,7 +823,7 @@ export default function Dashboard() {
                       {typeof imgUrl === "undefined" ? (
                         <img style={imgUserStyle} src={avatar} alt="" />
                       ) : (
-                        <img style={imgUserStyle} src={imgUrl} alt="" />
+                        <img style={imgUserStyle} src={supp.urlImg} alt="" />
                       )}
                       <span>{supp.name}</span>
                     </div>
@@ -984,11 +1013,7 @@ export default function Dashboard() {
             </div>
             <div style={containerStyleImgUserModal}>
               <label for="avatar">
-                {typeof imgUrl === "undefined" ? (
-                  <img style={imgStyle} src={avatar} alt="" />
-                ) : (
-                  <img style={imgStyle} src={imgUrl} alt="" />
-                )}
+                <img style={imgStyle} src={avatar} alt="" />
                 <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
                 <input
                   style={file_input}

@@ -7,19 +7,22 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { AuthContext } from "../../context/auth";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { MdAddAPhoto } from "react-icons/md";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 import Button from "../../components/Button";
 
 import { FiSettings, FiUpload } from "react-icons/fi";
 
 export default function Profile() {
-  const { nameUserAuth, updateUserData, userAuth } = useContext(AuthContext);
+  const { nameUserAuth, updateUserData, userAuth, telefoneUser } =
+    useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
 
-  const [nome, setNome] = useState();
+  const [nome, setNome] = useState(nameUserAuth);
   const [email, setEmail] = useState();
-  const [telefone, setTelefone] = useState();
+  const [telefone, setTelefone] = useState(telefoneUser);
   const [password, setPassword] = useState();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
@@ -149,6 +152,7 @@ export default function Profile() {
 
   const containerInput = {
     display: "flex",
+    position: "relative",
     alignItems: "center",
     flexDirection: "column",
     marginBottom: "2px",
@@ -162,6 +166,17 @@ export default function Profile() {
     gridTemplateColumns: "repeat(2, 1fr)",
     gridTemplateRows: "repeat(2, auto)",
     flexWrap: "wrap",
+  };
+
+  const containerInputIcon = {
+    position: "relative",
+  };
+
+  const icon = {
+    position: "absolute",
+    right: "3%",
+    top: "45%",
+    cursor: "pointer",
   };
 
   return (
@@ -218,12 +233,12 @@ export default function Profile() {
                       type="email"
                       id="nome"
                       name="nome"
-                      placeholder="Insira seu nome"
+                      placeholder="Insira seu e-mail"
                     />
                   </div>
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
-                      Número
+                      Telefone
                     </label>
                     <input
                       onChange={(e) => setTelefone(e.target.value)}
@@ -232,9 +247,10 @@ export default function Profile() {
                       type="text"
                       id="nome"
                       name="nome"
-                      placeholder="Insira seu nome"
+                      placeholder="Insira seu telefone"
                     />
                   </div>
+
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
                       Senha
@@ -243,11 +259,24 @@ export default function Profile() {
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
                       style={input}
-                      type="password"
-                      id="nome"
-                      name="nome"
-                      placeholder="Insira seu nome"
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      placeholder="Insira sua senha"
                     />
+                    {showPassword ? (
+                      <BsEyeSlash
+                        style={icon}
+                        size={24}
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <BsEye
+                        style={icon}
+                        size={24}
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
                   </div>
                 </div>
 

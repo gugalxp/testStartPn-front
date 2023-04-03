@@ -14,8 +14,8 @@ import NewPassword from '../pages/NewPassword';
 export default function Routes(){
   return(
     <Switch>
-      <Route exact path="/" component={SignIn} />
-      <Route exact path="/register" component={SignUp} />
+      <Route exact path="/login" component={SignIn} />
+      <Route exact path="/" component={SignUp} />
       <Route exact path="/forgotPassword" component={ForgotPassword} />
       <Route exact path="/emailSent" component={EmailSent} />
       <Route exact path="/newPassword" component={NewPassword} />

@@ -11,6 +11,7 @@ function AuthProvider({ children }) {
   const [userAuth, setUserAuth] = useState(null);
   const [emailUserAuth, setEmailUserAuth] = useState(null);
   const [nameUserAuth, setNameUserAuth] = useState(null);
+  const [telefoneUser , setTelefoneUser] = useState(null);
   const [emailSentConfirmed, setEmailSentConfirmed] = useState(null);
 
   const [clients, setClients] = useState(false);
@@ -19,7 +20,7 @@ function AuthProvider({ children }) {
   const [isClients, setIsClients] = useState(true);
   const [searchItemsSuplier, setSearchItemsSuplier] = useState("");
   const [searchItemsClient, setSearchItemsClient] = useState("");
-
+  
   //Listar clientes
   async function listClient() {
     try {
@@ -138,7 +139,14 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function createTerceiroData(name, email, telefone, endereco, tipo) {
+  async function createTerceiroData(
+    name,
+    email,
+    telefone,
+    endereco,
+    tipo,
+    imgUrl
+  ) {
     try {
       if (tipo === "Cliente") {
         const response = await api.post("/client", {
@@ -146,6 +154,7 @@ function AuthProvider({ children }) {
           email,
           telefone,
           endereco,
+          urlImg: imgUrl,
         });
 
         listClient();
@@ -158,12 +167,13 @@ function AuthProvider({ children }) {
           email,
           telefone,
           endereco,
+          urlImg: imgUrl,
         });
         listSupplier();
         toast.success("Novo Terceiro do tipo Fornecedor criado!");
       }
     } catch (error) {
-      console.log("ERROR: ", error.message)
+      console.log("ERROR: ", error.message);
     }
   }
 
@@ -222,14 +232,11 @@ function AuthProvider({ children }) {
 
   async function newPasswordUpdateUser(newPassword) {
     try {
-      const response = await api.put(`/users/updatePassword/`, {
-        id: userAuth,
+      const response = await api.put(`/users/updatePassword/${userAuth}`, {
         newPassword,
       });
 
-      console.log("SENHA: ", response.data);
-
-      toast.success("Senha atualizada com sucesso!");
+      toast.success(response.data);
 
       return true;
     } catch (error) {
@@ -249,6 +256,23 @@ function AuthProvider({ children }) {
         const response = await api.delete(`/fornecedor/${id}`);
         console.log(response.data);
         toast.success("Fornecedor excluido com sucesso!");
+        listSupplier();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteAll(tipo) {
+    try {
+      if (tipo === "Cliente") {
+        const response = await api.delete(`/client/deleteAll`);
+        toast.success(response.data);
+        listClient();
+      }
+      if (tipo === "Fornecedor") {
+        const response = await api.delete(`/fornecedor/deleteAll`);
+        toast.success(response.data);
         listSupplier();
       }
     } catch (error) {
@@ -285,6 +309,7 @@ function AuthProvider({ children }) {
 
       const { id, name, telefone, endereco, token } = response.data;
 
+      setTelefoneUser(telefone)
       setNameUserAuth(name);
       setEmailUserAuth(email);
 
@@ -372,6 +397,8 @@ function AuthProvider({ children }) {
         updateTerceiroData,
         deleteTerceiroData,
         updateUserData,
+        deleteAll,
+        telefoneUser,
       }}
     >
       {children}

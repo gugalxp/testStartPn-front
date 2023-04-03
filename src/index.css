@@ -129,6 +129,11 @@ button {
   margin-left: -30px;
 }
 
+strong,
+span {
+  word-break: break-all;
+}
+
 .contentListagemTerceiros {
   width: 100%;
   display: flex;
@@ -141,7 +146,13 @@ button {
 .contentListagemTerceiros span:nth-child(3) {
   display: flex;
   justify-content: flex-start !important;
-  margin-left: 35px;
+  margin-left: 12px;
+}
+
+.contentListagemTerceiros span:nth-child(2) {
+  display: flex;
+  justify-content: flex-start !important;
+  margin-left: 50px;
 }
 
 .listagemTerceiros {
@@ -176,4 +187,12 @@ form {
   margin-top: 2em;
   display: flex;
   flex-direction: column;
+}
+
+.noInfo {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #787486b6 
 }

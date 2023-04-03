@@ -26,7 +26,7 @@ function SignUp() {
       const isRegister = await signUp(email, password, confirmedPassword, name);
       console.log(isRegister);
       if (isRegister) {
-        history.push("/");
+        history.push("/login");
       }
     }
   }
@@ -274,7 +274,7 @@ function SignUp() {
             ></Button>
             <div style={jaTemConta}>
               Já tem uma conta?
-              <Link style={jaTemConta_Logar} to="/">
+              <Link style={jaTemConta_Logar} to="/login">
                 Login
               </Link>
             </div>
