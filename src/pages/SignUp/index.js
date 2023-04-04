@@ -4,10 +4,10 @@ import { AuthContext } from "../../context/auth";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import Button from "../../components/Button";
-import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import TitlePrimary from "../../components/TitlePrimary";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -18,17 +18,39 @@ function SignUp() {
   const { signUp } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmaPassword, setShowConfirmaPassword] = useState(false);
+  const [checkboxSelected, setCheckboxSelected] = useState(false);
   const history = useHistory();
 
   async function handleRegister(e) {
     e.preventDefault();
     if (email && password && confirmedPassword && name) {
-      const isRegister = await signUp(email, password, confirmedPassword, name);
-      console.log(isRegister);
-      if (isRegister) {
-        history.push("/login");
+      if (checkboxSelected) {
+        const isRegister = await signUp(
+          email,
+          password,
+          confirmedPassword,
+          name
+        );
+        console.log(isRegister);
+        if (isRegister) {
+          history.push("/login");
+        }
+      } else {
+        toast.info("Confirme o termo de privacidade!")
       }
+    } else {
+      toast.info("Preencha os campos vazios!")
     }
+  }
+
+  function handleCheckbox() {
+    setCheckboxSelected(!checkboxSelected);
+
+    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      if (checkbox.id === "current-checkbox") {
+        console.log("CHECK", checkbox.checked);
+      }
+    });
   }
 
   const form = {
@@ -88,7 +110,7 @@ function SignUp() {
   };
 
   const containerTermosPrivacidade = {
-    marginBottom: "30px",
+    marginBottom: "20px",
   };
 
   const lerTermosPrivacidade = {
@@ -257,8 +279,12 @@ function SignUp() {
               </strong>
             </div>
             <div style={containerConfirmaTermosPrivacidade}>
-              <label style={inputCheckbox} for="checkbox">
-                <input type="checkbox" id="checkbox" />
+              <label style={inputCheckbox} for="current-checkbox">
+                <input
+                  type="checkbox"
+                  id="current-checkbox"
+                  onChange={handleCheckbox}
+                />
                 Ao clicar neste botão, eu concordo com os termos de uso de
                 privacidade da nosa empresa.
               </label>

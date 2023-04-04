@@ -264,6 +264,7 @@ export default function Dashboard() {
 
   const containerNav = {
     display: "flex",
+    flexWrap: "wrap",
     justifyContent: "space-between",
   };
 
@@ -271,6 +272,7 @@ export default function Dashboard() {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    flexWrap: "wrap",
     justifyContent: "center",
     gap: "15px",
   };
@@ -634,7 +636,7 @@ export default function Dashboard() {
                 <div style={containerInputSearch}>
                   <div
                     onClick={handleSearch}
-                    style={{ position: "absolute", left: "15px", top: "6px" }}
+                    className="iconSearchContainer"
                   >
                     <svg
                       style={{ cursor: "pointer" }}
@@ -663,9 +665,8 @@ export default function Dashboard() {
                   <input
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Pesquisar"
-                    className="inputLogin"
+                    className="inputSearch"
                     maxLength={100}
-                    style={inputSearch}
                     onKeyPress={handleSearch}
                     onBlur={handleSearch}
                   />
@@ -706,7 +707,7 @@ export default function Dashboard() {
             {!clients.length && itemMenu === 1 && (
               <>
                 <strong className="noInfo">
-                  Nenhum Cliente adicionado a lista
+                  Nenhum cliente adicionado a lista
                 </strong>
               </>
             )}
@@ -717,7 +718,7 @@ export default function Dashboard() {
                 </strong>
               </>
             )}
-
+            
             {searchItemsClient && itemMenu === 1 && (
               <>
                 {Object.values(searchItemsClient).map((client) => (

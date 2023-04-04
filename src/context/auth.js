@@ -344,6 +344,7 @@ function AuthProvider({ children }) {
 
         if (response.data.id) {
           toast.success("Cadastrado efetuado com sucesso!");
+          return true;
         }
       } else {
         toast.error("As senhas inseridas não coincidem!");

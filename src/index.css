@@ -125,7 +125,7 @@ button {
   margin-left: 20px;
 }
 
-.contentTitleListTerceiros span:nth-child(4){
+.contentTitleListTerceiros span:nth-child(4) {
   margin-left: -30px;
 }
 
@@ -179,6 +179,92 @@ span {
   justify-content: center;
 }
 
+@media (max-width: 998px) {
+  .iconMenuUser,
+  .headerContainer {
+    display: none;
+  }
+  .containerMain {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+  .userName {
+    display: none;
+  }
+  .user {
+    width: 11px !important;
+    background: #f7f9fb !important;
+    border-radius: 60px;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+  }
+
+  .containerUser {
+    width: 100%;
+    justify-content: flex-end !important;
+    flex-direction: row;
+    align-items: center;
+    font-family: "Comfortaa";
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 16px;
+    padding: 15px;
+  }
+
+  .inputSearch {
+    background: white;
+    height: 45px;
+    width: 45px !important;
+    border-radius: 12px !important;
+    outline: none;
+    padding-left: 50px;
+    border: 1.9px solid #d7d7d7;
+    transition: all 2s;
+  }
+
+  .iconSearchContainer {
+    margin-top: 2px;
+    margin-left: -2px;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+.iconSearchContainer {
+  position: absolute;
+  left: 15px;
+  top: 6px;
+}
+
+.user {
+  width: 225px;
+  background: #ffffff;
+  border-radius: 60px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d7d7d7;
+}
+
+.containerUser {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "Comfortaa";
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 16px;
+  padding: 15px;
+}
+
 .excluir-terceiro .editar-terceiro:hover {
   opacity: 0.5;
 }
@@ -194,5 +280,16 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #787486b6 
+  color: #787486b6;
+}
+
+.inputSearch {
+  background: white;
+  height: 45px;
+  width: 290px;
+  border-radius: 60px;
+  outline: none;
+  padding-left: 50px;
+  border: 1.9px solid #d7d7d7;
+  transition: all 2s;
 }

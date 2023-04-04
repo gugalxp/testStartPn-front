@@ -1,4 +1,4 @@
-import logoCadastroImg from "../../assets/images/logoPn.png";
+import Button from "../Button";
 
 export default function TitlePrimary({conteudo, containerTitle}) {
   
@@ -11,7 +11,7 @@ export default function TitlePrimary({conteudo, containerTitle}) {
 
   return (
     <div style={containerTitle}>
-      <h1 style={titlePrimary}>{conteudo}</h1>
+      <Button style={titlePrimary}>{conteudo}</Button>
     </div>
   );
 }

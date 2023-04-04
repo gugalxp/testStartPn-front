@@ -19,8 +19,8 @@ const DashboardColumnLayout = ({ colum2Data }) => {
   };
 
   return (
-    <div style={containerMain}>
-      <div>
+    <div style={containerMain} className="containerMain">
+      <div className="headerContainer">
         <Header />
       </div>
       <div style={contentMain}>{colum2Data}</div>
