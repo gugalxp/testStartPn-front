@@ -8,7 +8,9 @@ import { AuthContext } from "../../context/auth";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { MdAddAPhoto } from "react-icons/md";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { IoIosArrowDropleft } from "react-icons/io";
 import Button from "../../components/Button";
+import { Link } from "react-router-dom";
 
 import { FiSettings, FiUpload } from "react-icons/fi";
 
@@ -69,7 +71,6 @@ export default function Profile() {
     background: "#ffffff",
     border: "1px solid #D7D7D7",
     width: "713px",
-    maxWidth: "713px",
     height: "500px",
     display: "flex",
     justifyContent: "center",
@@ -82,6 +83,7 @@ export default function Profile() {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    width: "100% !important",
   };
 
   const imgStyle = {
@@ -158,20 +160,6 @@ export default function Profile() {
     marginBottom: "2px",
   };
 
-  const content_Input = {
-    height: "600px",
-    padding: "15px",
-    gap: "15px",
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gridTemplateRows: "repeat(2, auto)",
-    flexWrap: "wrap",
-  };
-
-  const containerInputIcon = {
-    position: "relative",
-  };
-
   const icon = {
     position: "absolute",
     right: "3%",
@@ -181,21 +169,33 @@ export default function Profile() {
 
   return (
     <div>
+      <div
+       
+        className="titleShowProfile"
+      >
+        <Link to="/dashboard">
+          <IoIosArrowDropleft size={30} color="#476EE6"/>
+        </Link>
+        <span style={{ width: "100%", display: "flex", justifyContent: "center",}}>Minha conta</span>
+      </div>
       <DashboardColumnLayout
         colum2Data={
           <div>
-            <Title nameUser={nameUserAuth} page="Minha conta"></Title>
+            <div className="showTitle">
+              <Title nameUser={nameUserAuth} page="Minha conta"></Title>
+            </div>
             <div style={container_perfil}>
-              <form style={form_profile} onSubmit={handleUpload}>
-                <div style={containerStyleImgUserModal}>
+              <form className="form_profile" onSubmit={handleUpload}>
+                <div className="containerStyleImgUserModal">
                   <label className="label-avatar" for="avatar">
+                    <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                     {typeof imgUrl === "undefined" ? (
                       <img style={imgStyle} src={avatar} alt="" />
                     ) : (
                       <img style={imgStyle} src={imgUrl} alt="" />
                     )}
                     <MdAddAPhoto
-                      style={iconImgUserModal}
+                      className="iconImgUserModal"
                       color="#fff"
                       size={30}
                     />
@@ -205,9 +205,11 @@ export default function Profile() {
                       type="file"
                       accept="image/*"
                     />
+
+                    </div>
                   </label>
                 </div>
-                <div style={content_Input}>
+                <div className="content_Input">
                   <div style={containerInput}>
                     <label style={label} htmlFor="nome">
                       Nome
@@ -215,7 +217,7 @@ export default function Profile() {
                     <input
                       onChange={(e) => setNome(e.target.value)}
                       value={nome}
-                      style={input}
+                      className="input"
                       type="text"
                       id="nome"
                       name="nome"
@@ -229,7 +231,7 @@ export default function Profile() {
                     <input
                       onChange={(e) => setEmail(e.target.value)}
                       value={email}
-                      style={input}
+                      className="input"
                       type="email"
                       id="nome"
                       name="nome"
@@ -243,7 +245,7 @@ export default function Profile() {
                     <input
                       onChange={(e) => setTelefone(e.target.value)}
                       value={telefone}
-                      style={input}
+                      className="input"
                       type="text"
                       id="nome"
                       name="nome"
@@ -258,7 +260,7 @@ export default function Profile() {
                     <input
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
-                      style={input}
+                      className="input"
                       type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"

@@ -4,8 +4,10 @@ import SubModal from "../../components/Modals/SubModal";
 import Button from "../../components/Button";
 import Modal from "../../components/Modals/Modal";
 import Title from "../../components/Title";
+import HeaderMobile from "../../components/Header/HeaderMobile";
 import { FiMoreVertical, FiSettings } from "react-icons/fi";
-import { MdAddAPhoto } from "react-icons/md";
+import { MdAddAPhoto, MdDelete } from "react-icons/md";
+import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import avatar from "../../assets/images/avatar.png";
@@ -15,6 +17,7 @@ import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { toast } from "react-toastify";
 import firebase, { storage } from "../../services/firebaseConnection";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { IoIosArrowDropleft } from "react-icons/io";
 
 export default function Dashboard() {
   const [itemMenu, setItemMenu] = useState(1);
@@ -45,6 +48,7 @@ export default function Dashboard() {
   const [progress, setProgress] = useState(0);
   const [accessInfoClient, setAccessInfoClient] = useState("");
   const [selectedAllCheckbox, setSelectedAllCheckbox] = useState(false);
+  const [isInputSearchMobile, setIsInputSearchMobile] = useState(false);
 
   const {
     clients,
@@ -268,13 +272,14 @@ export default function Dashboard() {
     justifyContent: "space-between",
   };
 
-  const containerMenuNav = {
+  const containerMenuNavDesktop = {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "wrap",
     justifyContent: "center",
     gap: "15px",
+    width: "100%",
   };
 
   const menuNav = {
@@ -340,6 +345,8 @@ export default function Dashboard() {
   };
 
   const iconSettingsContainer = {
+    position: "relative",
+    right: "5px",
     width: "45px",
     height: "45px",
     background: "#FFFFFF",
@@ -588,14 +595,6 @@ export default function Dashboard() {
     marginLeft: "12px",
   };
 
-  const containerUsernamePhoto = {
-    width: "33%",
-    display: "flex",
-    alignItems: "center",
-    gap: "30px",
-    marginLeft: "2.5em",
-  };
-
   const inputSearch = {
     background: "white",
     height: "45px",
@@ -611,75 +610,267 @@ export default function Dashboard() {
     position: "relative",
   };
 
+  function handleInputSearchMobile() {
+    setIsInputSearchMobile(!isInputSearchMobile);
+  }
+
   return (
     <div>
+      {isInputSearchMobile ? (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "15px",
+            paddingLeft: "10px",
+            paddingRight: "10px",
+          }}
+        >
+          <IoIosArrowDropleft
+            size={35}
+            color="#476EE6"
+            onClick={handleInputSearchMobile}
+          />
+          <div className="containerInputSearchMobileTop">
+            <div onClick={handleSearch} className="iconSearchContainer">
+              <svg
+                style={{
+                  cursor: "pointer",
+                  position: "absolute",
+                  left: "130px",
+                  top: "17px",
+                  fontSize: "30px",
+                }}
+                width="30"
+                height="25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
+                  stroke="#1172EB"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M17.5 18.1465L13.875 14.5215"
+                  stroke="#1172EB"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <input
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Pesquisar"
+              className="inputSearchMobileTop"
+              maxLength={100}
+              onKeyPress={handleSearch}
+              onBlur={handleSearch}
+            />
+          </div>
+        </div>
+      ) : (
+        <HeaderMobile />
+      )}
       <DashboardColumnLayout
         colum2Data={
           <div>
-            <Title nameUser={nameUserAuth} page="Terceiros" />
+            <div className="showTitle">
+              <Title nameUser={nameUserAuth} page="Terceiros" />
+            </div>
             <div style={containerNav}>
-              <div style={containerMenuNav}>
-                <div style={menuNav}>
-                  <Link
-                    className={itemMenu === 1 ? "item active" : "item"}
-                    onClick={() => handleListContentClient("1")}
-                  >
-                    Clientes
-                  </Link>
-                  <Link
-                    className={itemMenu === 2 ? "item active" : "item"}
-                    onClick={() => handleListContentSupplier("2")}
-                  >
-                    Fornecedores
-                  </Link>
-                </div>
-                <div style={containerInputSearch}>
-                  <div
-                    onClick={handleSearch}
-                    className="iconSearchContainer"
-                  >
-                    <svg
-                      style={{ cursor: "pointer" }}
-                      width="30"
-                      height="25"
-                      viewBox="2 -2 18 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+              <div className="showTitleMobile">
+                <div className="containerMenuNavMobile">
+                  <div className="menuNav">
+                    <Link
+                      className={itemMenu === 1 ? "item active" : "item"}
+                      onClick={() => handleListContentClient("1")}
                     >
-                      <path
-                        d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
-                        stroke="#1172EB"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M17.5 18.1465L13.875 14.5215"
-                        stroke="#1172EB"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                      Clientes
+                    </Link>
+                    <Link
+                      className={itemMenu === 2 ? "item active" : "item"}
+                      onClick={() => handleListContentSupplier("2")}
+                    >
+                      Fornecedores
+                    </Link>
                   </div>
-                  <input
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Pesquisar"
-                    className="inputSearch"
-                    maxLength={100}
-                    onKeyPress={handleSearch}
-                    onBlur={handleSearch}
-                  />
+                  {!isInputSearchMobile && (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          flexDirection: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                        }}
+                      >
+                        <span className="titleMobile">Terceiros</span>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            flexDirection: "row-reverse",
+                          }}
+                        >
+                          <div className="containerInputSearch">
+                            <div
+                              onClick={handleSearch}
+                              className="iconSearchContainer"
+                            >
+                              <svg
+                                style={{ cursor: "pointer" }}
+                                width="30"
+                                height="25"
+                                viewBox="3 -2 18 21"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
+                                  stroke="#1172EB"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M17.5 18.1465L13.875 14.5215"
+                                  stroke="#1172EB"
+                                  stroke-width="3"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </div>
+                            <input
+                              onChange={(e) => setSearch(e.target.value)}
+                              placeholder="Pesquisar"
+                              className="inputSearch"
+                              maxLength={100}
+                              onKeyPress={handleSearch}
+                              onBlur={handleSearch}
+                            />
+                          </div>
+                          <div
+                            className="containerInputSearchMobile"
+                            onClick={handleInputSearchMobile}
+                          >
+                            <div className="iconSearchContainer">
+                              <svg
+                                style={{ cursor: "pointer" }}
+                                width="30"
+                                height="25"
+                                viewBox="3 -2 18 21"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
+                                  stroke="#1172EB"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M17.5 18.1465L13.875 14.5215"
+                                  stroke="#1172EB"
+                                  stroke-width="3"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </div>
+                            <input
+                              onChange={(e) => setSearch(e.target.value)}
+                              placeholder="Pesquisar"
+                              className="inputSearchMobile"
+                              maxLength={100}
+                              onClick={handleInputSearchMobile}
+                            />
+                          </div>
+                          <div style={iconSettingsContainer}>
+                            <FiSettings
+                              size={23}
+                              color="#476EE6"
+                              onClick={togglePostModalConfiguracao}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div style={iconSettingsContainer}>
-                  <FiSettings
-                    size={23}
-                    color="#476EE6"
-                    onClick={togglePostModalConfiguracao}
-                  />
+              </div>
+              <div className="showTitleDesktop">
+                <div style={containerMenuNavDesktop}>
+                  <div className="menuNav">
+                    <Link
+                      className={itemMenu === 1 ? "item active" : "item"}
+                      onClick={() => handleListContentClient("1")}
+                    >
+                      Clientes
+                    </Link>
+                    <Link
+                      className={itemMenu === 2 ? "item active" : "item"}
+                      onClick={() => handleListContentSupplier("2")}
+                    >
+                      Fornecedores
+                    </Link>
+                  </div>
+                  <div style={containerInputSearch}>
+                    <div onClick={handleSearch} className="iconSearchContainer">
+                      <svg
+                        style={{ cursor: "pointer" }}
+                        width="30"
+                        height="25"
+                        viewBox="2 -2 18 21"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
+                          stroke="#1172EB"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M17.5 18.1465L13.875 14.5215"
+                          stroke="#1172EB"
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Pesquisar"
+                      className="inputSearch"
+                      maxLength={100}
+                      onKeyPress={handleSearch}
+                      onBlur={handleSearch}
+                    />
+                  </div>
+                  <div style={iconSettingsContainer}>
+                    <FiSettings
+                      size={23}
+                      color="#476EE6"
+                      onClick={togglePostModalConfiguracao}
+                    />
+                  </div>
                 </div>
               </div>
               <Link
+                className="buttonNewSupplierDesktop"
                 onClick={
                   !selectedAllCheckbox
                     ? togglePostModalNewTerceiro
@@ -688,6 +879,16 @@ export default function Dashboard() {
                 style={!selectedAllCheckbox ? newTerceiro : deleteAllItems}
               >
                 {!selectedAllCheckbox ? "Novo terceiro" : "Excluir"}
+              </Link>
+              <Link
+                className="buttonNewSupplierMobile"
+                onClick={
+                  !selectedAllCheckbox
+                    ? togglePostModalNewTerceiro
+                    : handleDeleteAll
+                }
+              >
+                <BiPlus size={35} />
               </Link>
             </div>
             <div className="titleListTerceiros">
@@ -718,25 +919,47 @@ export default function Dashboard() {
                 </strong>
               </>
             )}
-            
+
             {searchItemsClient && itemMenu === 1 && (
-              <>
+              <div className="containerListagemTerceiros">
                 {Object.values(searchItemsClient).map((client) => (
                   <div className="listagemTerceiros" key={client.id}>
-                    <input type="checkbox" style={checkbox} />
-                    <div style={containerUsernamePhoto}>
-                      {typeof imgUrl === "undefined" ? (
-                        <img style={imgUserStyle} src={avatar} alt="" />
-                      ) : (
-                        <img style={imgUserStyle} src={client.urlImg} alt="" />
-                      )}
-                      <span>{client.name}</span>
+                    <div className="containerBoxPhoto">
+                      <input type="checkbox" style={checkbox} />
+                      <div className="containerUsernamePhoto">
+                        {typeof imgUrl === "undefined" ? (
+                          <img style={imgUserStyle} src={avatar} alt="" />
+                        ) : (
+                          <img
+                            style={imgUserStyle}
+                            src={client.urlImg}
+                            alt=""
+                          />
+                        )}
+                        <span data-label="Nome">{client.name}</span>
+                      </div>
+                      <span className="campoListMoreVerticalMobile">
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() =>
+                            togglePostModalEditOrDelete(client.id, client.name)
+                          }
+                        />
+                      </span>
                     </div>
                     <div className="contentListagemTerceiros">
-                      <span style={campoListEmail}>{client.email}</span>
-                      <span style={campoList}>{client.telefone}</span>
-                      <span style={campoList}>{client.endereco}</span>
-                      <span style={campoList}>
+                      <span data-label="E-mail" className="campoListEmail">
+                        {client.email}
+                      </span>
+                      <span data-label="Telefone" className="campoList">
+                        {client.telefone ? client.telefone : "-"}
+                      </span>
+                      <span data-label="Endereço" className="campoList">
+                        {client.endereco}
+                      </span>
+                      <span className="campoListMoreVerticalDesktop">
                         <FiMoreVertical
                           size={20}
                           style={{ cursor: "pointer" }}
@@ -749,26 +972,44 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             )}
             {searchItemsSuplier && itemMenu === 2 && (
-              <>
+              <div className="containerListagemTerceiros">
                 {Object.values(searchItemsSuplier).map((supp) => (
                   <div className="listagemTerceiros" key={supp.id}>
-                    <input type="checkbox" style={checkbox} />
-                    <div style={containerUsernamePhoto}>
-                      {typeof imgUrl === "undefined" ? (
-                        <img style={imgUserStyle} src={avatar} alt="" />
-                      ) : (
-                        <img style={imgUserStyle} src={supp.urlImg} alt="" />
-                      )}
-                      <span>{supp.name}</span>
+                    <div className="containerBoxPhoto">
+                      <input type="checkbox" style={checkbox} />
+                      <div className="containerUsernamePhoto">
+                        {typeof imgUrl === "undefined" ? (
+                          <img style={imgUserStyle} src={avatar} alt="" />
+                        ) : (
+                          <img style={imgUserStyle} src={supp.urlImg} alt="" />
+                        )}
+                        <span data-label="Nome">{supp.name}</span>
+                      </div>
+                      <span className="campoListMoreVerticalMobile">
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() =>
+                            togglePostModalEditOrDelete(supp.id, supp.name)
+                          }
+                        />
+                      </span>
                     </div>
                     <div className="contentListagemTerceiros">
-                      <span style={campoListEmail}>{supp.email}</span>
-                      <span style={campoList}>{supp.telefone}</span>
-                      <span style={campoList}>{supp.endereco}</span>
-                      <span style={campoList}>
+                      <span data-label="E-mail" className="campoListEmail">
+                        {supp.email}
+                      </span>
+                      <span data-label="Telefone" className="campoList">
+                        {supp.telefone ? supp.telefone : "-"}
+                      </span>
+                      <span data-label="Endereço" className="campoList">
+                        {supp.endereco}
+                      </span>
+                      <span className="campoListMoreVerticalDesktop">
                         <FiMoreVertical
                           size={20}
                           style={{ cursor: "pointer" }}
@@ -781,26 +1022,51 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             )}
             {isClients && !searchItemsClient && (
-              <>
+              <div className="containerListagemTerceiros">
                 {Object.values(clients).map((client) => (
                   <div className="listagemTerceiros" key={client.id}>
-                    <input type="checkbox" style={checkbox} />
-                    <div style={containerUsernamePhoto}>
-                      {typeof imgUrl === "undefined" ? (
-                        <img style={imgUserStyle} src={avatar} alt="" />
-                      ) : (
-                        <img style={imgUserStyle} src={client.urlImg} alt="" />
-                      )}
-                      <span>{client.name}</span>
+                    <div className="containerBoxPhoto">
+                      <input type="checkbox" style={checkbox} />
+                      <div className="containerUsernamePhoto">
+                        {typeof imgUrl === "undefined" ? (
+                          <img style={imgUserStyle} src={avatar} alt="" />
+                        ) : (
+                          <img
+                            style={imgUserStyle}
+                            src={client.urlImg}
+                            alt=""
+                          />
+                        )}
+                        <span className="nameUser" data-label="Nome">
+                          {client.name}
+                        </span>
+                      </div>
+
+                      <span className="campoListMoreVerticalMobile">
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() =>
+                            togglePostModalEditOrDelete(client.id, client.name)
+                          }
+                        />
+                      </span>
                     </div>
                     <div className="contentListagemTerceiros">
-                      <span style={campoListEmail}>{client.email}</span>
-                      <span style={campoList}>{client.telefone}</span>
-                      <span style={campoList}>{client.endereco}</span>
-                      <span style={campoList}>
+                      <span data-label="E-mail" className="campoListEmail">
+                        {client.email}
+                      </span>
+                      <span data-label="Telefone" className="campoList">
+                        {client.telefone ? client.telefone : "-"}
+                      </span>
+                      <span data-label="Endereço" className="campoList">
+                        {client.endereco}
+                      </span>
+                      <span className="campoListMoreVerticalDesktop">
                         <FiMoreVertical
                           size={20}
                           style={{ cursor: "pointer" }}
@@ -813,26 +1079,46 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             )}
             {isSupplier && !searchItemsSuplier && (
-              <>
+              <div className="containerListagemTerceiros">
                 {Object.values(supplier).map((supp) => (
                   <div className="listagemTerceiros" key={supp.id}>
-                    <input type="checkbox" style={checkbox} />
-                    <div style={containerUsernamePhoto}>
-                      {typeof imgUrl === "undefined" ? (
-                        <img style={imgUserStyle} src={avatar} alt="" />
-                      ) : (
-                        <img style={imgUserStyle} src={supp.urlImg} alt="" />
-                      )}
-                      <span>{supp.name}</span>
+                    <div className="containerBoxPhoto">
+                      <input type="checkbox" style={checkbox} />
+                      <div className="containerUsernamePhoto">
+                        {typeof imgUrl === "undefined" ? (
+                          <img style={imgUserStyle} src={avatar} alt="" />
+                        ) : (
+                          <img style={imgUserStyle} src={supp.urlImg} alt="" />
+                        )}
+                        <span className="nameUser" data-label="Nome">
+                          {supp.name}
+                        </span>
+                      </div>
+                      <span className="campoListMoreVerticalMobile">
+                        <FiMoreVertical
+                          size={20}
+                          style={{ cursor: "pointer" }}
+                          color="#000"
+                          onClick={() =>
+                            togglePostModalEditOrDelete(supp.id, supp.name)
+                          }
+                        />
+                      </span>
                     </div>
                     <div className="contentListagemTerceiros">
-                      <span style={campoListEmail}>{supp.email}</span>
-                      <span style={campoList}>{supp.telefone}</span>
-                      <span style={campoList}>{supp.endereco}</span>
-                      <span style={campoList}>
+                      <span data-label="E-mail" className="campoListEmail">
+                        {supp.email}
+                      </span>
+                      <span data-label="Telefone" className="campoList">
+                        {supp.telefone ? supp.telefone : "-"}
+                      </span>
+                      <span data-label="Endereço" className="campoList">
+                        {supp.endereco}
+                      </span>
+                      <span className="campoListMoreVerticalDesktop">
                         <FiMoreVertical
                           size={20}
                           style={{ cursor: "pointer" }}
@@ -845,7 +1131,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             )}
           </div>
         }
@@ -990,11 +1276,7 @@ export default function Dashboard() {
       )}
       {showModalNewTerceiro && (
         <>
-          <Modal
-            width="605px"
-            height="566px"
-            close={togglePostModalNewTerceiro}
-          >
+          <Modal close={togglePostModalNewTerceiro}>
             <div style={modal_header}>
               <div style={fixEditarTerceiro}>
                 <FiX
@@ -1012,20 +1294,32 @@ export default function Dashboard() {
                 />
               </div>
             </div>
-            <div style={containerStyleImgUserModal}>
+            <div  style={containerStyleImgUserModal}>
               <label for="avatar">
-                <img style={imgStyle} src={avatar} alt="" />
-                <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
-                <input
-                  style={file_input}
-                  id="avatar"
-                  type="file"
-                  accept="image/*"
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <img  className="imgStyle" src={avatar} alt="" />
+                  <MdAddAPhoto
+                    className="iconImgUserModal"
+                    color="#fff"
+                    size={30}
+                  />
+                  <input
+                    style={file_input}
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
               </label>
               <br />
             </div>
-            <form style={form}>
+            <form className="formNewTerceiro">
               <div style={containerInput}>
                 <label style={label} htmlFor="nome">
                   Nome do terceiro

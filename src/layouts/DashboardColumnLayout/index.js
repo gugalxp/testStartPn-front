@@ -1,14 +1,12 @@
 import React from "react";
 import Header from "../../components/Header";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../context/auth";
 
 const DashboardColumnLayout = ({ colum2Data }) => {
-  const contentMain = {
-    marginLeft: "50px",
-    marginRight: "50px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  };
+
+  const { isOpenHeaderMobile } =
+  useContext(AuthContext);
 
   const containerMain = {
     display: "grid",
@@ -20,10 +18,10 @@ const DashboardColumnLayout = ({ colum2Data }) => {
 
   return (
     <div style={containerMain} className="containerMain">
-      <div className="headerContainer">
+      <div className={!isOpenHeaderMobile ? "headerContainer" : ""}>
         <Header />
       </div>
-      <div style={contentMain}>{colum2Data}</div>
+      <div className="contentMain">{colum2Data}</div>
     </div>
   );
 };

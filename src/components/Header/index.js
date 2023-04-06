@@ -55,18 +55,7 @@ export default function Header() {
     flexDirection: "row",
   };
 
-  const sidebar = {
-    margin: 0,
-    padding: 0,
-    width: "229px",
-    background: "#FFFFFF",
-    position: "fixed",
-    height: "100%",
-    overflow: "auto",
-    borderTopRightRadius: "20px",
-    borderBottomRightRadius: "20px",
-    borderRight: "1px solid #D7D7D7",
-  };
+
 
   const containerLogo = {
     paddingTop: "30px",
@@ -86,7 +75,7 @@ export default function Header() {
   };
 
   return (
-    <div style={sidebar}>
+    <div className="sidebar">
       <div style={containerLogo}>
         <img style={styleLogo} src={logo} alt="Foto avatar" />
       </div>

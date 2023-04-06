@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
   const [userAuth, setUserAuth] = useState(null);
   const [emailUserAuth, setEmailUserAuth] = useState(null);
   const [nameUserAuth, setNameUserAuth] = useState(null);
-  const [telefoneUser , setTelefoneUser] = useState(null);
+  const [telefoneUser, setTelefoneUser] = useState(null);
   const [emailSentConfirmed, setEmailSentConfirmed] = useState(null);
 
   const [clients, setClients] = useState(false);
@@ -20,7 +20,7 @@ function AuthProvider({ children }) {
   const [isClients, setIsClients] = useState(true);
   const [searchItemsSuplier, setSearchItemsSuplier] = useState("");
   const [searchItemsClient, setSearchItemsClient] = useState("");
-  
+
   //Listar clientes
   async function listClient() {
     try {
@@ -112,7 +112,7 @@ function AuthProvider({ children }) {
       });
 
       if (response.data.error !== undefined) {
-        toast.info(response.data.error);
+        // toast.info(response.data.error);
       } else {
         setIsClients(false);
         setSearchItemsClient(response.data);
@@ -129,7 +129,7 @@ function AuthProvider({ children }) {
         search,
       });
       if (response.data.error !== undefined) {
-        toast.info(response.data.error);
+        // toast.info(response.data.error);
       } else {
         setIsSupplier(false);
         setSearchItemsSuplier(response.data);
@@ -309,7 +309,7 @@ function AuthProvider({ children }) {
 
       const { id, name, telefone, endereco, token } = response.data;
 
-      setTelefoneUser(telefone)
+      setTelefoneUser(telefone);
       setNameUserAuth(name);
       setEmailUserAuth(email);
 
