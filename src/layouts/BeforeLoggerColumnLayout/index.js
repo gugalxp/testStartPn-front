@@ -3,13 +3,6 @@ import ArteVisual from "../../components/ArteVisual";
 import fundoStiveJobsImg from "../../assets/images/fundoStiveJobs.png";
 
 const BeforeLoggerColumnLayout = ({ colum2Data, page }) => {
-  const containerMain = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr" /* cria duas colunas com a mesma largura */,
-    gridColumnGap: "0px",
-    gridRowGap: "0px",
-    background: "#fff",
-  };
 
   const column1 = {
     position: "relative",
@@ -35,14 +28,14 @@ const BeforeLoggerColumnLayout = ({ colum2Data, page }) => {
   };
 
   return (
-    <div style={containerMain}>
-      <div style={column1}>
-        <ArteVisual />
+    <div className="containerMain">
+      <div className="showArteVisual">
+        <div style={column1}>
+          <ArteVisual />
+        </div>
       </div>
-      {/* End column1*/}
 
       <div style={column2}>{colum2Data}</div>
-      {/* End column2 */}
     </div>
   );
 };

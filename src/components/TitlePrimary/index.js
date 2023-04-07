@@ -1,4 +1,3 @@
-import Button from "../Button";
 
 export default function TitlePrimary({conteudo, containerTitle}) {
   
@@ -11,7 +10,7 @@ export default function TitlePrimary({conteudo, containerTitle}) {
 
   return (
     <div style={containerTitle}>
-      <Button style={titlePrimary}>{conteudo}</Button>
+      <div style={titlePrimary}>{conteudo}</div>
     </div>
   );
 }

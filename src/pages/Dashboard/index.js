@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import Modal from "../../components/Modals/Modal";
 import Title from "../../components/Title";
 import HeaderMobile from "../../components/Header/HeaderMobile";
-import { FiMoreVertical, FiSettings } from "react-icons/fi";
+import { FiMoreVertical, FiSettings, FiSearch } from "react-icons/fi";
 import { MdAddAPhoto, MdDelete } from "react-icons/md";
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -41,6 +41,7 @@ export default function Dashboard() {
   const [updateTerceiroTipo, setUpdateTerceiroTipo] = useState();
   const [deleteTerceiroTipo, setDeleteTerceiroTipo] = useState("Cliente");
 
+  const [imgUrlAtual, setImgUrlAtual] = useState();
   const [idItem, setIdItem] = useState();
   const [nameItem, setNameItem] = useState();
   const [checkboxSelected, setCheckboxSelected] = useState(false);
@@ -49,6 +50,7 @@ export default function Dashboard() {
   const [accessInfoClient, setAccessInfoClient] = useState("");
   const [selectedAllCheckbox, setSelectedAllCheckbox] = useState(false);
   const [isInputSearchMobile, setIsInputSearchMobile] = useState(false);
+  const [exibeImagemModal, setExibeImagemModal] = useState(false);
 
   const {
     clients,
@@ -113,6 +115,7 @@ export default function Dashboard() {
         try {
           getDownloadURL(uploadTask.snapshot.ref).then((urlImg) => {
             setImgUrl(urlImg);
+            setExibeImagemModal(urlImg);
 
             localStorage.setItem(`imgUrl_${accessInfoClient}`, urlImg);
 
@@ -131,11 +134,15 @@ export default function Dashboard() {
               return;
             }
 
-            setNovoTerceiroNome("");
-            setNovoTerceiroEmail("");
-            setNovoTerceiroTelefone("");
-            setNovoTerceiroEndereco("");
-            setNovoTerceiroTipo("");
+            updateTerceiroData(
+              updateTerceiroNome,
+              updateTerceiroEmail,
+              updateTerceiroTelefone,
+              updateTerceiroEndereco,
+              updateTerceiroTipo,
+              idItem,
+              urlImg
+            );
           });
         } catch (error) {}
       }
@@ -150,22 +157,10 @@ export default function Dashboard() {
     await handleUpload(e);
   }
 
-  function updateTerceiroModalContent(e) {
+  async function updateTerceiroModalContent(e) {
     e.preventDefault();
-    updateTerceiroData(
-      updateTerceiroNome,
-      updateTerceiroEmail,
-      updateTerceiroTelefone,
-      updateTerceiroEndereco,
-      updateTerceiroTipo,
-      idItem
-    );
 
-    setUpdateTerceiroNome("");
-    setUpdateTerceiroEmail("");
-    setUpdateTerceiroTelefone("");
-    setUpdateTerceiroEndereco("");
-    setUpdateTerceiroTipo("");
+    await handleUpload(e);
   }
 
   function deleteTerceiroModalContent() {
@@ -191,9 +186,10 @@ export default function Dashboard() {
     }
   }
 
-  function togglePostModalEditOrDelete(id, name) {
+  function togglePostModalEditOrDelete(id, name, urlImgAtual) {
     setIdItem(id);
     setNameItem(name);
+    setImgUrlAtual(urlImgAtual);
     setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
     setShowSubModal(false);
   }
@@ -572,15 +568,6 @@ export default function Dashboard() {
     height: "100%",
   };
 
-  const imgStyle = {
-    width: "115px",
-    height: "115px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    marginTop: "30px",
-    cursor: "pointer",
-  };
-
   const campoList = {
     width: "33%",
     display: "flex",
@@ -618,15 +605,7 @@ export default function Dashboard() {
     <div>
       {isInputSearchMobile ? (
         <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "15px",
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
+          className="inputSearchResponsiveStyle"
         >
           <IoIosArrowDropleft
             size={35}
@@ -634,44 +613,26 @@ export default function Dashboard() {
             onClick={handleInputSearchMobile}
           />
           <div className="containerInputSearchMobileTop">
-            <div onClick={handleSearch} className="iconSearchContainer">
-              <svg
-                style={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  left: "130px",
-                  top: "17px",
-                  fontSize: "30px",
-                }}
-                width="30"
-                height="25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <div>
+              <div
+                onClick={handleSearch}
+                className="iconSearchContainerResponsive"
               >
-                <path
-                  d="M9.16667 16.4798C12.8486 16.4798 15.8333 13.4951 15.8333 9.81315C15.8333 6.13125 12.8486 3.14648 9.16667 3.14648C5.48477 3.14648 2.5 6.13125 2.5 9.81315C2.5 13.4951 5.48477 16.4798 9.16667 16.4798Z"
-                  stroke="#1172EB"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <FiSearch
+                  style={{ display: "absolute" }}
+                  color="#476ee6"
+                  size={25}
                 />
-                <path
-                  d="M17.5 18.1465L13.875 14.5215"
-                  stroke="#1172EB"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              </div>
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Pesquisar"
+                className="inputSearchMobileTop"
+                maxLength={100}
+                onKeyPress={handleSearch}
+                onBlur={handleSearch}
+              />
             </div>
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Pesquisar"
-              className="inputSearchMobileTop"
-              maxLength={100}
-              onKeyPress={handleSearch}
-              onBlur={handleSearch}
-            />
           </div>
         </div>
       ) : (
@@ -763,7 +724,10 @@ export default function Dashboard() {
                             className="containerInputSearchMobile"
                             onClick={handleInputSearchMobile}
                           >
-                            <div className="iconSearchContainer">
+                            <div
+                              className="iconSearchContainer"
+                              onClick={handleSearch}
+                            >
                               <svg
                                 style={{ cursor: "pointer" }}
                                 width="30"
@@ -944,7 +908,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(client.id, client.name)
+                            togglePostModalEditOrDelete(
+                              client.id,
+                              client.name,
+                              client.urlImg
+                            )
                           }
                         />
                       </span>
@@ -965,7 +933,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(client.id, client.name)
+                            togglePostModalEditOrDelete(
+                              client.id,
+                              client.name,
+                              client.urlImg
+                            )
                           }
                         />
                       </span>
@@ -994,7 +966,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(supp.id, supp.name)
+                            togglePostModalEditOrDelete(
+                              supp.id,
+                              supp.name,
+                              supp.urlImg
+                            )
                           }
                         />
                       </span>
@@ -1015,7 +991,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(supp.id, supp.name)
+                            togglePostModalEditOrDelete(
+                              supp.id,
+                              supp.name,
+                              supp.urlImg
+                            )
                           }
                         />
                       </span>
@@ -1051,7 +1031,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(client.id, client.name)
+                            togglePostModalEditOrDelete(
+                              client.id,
+                              client.name,
+                              client.urlImg
+                            )
                           }
                         />
                       </span>
@@ -1072,7 +1056,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(client.id, client.name)
+                            togglePostModalEditOrDelete(
+                              client.id,
+                              client.name,
+                              client.urlImg
+                            )
                           }
                         />
                       </span>
@@ -1103,7 +1091,11 @@ export default function Dashboard() {
                           style={{ cursor: "pointer" }}
                           color="#000"
                           onClick={() =>
-                            togglePostModalEditOrDelete(supp.id, supp.name)
+                            togglePostModalEditOrDelete(
+                              supp.id,
+                              supp.name,
+                              supp.urlImg
+                            )
                           }
                         />
                       </span>
@@ -1196,10 +1188,35 @@ export default function Dashboard() {
               </div>
             </div>
             <div style={containerStyleImgUserModal}>
-              <img style={styleImgUserModal} src={userImg} alt="Foto usuário" />
-              <MdAddAPhoto style={iconImgUserModal} color="#fff" size={30} />
+              <label for="avatar">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  {exibeImagemModal ? (
+                    <img className="imgStyle" src={exibeImagemModal} alt="" />
+                  ) : (
+                    <img className="imgStyle" src={avatar} alt="" />
+                  )}
+                  <MdAddAPhoto
+                    className="iconImgUserModal"
+                    color="#fff"
+                    size={30}
+                  />
+                  <input
+                    style={file_input}
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUpload}
+                  />
+                </div>
+              </label>
             </div>
-            <form style={form}>
+            <form className="formNewTerceiro">
               <div style={containerInput}>
                 <label style={label} htmlFor="nome">
                   Nome do terceiro
@@ -1294,7 +1311,7 @@ export default function Dashboard() {
                 />
               </div>
             </div>
-            <div  style={containerStyleImgUserModal}>
+            <div style={containerStyleImgUserModal}>
               <label for="avatar">
                 <div
                   style={{
@@ -1303,7 +1320,11 @@ export default function Dashboard() {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <img  className="imgStyle" src={avatar} alt="" />
+                  {!exibeImagemModal ? (
+                    <img className="imgStyle" src={avatar} alt="" />
+                  ) : (
+                    <img className="imgStyle" src={exibeImagemModal} alt="" />
+                  )}
                   <MdAddAPhoto
                     className="iconImgUserModal"
                     color="#fff"
@@ -1314,6 +1335,7 @@ export default function Dashboard() {
                     id="avatar"
                     type="file"
                     accept="image/*"
+                    onChange={handleUpload}
                   />
                 </div>
               </label>

@@ -22,10 +22,24 @@ export default function Modal({ conteudo, close, width, height, children }) {
     zIndex: 5,
   }
 
+  const modalStyle = {
+    position: "fixed",
+    left: "50%",
+    top: '50%',
+    transform: "translate(-50%, -50%)",
+    transition: "all 2s",
+    zIndex: "10",
+    backgroundColor: "#ffff",
+    borderRadius: "20px",
+    width: width,
+    height: height,
+    boxShadow: "0 0 15px 5px #1b1a1a23",
+  }
+
   return (
     <>
       <div style={fade} onClick={close}></div>
-      <div className="modalStyle">
+      <div style={modalStyle}>
         {children}
       </div>
 

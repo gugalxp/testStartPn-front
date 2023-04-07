@@ -183,16 +183,18 @@ function AuthProvider({ children }) {
     telefone,
     endereco,
     tipo,
-    idItem
+    idItem,
+    imgUrl
   ) {
     try {
       if (tipo === "Cliente") {
-        console.log(idItem);
+        console.log("A URL É ESSA: ", imgUrl);
         const response = await api.put(`/client/${idItem}`, {
           name,
           email,
           telefone,
           endereco,
+          urlImg: imgUrl,
         });
         toast.success("Cliente atualizado com sucesso!");
         listClient();
@@ -204,9 +206,11 @@ function AuthProvider({ children }) {
           email,
           telefone,
           endereco,
+          urlImg: imgUrl,
         });
         toast.success("Fornecedor atualizado com sucesso!");
         listSupplier();
+        return true;
       }
     } catch (error) {
       toast.error(error);

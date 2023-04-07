@@ -8,6 +8,19 @@
   justify-content: center;
 }
 
+.inputCheckbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 2em;
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 10px;
+  cursor: pointer;
+  gap: 10px;
+  width: 561px;
+}
+
 .sidebar {
   margin: 0;
   padding: 0;
@@ -36,20 +49,6 @@
 .showTitleMobile {
   width: 100%;
 }
-
-.modalStyle {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  background-color: #ffff;
-  border-radius: 20px;
-  width: 605px;
-  height: 566px;
-  box-shadow: 0 0 15px 5px #1b1a1a23;
-}
-
 
 .containerCadastro input[type="checkbox"] {
   cursor: pointer;
@@ -122,10 +121,10 @@ button {
 
 .item {
   text-align: center;
-  width: 50%;
+  width: 100%;
   color: #476ee6;
   font-size: 15px;
-  padding: 5px 12px;
+  padding: 6px 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 25px;
@@ -186,7 +185,8 @@ button {
   z-index: 100;
   display: flex;
   justify-content: flex-end;
-  animation: slide-in 0.5s forwards;
+  animation: slide-in 2s forwards;
+  transition: all 2s;
 }
 
 .containerInputSearch {
@@ -223,7 +223,7 @@ button {
     transform: translateX(-100%);
   }
   to {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
 }
 
@@ -284,7 +284,15 @@ button {
 .iconSearchContainer {
   position: absolute;
   left: 15px;
-  top: 6px;
+  top: 7px;
+}
+
+.iconSearchContainerResponsive {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 }
 
 .user {
@@ -359,18 +367,71 @@ form {
   padding: 5px;
 }
 
+.containerResponsiveSignUp {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
 @media screen and (max-width: 1100px) {
+  .showArteVisual,
   .containerInputSearch,
   .iconMenuUser,
   .headerContainer {
     display: none;
   }
 
-  .modalStyle{
-    width: 100%;
-    height: 100vh;
+  .containerCadastro input[type="checkbox"] {
+  
+    width: 50px !important;
+    height: 28px !important;
   }
   
+  .marginTopResponsive {
+    height: 100%;
+  }
+
+  /* .containerResponsiveSignUp {
+    margin-bottom: -30px !important;
+  } */
+
+  .inputCheckbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2em;
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    gap: 10px;
+    width: 297px;
+  }
+
+  .containerResponsiveSignUp {
+    width: 66% !important;
+    display: flex !important;
+    justify-content: center;
+    margin-top: 30px !important;
+  }
+
+  .formCadastro {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1rem;
+    margin-bottom: 35.4px;
+  }
+
+  .inputSearchResponsiveStyle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
   .formNewTerceiro {
     margin-top: 5em;
     height: 470px !important;
@@ -655,6 +716,7 @@ form {
   }
 
   .menuNav {
+    padding: 0.2em !important;
     width: 100% !important;
     height: 45px;
     gap: 10px;
@@ -688,11 +750,22 @@ form {
 }
 
 @media screen and (min-width: 1099px) {
+  .inputSearchResponsiveStyle,
+  .iconSearchContainerResponsive,
   .inputSearchMobileTop,
   .titleShowProfile,
   .buttonNewSupplierMobile {
     display: none;
   }
+
+  .containerMain {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* cria duas colunas com a mesma largura */
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background: #fff;
+  }
+
   .sidebarMobile,
   .campoListMoreVerticalMobile {
     display: none !important;
@@ -743,6 +816,7 @@ form {
 }
 
 .menuNav {
+  padding: 1em;
   width: 233px;
   height: 45px;
   gap: 10px;
@@ -802,4 +876,17 @@ form {
   object-fit: cover;
   margin-top: 30px;
   cursor: pointer;
+}
+
+.formCadastro {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1rem;
+  margin-bottom: 35.4px;
+}
+
+.containerTitleTermosPrivacidade {
+  margin-bottom: 21.3px;
+  width: 100%;
 }

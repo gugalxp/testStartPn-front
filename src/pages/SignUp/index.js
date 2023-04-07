@@ -176,13 +176,13 @@ function SignUp() {
     <div className="containerCadastro">
       <BeforeLoggerColumnLayout
         colum2Data={
-          <div>
-            <Logo containerLogo={{ width: "100%", marginBottom: "25px" }} />
+          <div className="marginTopResponsive">
+            <Logo containerLogo={"containerResponsiveSignUp"} />
             <TitlePrimary
               containerTitle={{ fontStyle: "normal" }}
               conteudo="Cadastrar"
             />
-            <form style={form}>
+            <form className="formCadastro">
               <div style={containerInput}>
                 <label style={label} for="name">
                   Nome
@@ -273,13 +273,13 @@ function SignUp() {
                 </div>
               </div>
             </form>
-            <div style={containerTitleTermosPrivacidade}>
+            <div className="containerTitleTermosPrivacidade">
               <strong style={titleTermoPrivacidade}>
                 Termos de uso e privacidade
               </strong>
             </div>
             <div style={containerConfirmaTermosPrivacidade}>
-              <label style={inputCheckbox} for="current-checkbox">
+              <label className="inputCheckbox" for="current-checkbox">
                 <input
                   type="checkbox"
                   id="current-checkbox"
