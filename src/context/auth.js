@@ -344,8 +344,6 @@ function AuthProvider({ children }) {
           name,
         });
 
-        setUserAuth(response.data);
-
         if (response.data.id) {
           toast.success("Cadastrado efetuado com sucesso!");
           return true;

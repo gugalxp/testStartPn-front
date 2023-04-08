@@ -26,19 +26,6 @@ function SignIn() {
     }
   }
 
-  const input = {
-    width: "418px",
-    height: "50.06px",
-    borderRadius: "10px",
-    border: "1px solid #d7d7d7",
-    background: "#fff",
-    fontSize: "14px",
-    lineHeight: "20px",
-    paddingLeft: "15px",
-    fontWeight: "500",
-    fontStyle: "normal",
-  };
-
   const label = {
     marginBottom: "14.43px",
     color: "#000000",
@@ -64,63 +51,8 @@ function SignIn() {
     width: "100%",
   };
 
-  const form = {
-    display: "flex",
-    maxWidth: "418px",
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: "0",
-    padding: "0",
-  };
-
   const containerButton = {
     marginTop: "0",
-  };
-
-  const containerForgotPassword = {
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "48.38px",
-    cursor: "pointer",
-  };
-
-  const esqueceuSenha = {
-    fontSize: "14px",
-    fontWeight: "500",
-    lineHeight: "20px",
-    color: "#476ee6",
-  };
-
-  const button = {
-    background: "#476ee6",
-    border: "none",
-    width: "160px",
-    height: "48px",
-    borderRadius: "60px",
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: "17px",
-    lineHeight: "20px",
-  };
-
-  const containerLogo = {
-    width: "100%",
-    marginBottom: "36.26px",
-    display: "flex",
-  };
-
-  const containerTitle = {
-    width: "100%",
-    marginBottom: "30px",
-    display: "flex",
-    fontSize: "24px",
-    lineHeight: "36px",
-    fontWeight: "500",
-    lineHeight: "3%",
-    padding: "0",
-    fontStyle: "normal",
   };
 
   const containerInputIcon = {
@@ -137,18 +69,21 @@ function SignIn() {
   return (
     <BeforeLoggerColumnLayout
       colum2Data={
-        <form style={form} onSubmit={handleLogin}>
-          <Logo containerLogo={containerLogo} />
-          <TitlePrimary
-            containerTitle={containerTitle}
-            conteudo="Dados de acesso"
-          />
+        <form className="formLogin" onSubmit={handleLogin}>
+          <div className="containerLogo">
+            <Logo />
+          </div>
+          <div className="containerTitle">
+            <TitlePrimary
+              conteudo="Dados de acesso"
+            />
+          </div>
           <div style={containerInputEmail}>
             <label style={label} for="email">
               E-mail
             </label>
             <input
-              style={input}
+              className="inputLogin"
               type="text"
               id="email"
               name="email"
@@ -163,7 +98,7 @@ function SignIn() {
             </label>
             <div style={containerInputIcon}>
               <input
-                style={input}
+                className="inputLogin"
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
@@ -186,14 +121,13 @@ function SignIn() {
               )}
             </div>
           </div>
-          <div style={containerForgotPassword}>
-            <Button
-              type="submit"
-              containerButton={containerButton}
-              buttonStyle={button}
-              conteudo="Entrar"
-            ></Button>
-            <Link style={esqueceuSenha} to="/forgotPassword">
+          <div className="containerForgotPassword">
+            <div style={containerButton}>
+              <button type="submit" className="buttonSignIn">
+                Entrar
+              </button>
+            </div>
+            <Link className="esqueceuSenha" to="/forgotPassword">
               Esqueceu sua senha?
             </Link>
           </div>
