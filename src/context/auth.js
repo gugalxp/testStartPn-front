@@ -290,7 +290,7 @@ function AuthProvider({ children }) {
 
       let id = idNewPassword;
 
-      const response = await api.put(`/users/update/${id}`, {
+      const response = await api.put(`/users/updatePassword/${id}`, {
         newPassword,
       });
 
@@ -298,7 +298,7 @@ function AuthProvider({ children }) {
 
       return true;
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Houve algum problema ao tentar criar nova senha");
       return false;
     }
   }

@@ -1,4 +1,3 @@
-import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
@@ -49,19 +48,6 @@ export default function ForgotPassword() {
     padding: "0",
   };
 
-  const input = {
-    width: "418px",
-    height: "50.06px",
-    borderRadius: "10px",
-    border: "1px solid #d7d7d7",
-    background: "#fff",
-    fontSize: "14px",
-    lineHeight: "20px",
-    paddingLeft: "15px",
-    fontWeight: "500",
-    fontStyle: "normal",
-  };
-
   const label = {
     marginBottom: "14px",
     color: "#000000",
@@ -78,11 +64,6 @@ export default function ForgotPassword() {
     justifyContent: "center",
     marginBottom: "51px",
     width: "100%",
-  };
-
-  const description = {
-    marginBottom: "34px",
-    width: "418px",
   };
 
   const containerButton = {
@@ -119,38 +100,41 @@ export default function ForgotPassword() {
   return (
     <BeforeLoggerColumnLayout
       colum2Data={
-        <form style={form} onSubmit={handleSendMail}>
+        <form className="formForgotPassword" onSubmit={handleSendMail}>
           <Logo containerLogo={containerLogo} />
-          <TitlePrimary
-            containerTitle={containerTitle}
-            conteudo="Esqueceu a senha?"
-          />
-          <p style={description}>
-            Não se preocupe! Digite seu e-mail para receber instruções de
-            recuperação de senha
-          </p>
-          <div style={containerInputEmail}>
-            <label style={label} for="email">
-              E-mail
-            </label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              style={input}
-              type="text"
-              id="email"
-              name="email"
-              placeholder="Insira seu e-mail"
-            />
+          <div className="containerTitle">
+            <TitlePrimary conteudo="Esqueceu a senha?" />
           </div>
-          <div style={containerForgotPassword}>
-            <Button
+          <div className="description">
+            <p>
+              Não se preocupe! Digite seu e-mail para receber instruções de
+              recuperação de senha
+            </p>
+          </div>
+          <div className="containerInputEmail">
+            <div className="contentInputForgotPassword">
+              <label className="labelForgotPassword" for="email">
+                E-mail
+              </label>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                className="inputForgotPassword"
+                type="text"
+                id="email"
+                name="email"
+                placeholder="Insira seu e-mail"
+              />
+            </div>
+          </div>
+          <div className="containerButtonForgotPassword">
+            <button
               handle={sendMail}
               type="submit"
-              containerButton={containerButton}
-              buttonStyle={button}
-              conteudo="Recuperar senha"
-            />
-            <Link style={lembrouSenha} to="/">
+              className="buttonForgotPassword"
+            >
+              Recuperar senha
+            </button>
+            <Link style={lembrouSenha} to="/login">
               Lembrou da senha?
             </Link>
           </div>

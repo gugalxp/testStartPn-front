@@ -53,14 +53,6 @@ function SignUp() {
     });
   }
 
-  const form = {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gridTemplateRows: "repeat(2, auto)",
-    gap: "1rem",
-    marginBottom: "35.4px",
-  };
-
   const containerInput = {
     display: "flex",
     flexDirection: "column",
@@ -96,21 +88,8 @@ function SignUp() {
     marginBottom: "6.1px",
   };
 
-  const inputCheckbox = {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: "2em",
-    fontSize: "13px",
-    fontWeight: "500",
-    marginLeft: "10px",
-    cursor: "pointer",
-    gap: "10px",
-    width: "561px",
-  };
-
   const containerTermosPrivacidade = {
-    marginBottom: "20px",
+    marginBottom: "17px",
   };
 
   const lerTermosPrivacidade = {

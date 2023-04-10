@@ -604,9 +604,7 @@ export default function Dashboard() {
   return (
     <div>
       {isInputSearchMobile ? (
-        <div
-          className="inputSearchResponsiveStyle"
-        >
+        <div className="inputSearchResponsiveStyle">
           <IoIosArrowDropleft
             size={35}
             color="#476EE6"
@@ -622,6 +620,7 @@ export default function Dashboard() {
                   style={{ display: "absolute" }}
                   color="#476ee6"
                   size={25}
+                  onClick={handleSearch}
                 />
               </div>
               <input
@@ -1129,7 +1128,10 @@ export default function Dashboard() {
         }
       />
       {showModalEditOrDelete && (
-        <Modal close={togglePostModalEditOrDelete} width="375px" height="275px">
+        <Modal
+          larguraAltura={"modalEditOrDelete"}
+          close={togglePostModalEditOrDelete}
+        >
           <div style={modal_header}>
             <h3>Ações</h3>
             <FiX
@@ -1169,7 +1171,10 @@ export default function Dashboard() {
 
       {showModalEdit && (
         <>
-          <Modal width="605px" height="566px" close={togglePostModalEdit}>
+          <Modal
+            larguraAltura={"modalEditTerceiro"}
+            close={togglePostModalEdit}
+          >
             <div style={modal_header}>
               <div style={fixEditarTerceiro}>
                 <FiX
@@ -1293,7 +1298,10 @@ export default function Dashboard() {
       )}
       {showModalNewTerceiro && (
         <>
-          <Modal close={togglePostModalNewTerceiro}>
+          <Modal
+            larguraAltura={"modalNewTerceiro"}
+            close={togglePostModalNewTerceiro}
+          >
             <div style={modal_header}>
               <div style={fixEditarTerceiro}>
                 <FiX
@@ -1419,8 +1427,7 @@ export default function Dashboard() {
       {showModalConfiguracao && (
         <>
           <Modal
-            width="340px"
-            height="600px"
+            larguraAltura={"modalConfig"}
             close={togglePostModalConfiguracao}
           >
             <div style={modal_header}>

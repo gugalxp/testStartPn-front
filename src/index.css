@@ -21,6 +21,77 @@
   width: 561px;
 }
 
+.containerTitleNewPassword {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 500;
+  line-height: 3%;
+  padding: 0;
+  margin: 1em 0;
+}
+
+.formNewPassword {
+  display: flex;
+  max-width: 418px;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.containerLogoNewPassword {
+  width: 100%;
+  margin-bottom: 39.26px;
+  display: flex;
+}
+
+.descriptionNewPassword {
+  margin-bottom: 27.19px;
+  width: 418px;
+}
+
+.inputNewPassword {
+  width: 418px;
+  height: 50.06px;
+  border-radius: 10px;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  padding-left: 15px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.containerInputNewSenha {
+  display: flex;
+  flex-direction: column;
+  justify-content: center !important;
+  width: 100%;
+  margin-bottom: 37.67px;
+  align-items: center;
+}
+
+.contentInputNewPassword {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.containerForgotPassword {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+  flex-direction: row;
+  gap: 20px;
+  cursor: pointer;
+}
+
 .sidebar {
   margin: 0;
   padding: 0;
@@ -50,7 +121,7 @@
   width: 100%;
 }
 
-.containerForgotPassword {
+.containerSignIn {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -256,15 +327,16 @@ button {
   background-color: #ffffff;
   z-index: 101;
   box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.3);
-  animation: slide-out 2s forwards;
+  animation-duration: 1s;
+  animation-name: slide-in-out;
 }
 
-@keyframes slide-in {
-  from {
+@keyframes slide-in-out {
+  0% {
     transform: translateX(-100%);
   }
-  to {
-    transform: translateX(100%);
+  100% {
+    transform: translateX(0);
   }
 }
 
@@ -427,7 +499,99 @@ form {
     display: none;
   }
 
+  .modalEditOrDelete {
+    width: 100% !important;
+    top: 82% !important
+  }
+
+  .modalConfig {
+    width: 100% !important;
+    height: 100% !important;;
+  }
+
+  .modalEditTerceiro {
+    width: 100% !important;
+    height: 100% !important;;
+  }
+
+  .modalNewTerceiro {
+    width: 100% !important;
+    height: 100% !important;;
+  }
+
+  .containerLogoNewPassword {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+    display: flex;
+  }
+
+  .containerTitleNewPassword {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .formNewPassword {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    margin: 17% 0;
+    padding: 0;
+  }
+
+  .descriptionNewPassword {
+    margin-bottom: 27.19px;
+    padding: 0 1em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .inputNewPassword {
+    width: 310px;
+    height: 55px;
+    border-radius: 10px;
+    border: 1px solid #d7d7d7;
+    background: #fff;
+    font-size: 14px;
+    line-height: 20px;
+    padding-left: 15px;
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .containerInputNewSenha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+    width: 100%;
+    margin-bottom: 37.67px;
+  }
+
   .containerForgotPassword {
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column;
+    gap: 20px;
+    cursor: pointer;
+  }
+
+  .descriptionEmailSent {
+    width: 300px !important;
+    text-align: center; 
+  }
+
+  .buttonForgotPassword {
+    width: 240px !important;
+    height: 40px !important;
+  }
+
+  .containerSignIn {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -435,6 +599,45 @@ form {
     align-items: center;
     margin-top: 40px;
     cursor: pointer;
+  }
+
+  .containerButtonForgotPassword {
+    display: flex;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .labelForgotPassword {
+    width: 100% !important;
+  }
+
+  .description {
+    margin-bottom: 34px;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+
+  .description p {
+    width: 362px !important;
+    word-break: break-all;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  .inputForgotPassword {
+    width: 310px !important;
+    height: 50.06px;
+  }
+
+  .containerInputEmail {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center;
+    margin-bottom: 51px;
+    align-items: center;
+    width: 100%;
   }
 
   .containerTitle {
@@ -476,6 +679,14 @@ form {
   .formLogin {
     max-width: auto !important;
     margin-top: 5% !important;
+  }
+
+  .formForgotPassword {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .marginTopResponsive {
@@ -841,7 +1052,7 @@ form {
   }
 
   .containerLogo {
-    justify-content: center;
+    justify-content: center;  
     margin-top: 5em;
   }
 }
@@ -1008,4 +1219,112 @@ form {
   padding-left: 15px;
   font-weight: 500;
   font-style: normal;
+}
+
+.containerInputEmail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 51px;
+  width: 100%;
+}
+
+.description {
+  margin-bottom: 34px;
+  width: 418px;
+}
+
+.formForgotPassword {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.labelForgotPassword {
+  margin-bottom: 14px;
+  color: #000000;
+  font-weight: 400;
+  line-height: 18.21px;
+  letter-spacing: 0.202385px;
+  font-size: 14px;
+  font-style: normal;
+}
+
+.containerButtonForgotPassword {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 13px;
+}
+
+.buttonForgotPassword {
+  background: #476ee6;
+  border: none;
+  width: 160px;
+  height: 48px;
+  border-radius: 60px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.inputForgotPassword {
+  width: 418px;
+  height: 50.06px;
+  border-radius: 10px;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  padding-left: 15px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.contentInputForgotPassword {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.containerLogo {
+  width: 100%;
+  margin-bottom: 39.26px;
+  display: flex;
+}
+
+.descriptionEmailSent {
+  margin-bottom: 34px;
+  width: 410px;
+  text-align: center;
+}
+
+.formEmailSent {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.modalNewTerceiro {
+  width: 605px;
+  height: 566px;
+}
+
+.modalEditTerceiro {
+  width: 605px;
+  height: 566px;
+}
+
+.modalConfig {
+  width: 340px;
+  height: 600px;
+}
+
+.modalEditOrDelete {
+  width: 375px; 
+  height: 275px;
 }

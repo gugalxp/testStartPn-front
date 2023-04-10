@@ -6,6 +6,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { Link, useHistory } from "react-router-dom";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
+import { toast } from "react-toastify";
 
 export default function NewPassword() {
   const [newPassword, setNewPassword] = useState();
@@ -25,26 +26,10 @@ export default function NewPassword() {
         history.push("/");
       }
     } else {
+      history.push("/newPassword");
+      toast.error("As senhas não conicidem.");
     }
   }
-
-  const containerLogo = {
-    width: "100%",
-    marginBottom: "39.26px",
-    display: "flex",
-  };
-
-  const containerTitle = {
-    width: "100%",
-    marginBottom: "14px",
-    display: "flex",
-    fontStyle: "normal",
-    fontSize: "24px",
-    lineHeight: "36px",
-    fontWeight: "500",
-    lineHeight: "3%",
-    padding: "0",
-  };
 
   const form = {
     display: "flex",
@@ -76,39 +61,11 @@ export default function NewPassword() {
     letterSpacing: "0.202385px",
     fontSize: "14px",
     fontStyle: "normal",
-  };
-
-  const containerInputSenha = {
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    marginBottom: "25.93px",
-    width: "100%",
-  };
-
-  const containerInputNewSenha = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    width: "100%",
-    marginBottom: "37.67px",
-  };
-
-  const description = {
-    marginBottom: "27.19px",
-    width: "418px",
   };
 
   const containerButton = {
     marginTop: "0",
-  };
-
-  const containerForgotPassword = {
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    cursor: "pointer",
   };
 
   const lembrouSenha = {
@@ -133,42 +90,47 @@ export default function NewPassword() {
   return (
     <BeforeLoggerColumnLayout
       colum2Data={
-        <form style={form}>
-          <Logo containerLogo={containerLogo} />
-          <TitlePrimary
-            containerTitle={containerTitle}
-            conteudo="Crie uma nova senha"
-          />
-          <p style={description}>
+        <form className="formNewPassword">
+          <div className="containerLogoNewPassword">
+            <Logo />
+          </div>
+          <div className="containerTitleNewPassword">
+            <TitlePrimary conteudo="Crie uma nova senha" />
+          </div>
+          <p className="descriptionNewPassword">
             Preencha os campos abaixo com a nova senha que deseja cadastrar
           </p>
-          <div style={containerInputSenha}>
-            <label style={label} for="email">
-              Nova senha
-            </label>
-            <input
-              onChange={(e) => setNewPassword(e.target.value)}
-              style={input}
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Insira seu e-mail"
-            />
+          <div className="containerInputNewSenha">
+            <div className="contentInputNewPassword">
+              <label style={label} for="email">
+                Nova senha
+              </label>
+              <input
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="inputNewPassword"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Insira seu e-mail"
+              />
+            </div>
           </div>
-          <div style={containerInputNewSenha}>
-            <label style={label} for="password">
-              Confirmação de nova senha
-            </label>
-            <input
-              onChange={(e) => setNewPasswordConfirmed(e.target.value)}
-              style={input}
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Insira seu e-mail"
-            />
+          <div className="containerInputNewSenha">
+            <div className="contentInputNewPassword">
+              <label style={label} for="password">
+                Confirmação de nova senha
+              </label>
+              <input
+                onChange={(e) => setNewPasswordConfirmed(e.target.value)}
+                className="inputNewPassword"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Insira seu e-mail"
+              />
+            </div>
           </div>
-          <div style={containerForgotPassword}>
+          <div className="containerForgotPassword">
             <Button
               handle={(e) => handleNewPassword(e)}
               type="submit"

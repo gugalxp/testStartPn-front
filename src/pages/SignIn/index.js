@@ -121,7 +121,7 @@ function SignIn() {
               )}
             </div>
           </div>
-          <div className="containerForgotPassword">
+          <div className="containerSignIn">
             <div style={containerButton}>
               <button type="submit" className="buttonSignIn">
                 Entrar

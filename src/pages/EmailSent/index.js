@@ -9,15 +9,7 @@ import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 import { Link } from "react-router-dom";
 
 export default function EmailSent() {
-  const { emailSentConfirmed } = useContext(AuthContext);
-
-
-  const containerLogo = {
-    width: "100%",
-    marginBottom: "39.26px",
-    display: "flex",
-    justifyContent: "center",
-  };
+  const { emailSentConfirmed, sendMail } = useContext(AuthContext);
 
   const containerTitle = {
     width: "100%",
@@ -28,15 +20,6 @@ export default function EmailSent() {
     fontSize: "24px",
     lineHeight: "36px",
     fontWeight: "500",
-    padding: "0",
-  };
-
-  const form = {
-    display: "flex",
-    maxWidth: "418px",
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: "0",
     padding: "0",
   };
 
@@ -99,13 +82,15 @@ export default function EmailSent() {
   return (
     <BeforeLoggerColumnLayout
       colum2Data={
-        <form style={form}>
-          <Logo containerLogo={containerLogo} />
+        <form className="formEmailSent">
+          <div className="containerLogo">
+            <Logo />
+          </div>
           <TitlePrimary
             containerTitle={containerTitle}
             conteudo="E-mail enviado!"
           />
-          <p style={description}>
+          <p className="descriptionEmailSent">
             Um link de recuperação de senha foi enviado para o e-mail
             <strong> {emailSentConfirmed} </strong>
           </p>
@@ -127,8 +112,8 @@ export default function EmailSent() {
               containerButton={containerButton}
               buttonStyle={button2}
               conteudo="Reenviar e-mail"
+              handle={() => sendMail(emailSentConfirmed)}
             />
-            {/* <Link style={lembrouSenha} to="/">Lembrou da senha?</Link> */}
           </div>
         </form>
       }
