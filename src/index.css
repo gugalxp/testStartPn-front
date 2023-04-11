@@ -5,7 +5,6 @@
   margin-right: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .inputCheckbox {
@@ -1072,6 +1071,7 @@ form {
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     background: #fff;
+    height: 100vh;
   }
 
   .sidebarMobile,

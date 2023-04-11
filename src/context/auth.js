@@ -24,32 +24,24 @@ function AuthProvider({ children }) {
   //Listar clientes
   async function listClient() {
     try {
-      if (isSupplier) {
-        setIsSupplier(false);
-        setIsClients(true);
-        const response = await api.get("/client");
-        setClients(response.data);
-      } else {
-        const response = await api.get("/client");
-        setClients(response.data);
-      }
+      setIsSupplier(false);
+      setIsClients(true);
+      const response = await api.get(`/client/${userAuth}`);
+      console.log("RESPONSE", response.data);
+      setClients(response.data);
     } catch (error) {
-      console.log(error);
+      console.log("error  CATCH: ", error);
+      console.log("error response:", error.response);
     }
   }
 
   //Listar fornecedor
   async function listSupplier() {
     try {
-      if (isClients) {
-        setIsClients(false);
-        setIsSupplier(true);
-        const response = await api.get("/fornecedor");
-        setSupplier(response.data);
-      } else {
-        const response = await api.get("/fornecedor");
-        setSupplier(response.data);
-      }
+      setIsClients(false);
+      setIsSupplier(true);
+      const response = await api.get(`/fornecedor/${userAuth}`);
+      setSupplier(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -62,12 +54,14 @@ function AuthProvider({ children }) {
       api
         .get("/users/details")
         .then((response) => {
+          console.log("USER ATUAL LOGADO: ", response.data);
           const { id, name, email } = response.data;
           setUserAuth(id, name, email); //enquanto houver o token no storage manterá o usuário logado
           setNameUserAuth(name);
           setEmailUserAuth(email);
         })
         .catch((err) => {
+          console("ERRO DE LOGIN: ", err);
           signOut();
         });
     } else {
@@ -75,9 +69,16 @@ function AuthProvider({ children }) {
     }
 
     if (isClients) {
-      listClient();
+      const idInterval = setInterval(() => {
+        if (userAuth) {
+          console.log("O ID É ESSE: ", userAuth);
+          console.log("CHEGOU NA CONDIÇÃO");
+          listClient();
+          clearInterval(idInterval);
+        }
+      });
     }
-  }, []);
+  }, [userAuth]);
 
   //Enviar Email
   async function sendMail(email) {
@@ -148,26 +149,28 @@ function AuthProvider({ children }) {
     imgUrl
   ) {
     try {
-      if (tipo === "Cliente") {
+      if (tipo === "Cliente" && userAuth) {
         const response = await api.post("/client", {
           name,
           email,
           telefone,
           endereco,
           urlImg: imgUrl,
+          id: userAuth,
         });
 
         listClient();
         toast.success("Novo Terceiro do tipo Cliente criado!");
         return response.data;
       }
-      if (tipo === "Fornecedor") {
+      if (tipo === "Fornecedor" && userAuth) {
         const response = await api.post("/fornecedor", {
           name,
           email,
           telefone,
           endereco,
           urlImg: imgUrl,
+          id: userAuth,
         });
         listSupplier();
         toast.success("Novo Terceiro do tipo Fornecedor criado!");
@@ -327,6 +330,7 @@ function AuthProvider({ children }) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       toast.success("Logado com sucesso!");
       listClient();
+      console.log("ESTADO DE CLIENTE: ", isClients);
       return true;
     } catch (error) {
       toast.error(error);
@@ -363,6 +367,7 @@ function AuthProvider({ children }) {
   async function signOut() {
     try {
       destroyCookie(null, "@startpn", { path: "/" });
+      localStorage.clear();
     } catch (error) {
       console.log(error);
     }
@@ -379,9 +384,9 @@ function AuthProvider({ children }) {
         signOut,
         isSupplier,
         isClients,
-        listClient,
         sendMail,
         supplier,
+        listClient,
         listSupplier,
         signIn,
         setUserAuth,

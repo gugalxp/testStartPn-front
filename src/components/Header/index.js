@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth";
 import logo from "../../assets/images/logoPn.png";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import {
   FiUser,
   FiSettings,
@@ -14,8 +14,14 @@ import {
 
 export default function Header() {
   const { user, signOut } = useContext(AuthContext);
+  const history = useHistory();
 
   const location = useLocation();
+
+  function handleSignOut() {
+    signOut();
+    history.push("/login")
+  }
 
   const items = {
     display: "block",
@@ -133,7 +139,7 @@ export default function Header() {
           />
           Minha conta
         </Link>
-        <Link style={containerLogOut} onClick={signOut}>
+        <Link style={containerLogOut} onClick={handleSignOut}>
           <FiLogOut color="#787486" style={icon} size={24} />
           Sair
         </Link>

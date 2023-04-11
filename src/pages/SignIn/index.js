@@ -74,9 +74,7 @@ function SignIn() {
             <Logo />
           </div>
           <div className="containerTitle">
-            <TitlePrimary
-              conteudo="Dados de acesso"
-            />
+            <TitlePrimary conteudo="Dados de acesso" />
           </div>
           <div style={containerInputEmail}>
             <label style={label} for="email">
