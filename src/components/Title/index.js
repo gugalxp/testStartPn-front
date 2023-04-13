@@ -2,11 +2,12 @@ import { FaChevronDown } from "react-icons/fa";
 import avatar from "../../assets/images/avatar.png";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth";
+import { useHistory } from "react-router-dom";
 
 export default function Title({ page, nameUser }) {
   const [imgUrl, setImgUrl] = useState();
   const { userAuth } = useContext(AuthContext);
-
+  const history = useHistory();
   useEffect(() => {
     const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
 
@@ -14,6 +15,12 @@ export default function Title({ page, nameUser }) {
       setImgUrl(storedUrl);
     }
   });
+
+  function handleOpenProfile(e) {
+    e.preventDefault();
+
+    history.push("/profile")
+  }
 
   const titleContainer = {
     display: "flex",
@@ -25,6 +32,7 @@ export default function Title({ page, nameUser }) {
     paddingTop: ".8em",
     paddingBottom: ".8em",
     justifyContent: "space-between",
+    cursor: "pointer",
   };
 
   const imgUserStyle = {
@@ -44,8 +52,8 @@ export default function Title({ page, nameUser }) {
   };
 
   return (
-    <div style={titleContainer}>
-      <span style={title}>{page}</span>
+    <div style={titleContainer} onClick={handleOpenProfile} >
+      <span style={title} >{page}</span>
       <div className="user">
         <div className="containerUser">
           <img
