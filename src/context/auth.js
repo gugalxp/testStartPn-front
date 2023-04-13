@@ -99,9 +99,10 @@ function AuthProvider({ children }) {
       );
 
       toast.success("E-mail enviado com sucesso!");
+      destroyCookie(null, "@idNewPassword");
       return true;
     } catch (error) {
-      console.log("O error é esse: ", error);
+      toast.error("Houve algum problema ao tentar enviar o e-mail! ");      
       return false;
     }
   }
