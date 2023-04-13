@@ -80,6 +80,7 @@ function AuthProvider({ children }) {
     }
   }, [userAuth]);
 
+  
   //Enviar Email
   async function sendMail(email) {
     try {
@@ -176,7 +177,39 @@ function AuthProvider({ children }) {
         toast.success("Novo Terceiro do tipo Fornecedor criado!");
       }
     } catch (error) {
-      console.log("ERROR: ", error.message);
+      console.log("ERROR: ", error);
+    }
+  }
+
+  async function addColumnDinamyc(
+    campo,
+    tipo,
+  ) {
+    try {
+      if (tipo === "Cliente" && userAuth) {
+        console.log("O CAMPO ADICIONADO FOI: " , campo)
+        console.log("O tipo escolhido foi: ", tipo)
+        // const response = await api.post("/", {
+        //   campo,
+        //   userAuth
+        // });
+
+        listClient();
+        // toast.success("Novo Terceiro do tipo Cliente criado!");
+        // return response.data;
+      }
+      if (tipo === "Fornecedor" && userAuth) {
+        console.log("O CAMPO ADICIONADO FOI: " , campo)
+        console.log("O tipo escolhido foi: ", tipo)
+        // const response = await api.post("/", {
+        //   campo,
+        //   userAuth
+        // });
+        listSupplier();
+        // toast.success("Novo Terceiro do tipo Fornecedor criado!");
+      }
+    } catch (error) {
+      console.log("ERROR: ", error);
     }
   }
 
@@ -407,6 +440,7 @@ function AuthProvider({ children }) {
         updateUserData,
         deleteAll,
         telefoneUser,
+        addColumnDinamyc,
       }}
     >
       {children}

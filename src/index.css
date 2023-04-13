@@ -515,7 +515,8 @@ form {
 
   .modalNewTerceiro {
     width: 100% !important;
-    height: 100% !important;;
+    height: 100% !important;
+    overflow-y: auto;
   }
 
   .containerLogoNewPassword {
@@ -735,9 +736,9 @@ form {
   }
 
   .formNewTerceiro {
-    margin-top: 5em;
-    height: 470px !important;
+    height: 200px !important;
     flex-wrap: nowrap !important;
+    margin-bottom: 2rem !important;
   }
 
   .item {
@@ -831,7 +832,7 @@ form {
     justify-content: space-around;
     gap: 1em;
     flex-direction: row;
-    border: 1px solid #d8d8d8;
+    border-right: 1px solid #d7d7d7;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
   }
@@ -1008,8 +1009,9 @@ form {
     background: #476ee6;
     color: #fff;
     border-radius: 50%;
-    bottom: 3em;
-    right: 1.5em;
+    bottom: 2.5em;
+    right: 2.2em;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.301);
   }
 
   .showTitleDesktop,
@@ -1322,6 +1324,7 @@ form {
 .modalConfig {
   width: 340px;
   height: 600px;
+  overflow-y: auto;
 }
 
 .modalEditOrDelete {

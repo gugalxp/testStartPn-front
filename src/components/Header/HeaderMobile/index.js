@@ -21,15 +21,6 @@ export default function HeaderMobile() {
     }
   });
 
-  const styleLogo = {
-    display: "block",
-    margin: "auto",
-    width: "153px",
-    height: "38.27px",
-    objectFit: "cover",
-    marginBottom: "52px",
-  };
-
   const imgUserStyle = {
     width: "37px",
     height: "37px",

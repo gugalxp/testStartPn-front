@@ -6,9 +6,9 @@ export default function ArteVisual() {
     position: "absolute",
     objectFit: "cover",
     width: "667px",
-    height: "500px",
+    height: "547px",
     left: "0px",
-    top: "135.33px",
+    bottom: "0",
     backgroundSize: "cover",
   };
 

@@ -7,6 +7,7 @@ import Title from "../../components/Title";
 import HeaderMobile from "../../components/Header/HeaderMobile";
 import { FiMoreVertical, FiSettings, FiSearch } from "react-icons/fi";
 import { MdAddAPhoto, MdDelete } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
@@ -51,6 +52,7 @@ export default function Dashboard() {
   const [selectedAllCheckbox, setSelectedAllCheckbox] = useState(false);
   const [isInputSearchMobile, setIsInputSearchMobile] = useState(false);
   const [exibeImagemModal, setExibeImagemModal] = useState(false);
+  const [newFieldTable, setNewFieldTable] = useState([]);
 
   const {
     clients,
@@ -70,6 +72,7 @@ export default function Dashboard() {
     updateTerceiroData,
     deleteTerceiroData,
     deleteAll,
+    addColumnDinamyc,
   } = useContext(AuthContext);
 
   ///////////////// SALVA IMAGEM NO FIREBASE
@@ -92,7 +95,7 @@ export default function Dashboard() {
       // Fazer alguma coisa com o arquivo, por exemplo, enviar para o servidor via AJAX
       // ...
     }
-    if (!file) return toast.info("Escolha uma foto de perfil!");
+    // if (!file) return toast.info("Escolha uma foto de perfil!");
 
     const storageRef = ref(
       storage,
@@ -130,11 +133,17 @@ export default function Dashboard() {
 
             if (response) {
               setAccessInfoClient(response.id);
+              setNovoTerceiroNome("");
+              setNovoTerceiroEmail("");
+              setNovoTerceiroTelefone("");
+              setNovoTerceiroEndereco("");
+              setNovoTerceiroTipo("");
+              setExibeImagemModal(false);
             } else {
               return;
             }
 
-            updateTerceiroData(
+            const responseupdt = updateTerceiroData(
               updateTerceiroNome,
               updateTerceiroEmail,
               updateTerceiroTelefone,
@@ -143,6 +152,18 @@ export default function Dashboard() {
               idItem,
               urlImg
             );
+
+            if (responseupdt) {
+              setAccessInfoClient(responseupdt.id);
+              setUpdateTerceiroNome("");
+              setUpdateTerceiroEmail("");
+              setUpdateTerceiroTelefone("");
+              setUpdateTerceiroEndereco("");
+              setUpdateTerceiroTipo("");
+              setExibeImagemModal(false);
+            } else {
+              return;
+            }
           });
         } catch (error) {}
       }
@@ -262,6 +283,22 @@ export default function Dashboard() {
     });
   }
 
+  function addFiledModalConfig(e) {
+    e.preventDefault();
+
+    setNewFieldTable([...newFieldTable, newFieldTable]);
+
+    if (itemMenuModal === 1) {
+      addColumnDinamyc(newFieldTable, "Cliente")
+    } else {
+      addColumnDinamyc(newFieldTable, "Fornecedor")
+    }
+  }
+
+  function removeField(index) {
+    setNewFieldTable(prevFields => prevFields.filter((_, i) => i !== index));
+  }
+
   const containerNav = {
     display: "flex",
     flexWrap: "wrap",
@@ -294,6 +331,7 @@ export default function Dashboard() {
   const menuNavModal = {
     width: "280px",
     height: "45px",
+    padding: ".25em",
     gap: "10px",
     display: "flex",
     flexDirection: "row",
@@ -512,7 +550,7 @@ export default function Dashboard() {
 
   const inputModalSettings = {
     height: "40px",
-    width: "240px",
+    width: "200px",
     borderRadius: "10px",
     border: "1px solid #d7d7d7",
     background: "#fff",
@@ -537,16 +575,6 @@ export default function Dashboard() {
     ...input,
   };
 
-  const iconImgUserModal = {
-    position: "absolute",
-    top: "118px",
-    right: "260",
-    background: "#476EE6",
-    borderRadius: "50%",
-    cursor: "pointer",
-    padding: "5px",
-  };
-
   const qtdNumeroCampo = {
     backgroundColor: "#476EE6",
     width: "2em",
@@ -566,30 +594,7 @@ export default function Dashboard() {
     alignItems: "flex-end",
     gap: "15px",
     height: "100%",
-  };
-
-  const campoList = {
-    width: "33%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    wordBreak: "break-all",
-  };
-
-  const campoListEmail = {
-    ...campoList,
-    justifyContent: "flex-start !important",
-    marginLeft: "12px",
-  };
-
-  const inputSearch = {
-    background: "white",
-    height: "45px",
-    width: "290px",
-    borderRadius: "60px",
-    outline: "none",
-    paddingLeft: "50px",
-    border: "1.9px solid #d7d7d7",
+    marginBottom: "10px",
   };
 
   const containerInputSearch = {
@@ -1469,24 +1474,58 @@ export default function Dashboard() {
                   flexDirection: "column",
                 }}
               >
-                <div style={containerQtdNumeroCampo}>
-                  <div style={qtdNumeroCampo}>1</div>
-                  <div style={containerInput}>
-                    <label style={label} htmlFor="nome">
-                      Nome do campo
-                    </label>
-                    <input
-                      style={inputModalSettings}
-                      type="text"
-                      id="nome"
-                      name="nome"
-                      placeholder="Insira seu nome"
-                    />
+                {newFieldTable.map((field, index) => (
+                  <div key={index} style={containerQtdNumeroCampo}>
+                    <div style={qtdNumeroCampo}>1</div>
+                    <div style={containerInput}>
+                      <label style={label} htmlFor="nome">
+                        Nome do campo
+                      </label>
+                      <div
+                        style={{
+                          height: "100% ",
+                          justifyContent: "center",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "14px",
+                        }}
+                      >
+                        <input
+                          style={inputModalSettings}
+                          type="text"
+                          id="nome"
+                          name="nome"
+                          placeholder="Insira seu nome"
+                        />
+                        <RiDeleteBin6Line
+                          style={{ cursor: "pointer" }}
+                          size={25}
+                          color="#555555"
+                          onClick={() => removeField(index)}
+                        />
+                      </div>
+                      <div style={containerCheckboxModal}>
+                        <input style={checkboxModal} type="checkbox" />O campo é
+                        obrigatório?
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div style={containerCheckboxModal}>
-                  <input style={checkboxModal} type="checkbox" />O campo é
-                  obrigatório?
+                ))}
+                <div
+                  onClick={addFiledModalConfig}
+                  style={{
+                    fontWeight: "500",
+                    marginTop: "19px",
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "row",
+                    width: "100%",
+                    color: "#476EE6",
+                    cursor: 'pointer',
+                  }}
+                >
+                  <BiPlus size={18} />
+                  Adicionar novo campo
                 </div>
               </div>
             </form>
