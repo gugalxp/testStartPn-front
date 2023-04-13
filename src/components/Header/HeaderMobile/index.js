@@ -3,7 +3,7 @@ import { AuthContext } from "../../../context/auth";
 import logo from "../../../assets/images/logoPn.png";
 import avatar from "../../../assets/images/avatar.png";
 
-import { Link, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { HiMenuAlt2 } from "react-icons/hi";
 import Navbar from "../../Navbar";
 
@@ -11,7 +11,7 @@ export default function HeaderMobile() {
   const { userAuth } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-  const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
@@ -20,6 +20,12 @@ export default function HeaderMobile() {
       setImgUrl(storedUrl);
     }
   });
+
+  function handleOpenProfile(e) {
+    e.preventDefault();
+
+    history.push("/profile");
+  }
 
   const imgUserStyle = {
     width: "37px",
@@ -33,7 +39,7 @@ export default function HeaderMobile() {
   };
 
   return (
-    <div className="sidebarMobile">
+    <div className="sidebarMobile" onClick={handleOpenProfile}>
       <HiMenuAlt2 size={35} color="#476ee6" onClick={handleNavbarToggle} />
       <img width="153px" height="38.27px" src={logo} alt="Foto avatar" />
       <img
