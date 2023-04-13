@@ -39,10 +39,17 @@ export default function HeaderMobile() {
   };
 
   return (
-    <div className="sidebarMobile" onClick={handleOpenProfile}>
+    <div className="sidebarMobile">
       <HiMenuAlt2 size={35} color="#476ee6" onClick={handleNavbarToggle} />
-      <img width="153px" height="38.27px" src={logo} alt="Foto avatar" />
       <img
+        width="153px"
+        height="38.27px"
+        src={logo}
+        alt="Foto avatar"
+        onClick={handleOpenProfile}
+      />
+      <img
+        onClick={handleOpenProfile}
         style={imgUserStyle}
         src={typeof imgUrl === "undefined" ? avatar : imgUrl}
         alt=""

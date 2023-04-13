@@ -95,23 +95,6 @@ export default function Profile() {
     cursor: "pointer",
   };
 
-  const iconImgUserModal = {
-    position: "absolute",
-    top: "230px",
-    right: "515px",
-    background: "#476EE6",
-    borderRadius: "50%",
-    cursor: "pointer",
-    padding: "5px",
-  };
-
-  const containerStyleImgUserModal = {
-    display: "flex",
-    justifyContent: "center",
-    height: "100%",
-    width: "100%",
-  };
-
   const file_input = {
     opacity: 0,
     position: "absolute",
@@ -140,16 +123,6 @@ export default function Profile() {
     marginBottom: "11px",
     color: "#000000",
     width: "100%",
-  };
-
-  const input = {
-    width: "315px",
-    borderRadius: "7px",
-    height: "50px",
-    border: "1px solid #d7d7d7",
-    background: "#fff",
-    padding: "10px",
-    color: "#060606",
   };
 
   const containerInput = {
