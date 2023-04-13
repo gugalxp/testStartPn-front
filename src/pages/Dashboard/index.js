@@ -95,7 +95,7 @@ export default function Dashboard() {
       // Fazer alguma coisa com o arquivo, por exemplo, enviar para o servidor via AJAX
       // ...
     }
-    // if (!file) return toast.info("Escolha uma foto de perfil!");
+    if (!file) return toast.info("Escolha uma foto de perfil!");
 
     const storageRef = ref(
       storage,
