@@ -15,8 +15,13 @@ import { Link } from "react-router-dom";
 import { FiSettings, FiUpload } from "react-icons/fi";
 
 export default function Profile() {
-  const { nameUserAuth, updateUserData, userAuth, telefoneUser, urlImgUserAuth} =
-    useContext(AuthContext);
+  const {
+    nameUserAuth,
+    updateUserData,
+    userAuth,
+    telefoneUser,
+    urlImgUserAuth,
+  } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
 
@@ -50,14 +55,13 @@ export default function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImgUrl(url);
+          updateUserData(nome, email, telefone, password, url);
         });
       }
     );
   }
 
-  function handleUpdateDataUser() {
-    updateUserData(nome, email, telefone, password, imgUrl);
-  }
+  function handleUpdateDataUser() {}
 
   const container_perfil = {
     display: "flex",

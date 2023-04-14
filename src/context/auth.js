@@ -60,7 +60,7 @@ function AuthProvider({ children }) {
           setUserAuth(id, name, email, urlImg); //enquanto houver o token no storage manterá o usuário logado
           setNameUserAuth(name);
           setEmailUserAuth(email);
-          setUrlImgUserAuth(urlImg)
+          setUrlImgUserAuth(urlImg);
         })
         .catch((err) => {
           console("ERRO DE LOGIN: ", err);
@@ -250,21 +250,19 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function updateUserData(name, email, telefone, password, imgUrl) {
+  async function updateUserData(name, email, telefone, password, urlImg) {
     try {
-      if (typeof imgUrl !== "undefined") {
-        if (password) {
-          newPasswordUpdateUser(password);
-        }
-        const response = await api.put(`/users/updateUser/${userAuth}`, {
-          name,
-          email,
-          telefone,
-          urlImg: imgUrl,
-        });
-        console.log(response.data);
-        toast.success("Seus dados foram atualizados com sucesso!");
+      if (password) {
+        newPasswordUpdateUser(password);
       }
+      const response = await api.put(`/users/updateUser/${userAuth}`, {
+        name,
+        email,
+        telefone,
+        urlImg,
+      });
+      console.log(response.data);
+      toast.success("Seus dados foram atualizados com sucesso!");
     } catch (error) {
       toast.error(error);
     }
@@ -349,11 +347,11 @@ function AuthProvider({ children }) {
 
       const { id, name, telefone, endereco, token, urlImg } = response.data;
 
-      console.log("METODO SIGNIN", urlImg)
+      console.log("METODO SIGNIN", urlImg);
       setTelefoneUser(telefone);
       setNameUserAuth(name);
       setEmailUserAuth(email);
-      setUrlImgUserAuth(urlImg)
+      setUrlImgUserAuth(urlImg);
 
       setCookie(undefined, "@startpn", token, {
         maxAge: 3600, // expirar em 1h
