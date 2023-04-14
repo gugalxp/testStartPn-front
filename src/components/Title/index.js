@@ -5,21 +5,14 @@ import { AuthContext } from "../../context/auth";
 import { useHistory } from "react-router-dom";
 
 export default function Title({ page, nameUser }) {
-  const [imgUrl, setImgUrl] = useState();
-  const { userAuth } = useContext(AuthContext);
+  const { userAuth, urlImgUserAuth } = useContext(AuthContext);
+  const [imgUrl, setImgUrl] = useState(urlImgUserAuth);
   const history = useHistory();
-  useEffect(() => {
-    const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
-
-    if (storedUrl) {
-      setImgUrl(storedUrl);
-    }
-  });
 
   function handleOpenProfile(e) {
     e.preventDefault();
 
-    history.push("/profile")
+    history.push("/profile");
   }
 
   const titleContainer = {
@@ -52,8 +45,8 @@ export default function Title({ page, nameUser }) {
   };
 
   return (
-    <div style={titleContainer} onClick={handleOpenProfile} >
-      <span style={title} >{page}</span>
+    <div style={titleContainer} onClick={handleOpenProfile}>
+      <span style={title}>{page}</span>
       <div className="user">
         <div className="containerUser">
           <img

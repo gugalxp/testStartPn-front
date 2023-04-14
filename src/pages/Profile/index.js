@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { FiSettings, FiUpload } from "react-icons/fi";
 
 export default function Profile() {
-  const { nameUserAuth, updateUserData, userAuth, telefoneUser } =
+  const { nameUserAuth, updateUserData, userAuth, telefoneUser, urlImgUserAuth} =
     useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
@@ -25,17 +25,6 @@ export default function Profile() {
   const [telefone, setTelefone] = useState(telefoneUser);
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
-    if (storedUrl) {
-      setImgUrl(storedUrl);
-    }
-  });
-
-  function handleUpdateDataUser() {
-    updateUserData(nome, email, telefone, password);
-  }
 
   async function handleUpload(event) {
     event.preventDefault();
@@ -61,10 +50,13 @@ export default function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImgUrl(url);
-          localStorage.setItem(`imgUrl_${userAuth}`, url); // adiciona a URL ao localStorage
         });
       }
     );
+  }
+
+  function handleUpdateDataUser() {
+    updateUserData(nome, email, telefone, password, imgUrl);
   }
 
   const container_perfil = {
@@ -149,10 +141,10 @@ export default function Profile() {
                         justifyContent: "flex-end",
                       }}
                     >
-                      {typeof imgUrl === "undefined" ? (
+                      {typeof urlImgUserAuth === "undefined" ? (
                         <img style={imgStyle} src={avatar} alt="" />
                       ) : (
-                        <img style={imgStyle} src={imgUrl} alt="" />
+                        <img style={imgStyle} src={urlImgUserAuth} alt="" />
                       )}
                       <MdAddAPhoto
                         className="iconImgUserModal"

@@ -12,11 +12,9 @@ import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import avatar from "../../assets/images/avatar.png";
-import userImg from "../../assets/images/user.png";
-import AvatarImg from "../../assets/images/avatar.png";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { toast } from "react-toastify";
-import firebase, { storage } from "../../services/firebaseConnection";
+import  { storage } from "../../services/firebaseConnection";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { IoIosArrowDropleft } from "react-icons/io";
 
@@ -42,7 +40,6 @@ export default function Dashboard() {
   const [updateTerceiroTipo, setUpdateTerceiroTipo] = useState();
   const [deleteTerceiroTipo, setDeleteTerceiroTipo] = useState("Cliente");
 
-  const [imgUrlAtual, setImgUrlAtual] = useState();
   const [idItem, setIdItem] = useState();
   const [nameItem, setNameItem] = useState();
   const [checkboxSelected, setCheckboxSelected] = useState(false);
@@ -210,7 +207,6 @@ export default function Dashboard() {
   function togglePostModalEditOrDelete(id, name, urlImgAtual) {
     setIdItem(id);
     setNameItem(name);
-    setImgUrlAtual(urlImgAtual);
     setShowModalEditOrDelete(!showModalEditOrDelete); //troca de true para false
     setShowSubModal(false);
   }

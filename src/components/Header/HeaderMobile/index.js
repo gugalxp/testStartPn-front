@@ -8,18 +8,10 @@ import { HiMenuAlt2 } from "react-icons/hi";
 import Navbar from "../../Navbar";
 
 export default function HeaderMobile() {
-  const { userAuth } = useContext(AuthContext);
-  const [imgUrl, setImgUrl] = useState();
+  const { userAuth, urlImgUserAuth } = useContext(AuthContext);
+  const [imgUrl, setImgUrl] = useState(urlImgUserAuth);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const history = useHistory();
-
-  useEffect(() => {
-    const storedUrl = localStorage.getItem(`imgUrl_${userAuth}`);
-
-    if (storedUrl) {
-      setImgUrl(storedUrl);
-    }
-  });
 
   function handleOpenProfile(e) {
     e.preventDefault();

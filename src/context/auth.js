@@ -10,6 +10,7 @@ export const AuthContext = createContext({});
 function AuthProvider({ children }) {
   const [userAuth, setUserAuth] = useState(null);
   const [emailUserAuth, setEmailUserAuth] = useState(null);
+  const [urlImgUserAuth, setUrlImgUserAuth] = useState(null);
   const [nameUserAuth, setNameUserAuth] = useState(null);
   const [telefoneUser, setTelefoneUser] = useState(null);
   const [emailSentConfirmed, setEmailSentConfirmed] = useState(null);
@@ -55,10 +56,11 @@ function AuthProvider({ children }) {
         .get("/users/details")
         .then((response) => {
           console.log("USER ATUAL LOGADO: ", response.data);
-          const { id, name, email } = response.data;
-          setUserAuth(id, name, email); //enquanto houver o token no storage manterá o usuário logado
+          const { id, name, email, urlImg } = response.data;
+          setUserAuth(id, name, email, urlImg); //enquanto houver o token no storage manterá o usuário logado
           setNameUserAuth(name);
           setEmailUserAuth(email);
+          setUrlImgUserAuth(urlImg)
         })
         .catch((err) => {
           console("ERRO DE LOGIN: ", err);
@@ -80,7 +82,6 @@ function AuthProvider({ children }) {
     }
   }, [userAuth]);
 
-  
   //Enviar Email
   async function sendMail(email) {
     try {
@@ -100,7 +101,7 @@ function AuthProvider({ children }) {
 
       return true;
     } catch (error) {
-      toast.error("Houve algum problema ao tentar enviar o e-mail! ");      
+      toast.error("Houve algum problema ao tentar enviar o e-mail! ");
       return false;
     }
   }
@@ -180,14 +181,11 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function addColumnDinamyc(
-    campo,
-    tipo,
-  ) {
+  async function addColumnDinamyc(campo, tipo) {
     try {
       if (tipo === "Cliente" && userAuth) {
-        console.log("O CAMPO ADICIONADO FOI: " , campo)
-        console.log("O tipo escolhido foi: ", tipo)
+        console.log("O CAMPO ADICIONADO FOI: ", campo);
+        console.log("O tipo escolhido foi: ", tipo);
         // const response = await api.post("/", {
         //   campo,
         //   userAuth
@@ -198,8 +196,8 @@ function AuthProvider({ children }) {
         // return response.data;
       }
       if (tipo === "Fornecedor" && userAuth) {
-        console.log("O CAMPO ADICIONADO FOI: " , campo)
-        console.log("O tipo escolhido foi: ", tipo)
+        console.log("O CAMPO ADICIONADO FOI: ", campo);
+        console.log("O tipo escolhido foi: ", tipo);
         // const response = await api.post("/", {
         //   campo,
         //   userAuth
@@ -252,18 +250,21 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function updateUserData(name, email, telefone, password) {
+  async function updateUserData(name, email, telefone, password, imgUrl) {
     try {
-      if (password) {
-        newPasswordUpdateUser(password);
+      if (typeof imgUrl !== "undefined") {
+        if (password) {
+          newPasswordUpdateUser(password);
+        }
+        const response = await api.put(`/users/updateUser/${userAuth}`, {
+          name,
+          email,
+          telefone,
+          urlImg: imgUrl,
+        });
+        console.log(response.data);
+        toast.success("Seus dados foram atualizados com sucesso!");
       }
-      const response = await api.put(`/users/updateUser/${userAuth}`, {
-        name,
-        email,
-        telefone,
-      });
-      console.log(response.data);
-      toast.success("Seus dados foram atualizados com sucesso!");
     } catch (error) {
       toast.error(error);
     }
@@ -346,11 +347,13 @@ function AuthProvider({ children }) {
         password,
       });
 
-      const { id, name, telefone, endereco, token } = response.data;
+      const { id, name, telefone, endereco, token, urlImg } = response.data;
 
+      console.log("METODO SIGNIN", urlImg)
       setTelefoneUser(telefone);
       setNameUserAuth(name);
       setEmailUserAuth(email);
+      setUrlImgUserAuth(urlImg)
 
       setCookie(undefined, "@startpn", token, {
         maxAge: 3600, // expirar em 1h
@@ -440,6 +443,7 @@ function AuthProvider({ children }) {
         deleteAll,
         telefoneUser,
         addColumnDinamyc,
+        urlImgUserAuth,
       }}
     >
       {children}
