@@ -67,23 +67,10 @@ export default function Profile() {
     );
   }
 
-  const form_profile = {
-    background: "#ffffff",
-    border: "1px solid #D7D7D7",
-    width: "713px",
-    height: "500px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "15px",
-    marginTop: "-5px",
-  };
-
   const container_perfil = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100% !important",
   };
 
   const imgStyle = {
@@ -113,7 +100,7 @@ export default function Profile() {
     border: "1px solid #D7D7D7",
     borderRadius: "60px",
     marginBottom: "20px",
-    marginTop: "20px",
+    marginTop: "30px",
   };
 
   const label = {
@@ -133,23 +120,17 @@ export default function Profile() {
     marginBottom: "2px",
   };
 
-  const icon = {
-    position: "absolute",
-    right: "3%",
-    top: "45%",
-    cursor: "pointer",
-  };
-
   return (
     <div>
-      <div
-       
-        className="titleShowProfile"
-      >
+      <div className="titleShowProfile">
         <Link to="/dashboard">
-          <IoIosArrowDropleft size={30} color="#476EE6"/>
+          <IoIosArrowDropleft size={30} color="#476EE6" />
         </Link>
-        <span style={{ width: "100%", display: "flex", justifyContent: "center",}}>Minha conta</span>
+        <span
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          Minha conta
+        </span>
       </div>
       <DashboardColumnLayout
         colum2Data={
@@ -161,29 +142,34 @@ export default function Profile() {
               <form className="form_profile" onSubmit={handleUpload}>
                 <div className="containerStyleImgUserModal">
                   <label className="label-avatar" for="avatar">
-                    <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-                    {typeof imgUrl === "undefined" ? (
-                      <img style={imgStyle} src={avatar} alt="" />
-                    ) : (
-                      <img style={imgStyle} src={imgUrl} alt="" />
-                    )}
-                    <MdAddAPhoto
-                      className="iconImgUserModal"
-                      color="#fff"
-                      size={30}
-                    />
-                    <input
-                      style={file_input}
-                      id="avatar"
-                      type="file"
-                      accept="image/*"
-                    />
-
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      {typeof imgUrl === "undefined" ? (
+                        <img style={imgStyle} src={avatar} alt="" />
+                      ) : (
+                        <img style={imgStyle} src={imgUrl} alt="" />
+                      )}
+                      <MdAddAPhoto
+                        className="iconImgUserModal"
+                        color="#fff"
+                        size={30}
+                      />
+                      <input
+                        style={file_input}
+                        id="avatar"
+                        type="file"
+                        accept="image/*"
+                      />
                     </div>
                   </label>
                 </div>
                 <div className="content_Input">
-                  <div style={containerInput}>
+                  <div className="containerInputPerfil" style={containerInput}>
                     <label style={label} htmlFor="nome">
                       Nome
                     </label>
@@ -197,7 +183,7 @@ export default function Profile() {
                       placeholder="Insira seu nome"
                     />
                   </div>
-                  <div style={containerInput}>
+                  <div className="containerInputPerfil" style={containerInput}>
                     <label style={label} htmlFor="nome">
                       E-mail
                     </label>
@@ -211,7 +197,7 @@ export default function Profile() {
                       placeholder="Insira seu e-mail"
                     />
                   </div>
-                  <div style={containerInput}>
+                  <div className="containerInputPerfil" style={containerInput}>
                     <label style={label} htmlFor="nome">
                       Telefone
                     </label>
@@ -226,7 +212,7 @@ export default function Profile() {
                     />
                   </div>
 
-                  <div style={containerInput}>
+                  <div className="containerInputPerfil" style={containerInput}>
                     <label style={label} htmlFor="nome">
                       Senha
                     </label>
@@ -241,13 +227,13 @@ export default function Profile() {
                     />
                     {showPassword ? (
                       <BsEyeSlash
-                        style={icon}
+                        className="iconViewPerfil"
                         size={24}
                         onClick={() => setShowPassword(!showPassword)}
                       />
                     ) : (
                       <BsEye
-                        style={icon}
+                        className="iconViewPerfil"
                         size={24}
                         onClick={() => setShowPassword(!showPassword)}
                       />
@@ -266,7 +252,7 @@ export default function Profile() {
               </form>
             </div>
             <br />
-            {!imgUrl && <progress value={progress}></progress>}
+            {/* {!imgUrl && <progress value={progress}></progress>} */}
           </div>
         }
       />

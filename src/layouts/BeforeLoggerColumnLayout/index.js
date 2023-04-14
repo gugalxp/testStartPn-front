@@ -25,6 +25,7 @@ const BeforeLoggerColumnLayout = ({ colum2Data, page }) => {
     justifyContent: "center",
     flexDirection: "column",
     height: "100%",
+    padding: "1em",
   };
 
   return (
@@ -35,7 +36,7 @@ const BeforeLoggerColumnLayout = ({ colum2Data, page }) => {
         </div>
       </div>
 
-      <div style={column2}>{colum2Data}</div>
+      <div className="column2" style={column2}>{colum2Data}</div>
     </div>
   );
 };

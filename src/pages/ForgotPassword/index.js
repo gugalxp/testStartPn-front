@@ -29,72 +29,11 @@ export default function ForgotPassword() {
     display: "flex",
   };
 
-  const containerTitle = {
-    width: "100%",
-    marginBottom: "17px",
-    display: "flex",
-    fontSize: "24px",
-    lineHeight: "36px",
-    fontWeight: "500",
-    lineHeight: "3%",
-    padding: "0",
-  };
-
-  const form = {
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: "0",
-    padding: "0",
-  };
-
-  const label = {
-    marginBottom: "14px",
-    color: "#000000",
-    fontWeight: "400",
-    lineHeight: "18.21px",
-    letterSpacing: "0.202385px",
-    fontSize: "14px",
-    fontStyle: "normal",
-  };
-
-  const containerInputEmail = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    marginBottom: "51px",
-    width: "100%",
-  };
-
-  const containerButton = {
-    marginTop: "0",
-  };
-
-  const containerForgotPassword = {
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    cursor: "pointer",
-  };
-
   const lembrouSenha = {
     fontSize: "14px",
     fontWeight: "500",
     lineHeight: "20px",
     color: "#476ee6",
-  };
-
-  const button = {
-    background: "#476ee6",
-    border: "none",
-    width: "180px",
-    height: "48px",
-    borderRadius: "60px",
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: "15px",
-    lineHeight: "27px",
   };
 
   return (
@@ -107,7 +46,7 @@ export default function ForgotPassword() {
           </div>
           <div className="description">
             <p>
-              Não se preocupe! Digite seu e-mail para receber instruções de
+            Não se preocupe! <span style={{whiteSpace: "nowrap"}}>Digite seu e-mail</span> para receber instruções de
               recuperação de senha
             </p>
           </div>

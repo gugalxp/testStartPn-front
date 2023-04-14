@@ -1226,7 +1226,7 @@ export default function Dashboard() {
                 </div>
               </label>
             </div>
-            <form className="formNewTerceiro">
+            <form className="formEditTerceiro">
               <div style={containerInput}>
                 <label style={label} htmlFor="nome">
                   Nome do terceiro

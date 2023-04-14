@@ -98,7 +98,6 @@ function AuthProvider({ children }) {
         }
       );
 
-      toast.success("E-mail enviado com sucesso!");
       return true;
     } catch (error) {
       toast.error("Houve algum problema ao tentar enviar o e-mail! ");      

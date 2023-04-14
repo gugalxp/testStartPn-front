@@ -498,19 +498,39 @@ form {
     display: none;
   }
 
+  .titlePrimary {
+    padding-left: 8px !important;
+  }
+
+  .containerInputPerfil {
+    align-items: flex-start !important;
+  }
+
+  .iconViewPerfil {
+    position: absolute;
+    right: 10% !important;
+    top: 50% !important;
+    cursor: pointer;
+  }
+
+  .column2 {
+    padding: 2em !important;
+    overflow: hidden;
+  }
+
   .modalEditOrDelete {
     width: 100% !important;
-    top: 82% !important
+    top: 82% !important;
   }
 
   .modalConfig {
     width: 100% !important;
-    height: 100% !important;;
+    height: 100% !important;
   }
 
   .modalEditTerceiro {
     width: 100% !important;
-    height: 100% !important;;
+    height: 100% !important;
   }
 
   .modalNewTerceiro {
@@ -583,7 +603,7 @@ form {
 
   .descriptionEmailSent {
     width: 300px !important;
-    text-align: center; 
+    text-align: center;
   }
 
   .buttonForgotPassword {
@@ -605,7 +625,7 @@ form {
     display: flex;
     flex-direction: column !important;
     align-items: center;
-    gap: 13px;
+    gap: 20px !important;
   }
 
   .labelForgotPassword {
@@ -620,15 +640,14 @@ form {
   }
 
   .description p {
-    width: 362px !important;
+    text-align: left;
+    width: 285px !important;
     word-break: break-all;
-    padding-left: 1em;
-    padding-right: 1em;
   }
 
   .inputForgotPassword {
-    width: 310px !important;
-    height: 50.06px;
+    width: 270px !important;
+    height: 50.06px !important;
   }
 
   .containerInputEmail {
@@ -664,7 +683,7 @@ form {
   }
 
   .inputLogin {
-    width: 310px !important;
+    width: 295px !important;
     height: 50.06px;
     border-radius: 10px;
     border: 1px solid #d7d7d7;
@@ -711,10 +730,10 @@ form {
   }
 
   .containerResponsiveSignUp {
-    width: 66% !important;
     display: flex !important;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 30px !important;
+    padding-left: 8px;
   }
 
   .formCadastro {
@@ -739,6 +758,14 @@ form {
     height: 200px !important;
     flex-wrap: nowrap !important;
     margin-bottom: 2rem !important;
+    padding: 0 !important;
+  }
+
+  .formEditTerceiro {
+    height: 200px !important;
+    flex-wrap: nowrap !important;
+    margin-bottom: 2rem !important;
+    padding: 0 !important;
   }
 
   .item {
@@ -775,21 +802,20 @@ form {
   .content_Input {
     margin-top: -10em !important;
     height: 600px !important;
-    width: 100% !important;
-    padding: 15px;
     gap: 15px;
     display: grid;
     grid-template-columns: 1fr !important;
   }
 
   .input {
-    width: 100% !important;
+    max-width: 260px !important;
+    justify-content: flex-start !important;
     border-radius: 7px;
     height: 50px;
     border: 1px solid #d7d7d7;
     background: #fff;
-    padding: 10px;
     color: #060606;
+    padding: 1em;
   }
 
   .titleMobile {
@@ -853,8 +879,6 @@ form {
   .containerMain {
     display: grid;
     grid-template-columns: 1fr !important;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
   }
   .userName {
     display: none;
@@ -1045,7 +1069,7 @@ form {
   }
 
   .form_profile {
-    width: 350px;
+    width: 100%;
     height: 700px;
     border: none;
     margin-top: 3em !important;
@@ -1053,7 +1077,7 @@ form {
   }
 
   .containerLogo {
-    justify-content: center;  
+    justify-content: center;
     margin-top: 1em;
   }
 }
@@ -1092,6 +1116,7 @@ form {
     width: 35%;
   }
 }
+
 .containerUsernamePhoto {
   display: flex;
   align-items: center;
@@ -1141,7 +1166,6 @@ form {
 
 .content_Input {
   height: 600px;
-  padding: 15px;
   gap: 15px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1167,6 +1191,19 @@ form {
 }
 
 .formNewTerceiro {
+  height: 310px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 15px;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.formEditTerceiro {
   height: 310px;
   width: 100%;
   position: absolute;
@@ -1328,6 +1365,20 @@ form {
 }
 
 .modalEditOrDelete {
-  width: 375px; 
+  width: 375px;
   height: 275px;
 }
+
+.iconViewPerfil {
+  position: absolute;
+  right: 3%;
+  top: 45%;
+  cursor: pointer;
+}
+
+.titlePrimary {
+  color: #476ee6;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 500;
+};

@@ -10,7 +10,7 @@ export default function TitlePrimary({conteudo, containerTitle}) {
 
   return (
     <div style={containerTitle}>
-      <div style={titlePrimary}>{conteudo}</div>
+      <div className="titlePrimary">{conteudo}</div>
     </div>
   );
 }

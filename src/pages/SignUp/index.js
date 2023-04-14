@@ -74,10 +74,6 @@ function SignUp() {
     fontSize: "14px",
   };
 
-  const containerTitleTermosPrivacidade = {
-    marginBottom: "21.3px",
-  };
-
   const titleTermoPrivacidade = {
     fontSize: "14px",
     lineHeight: "20px",
