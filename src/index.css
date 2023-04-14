@@ -755,17 +755,19 @@ form {
   }
 
   .formNewTerceiro {
-    height: 200px !important;
+    height: 100% !important;
     flex-wrap: nowrap !important;
     margin-bottom: 2rem !important;
-    padding: 0 !important;
+    padding-bottom: 2em !important;
+    position: relative !important;
   }
 
   .formEditTerceiro {
-    height: 200px !important;
+    height: 100% !important;
     flex-wrap: nowrap !important;
     margin-bottom: 2rem !important;
     padding: 0 !important;
+    position: relative !important;
   }
 
   .item {
@@ -1351,11 +1353,13 @@ form {
 .modalNewTerceiro {
   width: 605px;
   height: 566px;
+  overflow-y: auto;
 }
 
 .modalEditTerceiro {
   width: 605px;
   height: 566px;
+  overflow-y: auto;
 }
 
 .modalConfig {
