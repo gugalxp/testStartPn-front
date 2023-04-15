@@ -61,6 +61,7 @@ function AuthProvider({ children }) {
           setNameUserAuth(name);
           setEmailUserAuth(email);
           setUrlImgUserAuth(urlImg);
+          localStorage.setItem("@urlImgPerfil", urlImg); // adiciona a URL ao localStorage
         })
         .catch((err) => {
           console("ERRO DE LOGIN: ", err);

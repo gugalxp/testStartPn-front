@@ -21,9 +21,8 @@ export default function Profile() {
     userAuth,
     telefoneUser,
     urlImgUserAuth,
-    setUrlImgUserAuth
+    setUrlImgUserAuth,
   } = useContext(AuthContext);
-  const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
 
   const [nome, setNome] = useState(nameUserAuth);
@@ -32,8 +31,12 @@ export default function Profile() {
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleUpload(event) {
+  useEffect(() => {
+    const imgUrlPerfilLocalStorage = localStorage.getItem("@urlImgPerfil"); // adiciona a URL ao localStorage
+    setUrlImgUserAuth(imgUrlPerfilLocalStorage);
+  });
 
+  async function handleUpload(event) {
     const file = event.target[0]?.files[0];
 
     if (!file) return;
@@ -54,8 +57,7 @@ export default function Profile() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setImgUrl(url);
-          setUrlImgUserAuth(url)
+          setUrlImgUserAuth(url);
           updateUserData(nome, email, telefone, password, url);
         });
       }
@@ -236,11 +238,7 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <Button
-                  buttonStyle={button}
-                  conteudo="Salvar"
-                  type="submit"
-                >
+                <Button buttonStyle={button} conteudo="Salvar" type="submit">
                   Salvar
                 </Button>
               </form>

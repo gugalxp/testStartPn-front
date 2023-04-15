@@ -5,9 +5,15 @@ import { AuthContext } from "../../context/auth";
 import { useHistory } from "react-router-dom";
 
 export default function Title({ page, nameUser }) {
-  const { userAuth, urlImgUserAuth } = useContext(AuthContext);
+  const { userAuth, urlImgUserAuth, setUrlImgUserAuth } =
+    useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState(urlImgUserAuth);
   const history = useHistory();
+
+  useEffect(() => {
+    const imgUrlPerfilLocalStorage = localStorage.getItem("@urlImgPerfil"); // adiciona a URL ao localStorage
+    setUrlImgUserAuth(imgUrlPerfilLocalStorage);
+  });
 
   function handleOpenProfile(e) {
     e.preventDefault();
