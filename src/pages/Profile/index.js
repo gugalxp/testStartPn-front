@@ -21,6 +21,7 @@ export default function Profile() {
     userAuth,
     telefoneUser,
     urlImgUserAuth,
+    setUrlImgUserAuth
   } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState();
   const [progress, setProgress] = useState(0);
@@ -32,7 +33,6 @@ export default function Profile() {
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleUpload(event) {
-    event.preventDefault();
 
     const file = event.target[0]?.files[0];
 
@@ -55,13 +55,12 @@ export default function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImgUrl(url);
+          setUrlImgUserAuth(url)
           updateUserData(nome, email, telefone, password, url);
         });
       }
     );
   }
-
-  function handleUpdateDataUser() {}
 
   const container_perfil = {
     display: "flex",
@@ -238,7 +237,6 @@ export default function Profile() {
                 </div>
 
                 <Button
-                  handle={handleUpdateDataUser}
                   buttonStyle={button}
                   conteudo="Salvar"
                   type="submit"

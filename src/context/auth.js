@@ -442,6 +442,7 @@ function AuthProvider({ children }) {
         telefoneUser,
         addColumnDinamyc,
         urlImgUserAuth,
+        setUrlImgUserAuth
       }}
     >
       {children}

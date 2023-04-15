@@ -362,7 +362,7 @@ export default function Dashboard() {
   const deleteAllItems = {
     width: "160px",
     height: "45px",
-    background: "red",
+    background: "#f15933",
     borderRadius: "60px",
     color: "#fff",
     display: "flex",
