@@ -14,7 +14,7 @@ import { FiX } from "react-icons/fi";
 import avatar from "../../assets/images/avatar.png";
 import DashboardColumnLayout from "../../layouts/DashboardColumnLayout";
 import { toast } from "react-toastify";
-import  { storage } from "../../services/firebaseConnection";
+import { storage } from "../../services/firebaseConnection";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { IoIosArrowDropleft } from "react-icons/io";
 
@@ -70,6 +70,7 @@ export default function Dashboard() {
     deleteTerceiroData,
     deleteAll,
     addColumnDinamyc,
+    setUrlImgUserAuth,
   } = useContext(AuthContext);
 
   ///////////////// SALVA IMAGEM NO FIREBASE
@@ -79,6 +80,9 @@ export default function Dashboard() {
       `imgUrl_${accessInfoClient}`
     ); // adiciona a URL ao localStorage
     setImgUrl(imgUrlFromLocalStorage);
+
+    const imgUrlPerfilLocalStorage = localStorage.getItem("@urlImgPerfil"); // adiciona a URL ao localStorage
+    setUrlImgUserAuth(imgUrlPerfilLocalStorage);
   });
 
   async function handleUpload(event) {
@@ -285,14 +289,14 @@ export default function Dashboard() {
     setNewFieldTable([...newFieldTable, newFieldTable]);
 
     if (itemMenuModal === 1) {
-      addColumnDinamyc(newFieldTable, "Cliente")
+      addColumnDinamyc(newFieldTable, "Cliente");
     } else {
-      addColumnDinamyc(newFieldTable, "Fornecedor")
+      addColumnDinamyc(newFieldTable, "Fornecedor");
     }
   }
 
   function removeField(index) {
-    setNewFieldTable(prevFields => prevFields.filter((_, i) => i !== index));
+    setNewFieldTable((prevFields) => prevFields.filter((_, i) => i !== index));
   }
 
   const containerNav = {
@@ -1517,7 +1521,7 @@ export default function Dashboard() {
                     flexDirection: "row",
                     width: "100%",
                     color: "#476EE6",
-                    cursor: 'pointer',
+                    cursor: "pointer",
                   }}
                 >
                   <BiPlus size={18} />
