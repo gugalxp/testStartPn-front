@@ -311,6 +311,7 @@ function AuthProvider({ children }) {
         listClient();
       }
       if (tipo === "Fornecedor") {
+        console.log("ID USER FORNE: ", userAuth)
         const response = await api.delete(`/fornecedor/deleteAll/${userAuth}`);
         toast.success(response.data);
         listSupplier();

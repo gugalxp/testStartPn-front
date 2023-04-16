@@ -38,6 +38,8 @@ export default function Profile() {
   });
 
   async function handleUpload(event) {
+    event.preventDefault();
+    
     const file = event.target[0]?.files[0];
 
     if (!file) return;
