@@ -1,5 +1,4 @@
 import { useState, createContext, useEffect } from "react";
-import firebase from "../services/firebaseConnection";
 import { toast } from "react-toastify";
 
 import { destroyCookie, setCookie, parseCookies } from "nookies";
@@ -28,7 +27,7 @@ function AuthProvider({ children }) {
       setIsSupplier(false);
       setIsClients(true);
       const response = await api.get(`/client/${userAuth}`);
-      console.log("RESPONSE", response.data);
+      console.log("LISTA CLIENTES", response.data.length);
       setClients(response.data);
     } catch (error) {
       console.log("error  CATCH: ", error);
@@ -60,8 +59,10 @@ function AuthProvider({ children }) {
           setUserAuth(id, name, email, urlImg); //enquanto houver o token no storage manterá o usuário logado
           setNameUserAuth(name);
           setEmailUserAuth(email);
-          setUrlImgUserAuth(urlImg);
-          localStorage.setItem("@urlImgPerfil", urlImg); // adiciona a URL ao localStorage
+          if (urlImg !== null) {
+            setUrlImgUserAuth(urlImg);
+            localStorage.setItem("@urlImgPerfil", urlImg); // adiciona a URL ao localStorage
+          }
         })
         .catch((err) => {
           console("ERRO DE LOGIN: ", err);
@@ -305,12 +306,12 @@ function AuthProvider({ children }) {
   async function deleteAll(tipo) {
     try {
       if (tipo === "Cliente") {
-        const response = await api.delete(`/client/deleteAll`);
+        const response = await api.delete(`/client/deleteAll/${userAuth}`);
         toast.success(response.data);
         listClient();
       }
       if (tipo === "Fornecedor") {
-        const response = await api.delete(`/fornecedor/deleteAll`);
+        const response = await api.delete(`/fornecedor/deleteAll/${userAuth}`);
         toast.success(response.data);
         listSupplier();
       }
@@ -352,7 +353,11 @@ function AuthProvider({ children }) {
       setTelefoneUser(telefone);
       setNameUserAuth(name);
       setEmailUserAuth(email);
-      setUrlImgUserAuth(urlImg);
+
+      if (urlImg !== null) {
+        setUrlImgUserAuth(urlImg);
+        localStorage.setItem("@urlImgPerfil", urlImg); // adiciona a URL ao localStorage
+      }
 
       setCookie(undefined, "@startpn", token, {
         maxAge: 3600, // expirar em 1h
@@ -443,7 +448,7 @@ function AuthProvider({ children }) {
         telefoneUser,
         addColumnDinamyc,
         urlImgUserAuth,
-        setUrlImgUserAuth
+        setUrlImgUserAuth,
       }}
     >
       {children}

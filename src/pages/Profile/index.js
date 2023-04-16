@@ -34,6 +34,7 @@ export default function Profile() {
   useEffect(() => {
     const imgUrlPerfilLocalStorage = localStorage.getItem("@urlImgPerfil"); // adiciona a URL ao localStorage
     setUrlImgUserAuth(imgUrlPerfilLocalStorage);
+    console.log("RESPONSE IMG profile: ", urlImgUserAuth)
   });
 
   async function handleUpload(event) {
@@ -58,6 +59,7 @@ export default function Profile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setUrlImgUserAuth(url);
+          localStorage.setItem("@urlImgPerfil", url); // adiciona a URL ao localStorage
           updateUserData(nome, email, telefone, password, url);
         });
       }
@@ -146,7 +148,7 @@ export default function Profile() {
                         justifyContent: "flex-end",
                       }}
                     >
-                      {typeof urlImgUserAuth === "undefined" ? (
+                      {typeof urlImgUserAuth === "undefined" || urlImgUserAuth === null ? (
                         <img style={imgStyle} src={avatar} alt="" />
                       ) : (
                         <img style={imgStyle} src={urlImgUserAuth} alt="" />

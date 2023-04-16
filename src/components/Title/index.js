@@ -12,7 +12,7 @@ export default function Title({ page, nameUser }) {
 
   useEffect(() => {
     const imgUrlPerfilLocalStorage = localStorage.getItem("@urlImgPerfil"); // adiciona a URL ao localStorage
-    setUrlImgUserAuth(imgUrlPerfilLocalStorage);
+    setImgUrl(imgUrlPerfilLocalStorage);
   });
 
   function handleOpenProfile(e) {
@@ -57,7 +57,7 @@ export default function Title({ page, nameUser }) {
         <div className="containerUser">
           <img
             style={imgUserStyle}
-            src={typeof imgUrl === "undefined" ? avatar : imgUrl}
+            src={typeof imgUrl === "undefined" || imgUrl === null ? avatar : imgUrl}
             alt=""
           />
           <div className="userName">{nameUser}</div>
