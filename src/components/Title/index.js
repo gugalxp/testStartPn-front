@@ -51,10 +51,10 @@ export default function Title({ page, nameUser }) {
   };
 
   return (
-    <div style={titleContainer} onClick={handleOpenProfile}>
+    <div style={titleContainer}>
       <span style={title}>{page}</span>
       <div className="user">
-        <div className="containerUser">
+        <div className="containerUser" onClick={handleOpenProfile}>
           <img
             style={imgUserStyle}
             src={typeof imgUrl === "undefined" || imgUrl === null ? avatar : imgUrl}

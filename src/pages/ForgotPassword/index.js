@@ -6,10 +6,11 @@ import { AuthContext } from "../../context/auth";
 import { useHistory } from "react-router-dom";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 import { Link } from "react-router-dom";
+import { ImSpinner } from "react-icons/im";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const { sendMail, setEmailSentConfirmed } = useContext(AuthContext);
+  const { sendMail, setEmailSentConfirmed, exibeSppiner } = useContext(AuthContext);
   const history = useHistory();
 
   async function handleSendMail(e) {
@@ -71,7 +72,7 @@ export default function ForgotPassword() {
               type="submit"
               className="buttonForgotPassword"
             >
-              Recuperar senha
+              {exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Recuperar senha"}
             </button>
             <Link style={lembrouSenha} to="/login">
               Lembrou da senha?

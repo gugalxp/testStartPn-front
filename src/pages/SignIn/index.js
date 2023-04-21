@@ -6,12 +6,13 @@ import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
+import { ImSpinner } from "react-icons/im";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn } = useContext(AuthContext);
+  const { signIn, exibeSppiner } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
 
@@ -70,7 +71,7 @@ function SignIn() {
     <BeforeLoggerColumnLayout
       colum2Data={
         <form className="formLogin" onSubmit={handleLogin}>
-          <div className="containerLogo">
+          <div className="containerLogoLogin">
             <Logo />
           </div>
           <div className="containerTitle">
@@ -122,7 +123,7 @@ function SignIn() {
           <div className="containerSignIn">
             <div style={containerButton}>
               <button type="submit" className="buttonSignIn">
-                Entrar
+              {exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Entrar"}
               </button>
             </div>
             <Link className="esqueceuSenha" to="/forgotPassword">

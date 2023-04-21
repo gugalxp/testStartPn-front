@@ -6,7 +6,8 @@ import Modal from "../../components/Modals/Modal";
 import Title from "../../components/Title";
 import HeaderMobile from "../../components/Header/HeaderMobile";
 import { FiMoreVertical, FiSettings, FiSearch } from "react-icons/fi";
-import { MdAddAPhoto, MdDelete } from "react-icons/md";
+import { MdAddAPhoto } from "react-icons/md";
+import { ImSpinner } from "react-icons/im";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -71,6 +72,7 @@ export default function Dashboard() {
     deleteAll,
     addColumnDinamyc,
     setUrlImgUserAuth,
+    exibeSppiner,
   } = useContext(AuthContext);
 
   ///////////////// SALVA IMAGEM NO FIREBASE
@@ -873,17 +875,25 @@ export default function Dashboard() {
                 <span>Endereço</span>
               </div>
             </div>
-            {!clients.length && itemMenu === 1 && (
+            {!clients.length && itemMenu === 1 && !exibeSppiner && (
               <>
                 <strong className="noInfo">
                   Nenhum cliente adicionado a lista
                 </strong>
               </>
             )}
-            {!supplier.length && itemMenu === 2 && (
+            {!supplier.length && itemMenu === 2 && !exibeSppiner && (
               <>
                 <strong className="noInfo">
                   Nenhum Fornecedor adicionado a lista
+                </strong>
+              </>
+            )}
+
+            {exibeSppiner && (
+              <>
+                <strong className="noInfo">
+                  <ImSpinner size={30} className="loaderIcon" />
                 </strong>
               </>
             )}

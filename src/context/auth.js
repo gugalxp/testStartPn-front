@@ -16,6 +16,7 @@ function AuthProvider({ children }) {
 
   const [clients, setClients] = useState(false);
   const [supplier, setSupplier] = useState(false);
+  const [exibeSppiner, setExibeSppiner] = useState(false);
   const [isSupplier, setIsSupplier] = useState(false);
   const [isClients, setIsClients] = useState(true);
   const [searchItemsSuplier, setSearchItemsSuplier] = useState("");
@@ -24,12 +25,15 @@ function AuthProvider({ children }) {
   //Listar clientes
   async function listClient() {
     try {
+      setExibeSppiner(true);
       setIsSupplier(false);
       setIsClients(true);
       const response = await api.get(`/client/${userAuth}`);
       console.log("LISTA CLIENTES", response.data.length);
+      setExibeSppiner(false)
       setClients(response.data);
     } catch (error) {
+      setExibeSppiner(false);
       console.log("error  CATCH: ", error);
       console.log("error response:", error.response);
     }
@@ -38,11 +42,14 @@ function AuthProvider({ children }) {
   //Listar fornecedor
   async function listSupplier() {
     try {
+      setExibeSppiner(true);
       setIsClients(false);
       setIsSupplier(true);
       const response = await api.get(`/fornecedor/${userAuth}`);
-      setSupplier(response.data);
+      setExibeSppiner(false);
+      setSupplier(response.data); 
     } catch (error) {
+      setExibeSppiner(false);
       console.log(error);
     }
   }
@@ -87,6 +94,7 @@ function AuthProvider({ children }) {
   //Enviar Email
   async function sendMail(email) {
     try {
+      setExibeSppiner(true)
       const response = await api.post("/sendMail", {
         email,
       });
@@ -100,9 +108,10 @@ function AuthProvider({ children }) {
           path: "/",
         }
       );
-
+      setExibeSppiner(false)
       return true;
     } catch (error) {
+      setExibeSppiner(false);
       toast.error("Houve algum problema ao tentar enviar o e-mail! ");
       return false;
     }
@@ -343,6 +352,7 @@ function AuthProvider({ children }) {
   //Fazendo login do usuario
   async function signIn(email, password) {
     try {
+      setExibeSppiner(true);
       const response = await api.post("/users/login", {
         email,
         password,
@@ -368,11 +378,14 @@ function AuthProvider({ children }) {
       setUserAuth(id, email, name, telefone, endereco);
 
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setExibeSppiner(false);
       toast.success("Logado com sucesso!");
       listClient();
       console.log("ESTADO DE CLIENTE: ", isClients);
+      window.location.reload(true);
       return true;
     } catch (error) {
+      setExibeSppiner(false);
       toast.error(error);
       return false;
     }
@@ -382,6 +395,7 @@ function AuthProvider({ children }) {
   async function signUp(email, password, confirmedPassword, name) {
     try {
       if (confirmedPassword === password) {
+        setExibeSppiner(true);
         const response = await api.post("/users", {
           email,
           password,
@@ -392,12 +406,15 @@ function AuthProvider({ children }) {
           toast.success("Cadastrado efetuado com sucesso!");
           return true;
         }
+        setExibeSppiner(false);
       } else {
+        setExibeSppiner(false);
         toast.error("As senhas inseridas não coincidem!");
         return false;
       }
       return true;
     } catch (error) {
+      setExibeSppiner(false);
       toast.error(error);
       return false;
     }
@@ -450,6 +467,7 @@ function AuthProvider({ children }) {
         addColumnDinamyc,
         urlImgUserAuth,
         setUrlImgUserAuth,
+        exibeSppiner,
       }}
     >
       {children}

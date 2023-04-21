@@ -4,12 +4,13 @@ import TitlePrimary from "../../components/TitlePrimary";
 import EmailEnviadoImg from "../../assets/images/emailEnviado.png";
 import { AuthContext } from "../../context/auth";
 import { useContext } from "react";
+import { ImSpinner } from "react-icons/im";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 
 import { Link } from "react-router-dom";
 
 export default function EmailSent() {
-  const { emailSentConfirmed, sendMail } = useContext(AuthContext);
+  const { emailSentConfirmed, sendMail, exibeSppiner } = useContext(AuthContext);
 
   const containerTitle = {
     width: "100%",
@@ -111,7 +112,7 @@ export default function EmailSent() {
               type="submit"
               containerButton={containerButton}
               buttonStyle={button2}
-              conteudo="Reenviar e-mail"
+              conteudo={exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Reenviar e-mail"}
               handle={() => sendMail(emailSentConfirmed)}
             />
           </div>
