@@ -343,6 +343,7 @@ button {
   box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.3);
   animation-duration: 1s;
   animation-name: slide-in-out;
+  overflow-y: auto;
 }
 
 @keyframes slide-in-out {
