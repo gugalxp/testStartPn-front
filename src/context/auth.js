@@ -111,7 +111,7 @@ function AuthProvider({ children }) {
   //search Client
   async function searchClient(search) {
     try {
-      const response = await api.post("/client/search", {
+      const response = await api.post(`/client/search/${userAuth}`, {
         search,
       });
 
@@ -129,7 +129,7 @@ function AuthProvider({ children }) {
   //search Fornecedor
   async function searchSupplier(search) {
     try {
-      const response = await api.post("/fornecedor/search", {
+      const response = await api.post(`/fornecedor/search/${userAuth}`, {
         search,
       });
       if (response.data.error !== undefined) {
@@ -311,7 +311,7 @@ function AuthProvider({ children }) {
         listClient();
       }
       if (tipo === "Fornecedor") {
-        console.log("ID USER FORNE: ", userAuth)
+        console.log("ID USER FORNE: ", userAuth);
         const response = await api.delete(`/fornecedor/deleteAll/${userAuth}`);
         toast.success(response.data);
         listSupplier();

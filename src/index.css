@@ -369,6 +369,7 @@ button {
   width: 100%;
   margin-bottom: 36.26px;
   display: flex;
+  justify-content: center;
 }
 
 .contentListagemTerceiros span:nth-child(3) {
