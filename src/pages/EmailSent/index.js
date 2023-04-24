@@ -6,11 +6,20 @@ import { AuthContext } from "../../context/auth";
 import { useContext } from "react";
 import { ImSpinner } from "react-icons/im";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
+import { toast } from "react-toastify";
 
 import { Link } from "react-router-dom";
 
 export default function EmailSent() {
   const { emailSentConfirmed, sendMail, exibeSppiner } = useContext(AuthContext);
+
+  async function handleEmailSent(e) {
+    e.preventDefault();
+    let response = await sendMail(emailSentConfirmed);
+    if (response) {
+      toast.success("E-mail reenviado com sucesso!");
+    }
+  }
 
   const containerTitle = {
     width: "100%",
@@ -22,12 +31,6 @@ export default function EmailSent() {
     lineHeight: "36px",
     fontWeight: "500",
     padding: "0",
-  };
-
-  const description = {
-    marginBottom: "34px",
-    width: "410px",
-    textAlign: "center",
   };
 
   const containerButton = {
@@ -101,7 +104,7 @@ export default function EmailSent() {
           </div>
 
           <div style={containerButtons}>
-            <Link to="/">
+            <Link to="/login">
               <Button
                 containerButton={containerButton}
                 buttonStyle={button1}
@@ -113,7 +116,7 @@ export default function EmailSent() {
               containerButton={containerButton}
               buttonStyle={button2}
               conteudo={exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Reenviar e-mail"}
-              handle={() => sendMail(emailSentConfirmed)}
+              handle={handleEmailSent}
             />
           </div>
         </form>

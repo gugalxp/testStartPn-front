@@ -284,6 +284,11 @@ button {
   line-height: 20px;
 }
 
+.buttonSignInActive {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 .titleListTerceiros {
   display: flex;
   background-color: #ffffff;

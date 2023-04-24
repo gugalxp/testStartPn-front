@@ -70,7 +70,7 @@ export default function ForgotPassword() {
             <button
               handle={sendMail}
               type="submit"
-              className="buttonForgotPassword"
+              className={exibeSppiner ? "buttonForgotPassword buttonSignInActive" : "buttonForgotPassword"}
             >
               {exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Recuperar senha"}
             </button>

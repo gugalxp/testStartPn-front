@@ -129,7 +129,7 @@ function SignIn() {
           </div>
           <div className="containerSignIn">
             <div style={containerButton}>
-              <button type="submit" className="buttonSignIn">
+              <button type="submit" className={exibeSppiner ? "buttonSignIn buttonSignInActive" : "buttonSignIn"}>
                 {exibeSppiner ? (
                   <ImSpinner size={30} className="loaderIcon" />
                 ) : (
