@@ -7,6 +7,7 @@ import TitlePrimary from "../../components/TitlePrimary";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 import { ImSpinner } from "react-icons/im";
+import { toast } from "react-toastify";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -16,14 +17,20 @@ function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
 
     if (email !== "" && password !== "") {
-      let isSignIn = signIn(email, password);
+      let isSignIn = await signIn(email, password);
       if (isSignIn) {
         history.push("/dashboard");
+      } else {
+        history.push("/");
       }
+    }
+
+    if (email === "" || password === "") {
+      toast.info("Preencha os campos");
     }
   }
 
@@ -123,7 +130,11 @@ function SignIn() {
           <div className="containerSignIn">
             <div style={containerButton}>
               <button type="submit" className="buttonSignIn">
-              {exibeSppiner ? <ImSpinner size={30} className="loaderIcon" /> : "Entrar"}
+                {exibeSppiner ? (
+                  <ImSpinner size={30} className="loaderIcon" />
+                ) : (
+                  "Entrar"
+                )}
               </button>
             </div>
             <Link className="esqueceuSenha" to="/forgotPassword">

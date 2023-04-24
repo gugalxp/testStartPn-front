@@ -1,4 +1,3 @@
-import ArteVisual from "../../components/ArteVisual";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
@@ -16,6 +15,11 @@ export default function NewPassword() {
 
   function handleNewPassword(e) {
     e.preventDefault();
+    
+    if (newPassword === "" || newPasswordConfirmed === "") {
+      return toast.info("Preencha os campos");
+    }
+
     if (
       newPassword === newPasswordConfirmed &&
       newPasswordConfirmed &&
@@ -30,28 +34,6 @@ export default function NewPassword() {
       toast.error("As senhas não conicidem.");
     }
   }
-
-  const form = {
-    display: "flex",
-    maxWidth: "418px",
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: "0",
-    padding: "0",
-  };
-
-  const input = {
-    width: "418px",
-    height: "50.06px",
-    borderRadius: "10px",
-    border: "1px solid #d7d7d7",
-    background: "#fff",
-    fontSize: "14px",
-    lineHeight: "20px",
-    paddingLeft: "15px",
-    fontWeight: "500",
-    fontStyle: "normal",
-  };
 
   const label = {
     marginBottom: "14px",
@@ -111,7 +93,7 @@ export default function NewPassword() {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Insira seu e-mail"
+                placeholder="Nova senha"
               />
             </div>
           </div>
@@ -126,7 +108,7 @@ export default function NewPassword() {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Insira seu e-mail"
+                placeholder="Confirmar nova senha"
               />
             </div>
           </div>
@@ -138,7 +120,7 @@ export default function NewPassword() {
               buttonStyle={button}
               conteudo="Criar senha"
             />
-            <Link style={lembrouSenha} to="/">
+            <Link style={lembrouSenha} to="/login">
               Lembrou da senha?
             </Link>
           </div>

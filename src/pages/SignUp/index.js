@@ -23,6 +23,10 @@ function SignUp() {
 
   async function handleRegister(e) {
     e.preventDefault();
+    if (name === "" || email === "" || password === "" || confirmedPassword === "") {
+      return toast.info("Preencha os campos");
+    }
+
     if (email && password && confirmedPassword && name) {
       if (checkboxSelected) {
         const isRegister = await signUp(
