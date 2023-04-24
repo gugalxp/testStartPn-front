@@ -3,15 +3,22 @@ import Button from "../../components/Button";
 import TitlePrimary from "../../components/TitlePrimary";
 import EmailEnviadoImg from "../../assets/images/emailEnviado.png";
 import { AuthContext } from "../../context/auth";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ImSpinner } from "react-icons/im";
 import BeforeLoggerColumnLayout from "../../layouts/BeforeLoggerColumnLayout";
 import { toast } from "react-toastify";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function EmailSent() {
   const { emailSentConfirmed, sendMail, exibeSppiner } = useContext(AuthContext);
+  const history = useHistory();
+  
+  useEffect(() => {
+    if (emailSentConfirmed === null) {
+      history.push("/forgotPassword")
+    }
+  }, [])
 
   async function handleEmailSent(e) {
     e.preventDefault();
